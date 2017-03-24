@@ -127,8 +127,10 @@ i.ft-icon-refresh:after {
 	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#505050"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>');
 }
 i.ft-icon-sections:after {
-	//background-image: url(https://www.ft.com/__origami/service/image/v2/images/raw/fticon:hamburger?format=svg&source=ftchinese&tint=%23ffffff,%23ffffff);
 	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" fill="#505050"><path d="M1.5 20.139v-4.929c0-1.35.478-2.503 1.433-3.458s2.108-1.433 3.458-1.433h88.219c1.324 0 2.471.478 3.438 1.433s1.452 2.108 1.452 3.458v4.929c0 1.324-.484 2.47-1.452 3.438s-2.114 1.451-3.438 1.451h-88.219c-1.35 0-2.503-.483-3.458-1.451-.955-.968-1.433-2.114-1.433-3.438zm0 31.825v-4.89c0-1.376.478-2.547 1.433-3.502.955-.949 2.108-1.426 3.458-1.426h88.219c1.324 0 2.471.478 3.438 1.426.968.955 1.452 2.126 1.452 3.502v4.89c0 1.324-.484 2.471-1.452 3.438-.968.969-2.114 1.452-3.438 1.452h-88.219c-1.35 0-2.503-.483-3.458-1.452-.955-.967-1.433-2.114-1.433-3.438zm0 26.936c0-1.351.478-2.51 1.433-3.465s2.108-1.426 3.458-1.426h88.219c1.324 0 2.471.471 3.438 1.426s1.452 2.115 1.452 3.465v4.891c0 1.375-.484 2.533-1.452 3.476-.968.943-2.114 1.415-3.438 1.415h-88.219c-1.35 0-2.503-.472-3.458-1.415-.955-.943-1.433-2.101-1.433-3.476v-4.891z"/></svg>');
+}
+i.ft-icon-audio:after {
+	background-image: url('data:image/svg+xml;utf8,<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
 }
 i.ft-icon-profile:after {
 	//background-image: url(https://www.ft.com/__origami/service/image/v2/images/raw/fticon:profile?format=svg&source=ftchinese&tint=%23ffffff,%23ffffff);
