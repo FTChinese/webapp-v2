@@ -1,9 +1,22 @@
-function listenToStory() {
+function listenToStory(ele) {
 	try {
+		// MARK: - Switch Between two buttons
+		var buttonClass = ele.className;
+		var buttonAction;
+		if (buttonClass.indexOf(' pause') >= 0) {
+			buttonAction = 'pause';
+			buttonClass = buttonClass.replace(' pause', '');
+		} else {
+			buttonAction = 'play';
+			buttonClass += ' pause';
+		}
+		ele.className = buttonClass;
+
 		var title;
 		var text;
-		var currentStory = allstories[gCurrentStoryId];
+		var currentStory;
 		var audioMessage = {};
+		currentStory = allstories[gCurrentStoryId];
 		if (langmode === 'ch' || currentStory.ebody === '') {
 			title = currentStory.cheadline;
 			text = currentStory.cbody;
@@ -16,10 +29,11 @@ function listenToStory() {
 		audioMessage = {
 			title: title,
 			text: text,
-			language: langmode
+			language: langmode,
+			action: buttonAction
 		}
-		console.log (audioMessage);
 		webkit.messageHandlers.listen.postMessage(audioMessage);
+
 	} catch (ignore) {
 
 	}
