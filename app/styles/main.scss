@@ -1,0 +1,19 @@
+@import "bourbon/_bourbon.scss";
+
+// vendor prefix
+@mixin vendor-prefix($name, $argument) {
+  -webkit-#{$name}: #{$argument};
+  -ms-#{$name}: #{$argument};
+  -moz-#{$name}: #{$argument};
+  -o-#{$name}: #{$argument};
+  #{$name}: #{$argument};
+}
+
+// old css from the FTC web app
+@import "variables.scss";
+@import "s.scss";
+@import "table.scss";
+@import "loader.scss";
+@import "icons.scss";
+@import "iap.scss";
+@import "columnflow.scss";

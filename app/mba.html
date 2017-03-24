@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<title>Web App</title>
+<meta content="FT中文网智能手机HTML 5应用" name="description"/>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<link rel="apple-touch-icon-precomposed" href="http://s.ftimg.net/img/mba_icon.png" />
+<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+<style>
+* { margin:0; padding:0;}
+html,body,.fullbody,#storyScroller,#homeScroller,#channelScroller,#fullbody,#storyview,#channelview,#adview {height:100%;min-height:100%;overflow:hidden;margin:0;padding:0;box-sizing:border-box;}
+html,body {font:16px 'Helvetica Neue',Helvetica,Arial,"Hiragino Sans GB","WenQuanYi Micro Hei","Heiti SC",STHeiti,SimSun,sans-serif;margin:0 auto;padding:0;width:100%;display:block;text-align:center;background:#002F5F;-webkit-text-size-adjust:none;}
+div {text-align:left;line-height:140%;}
+img,input {border:medium none;}
+img,video{max-width:100%;}
+ul,li {list-style-position:outside;list-style-type:none;margin:0;padding:0;}
+a:link,a:visited,a:active,a.unvisited:link, a.unvisited:visited,.unvisited:link,.unvisited:visited,#ft-login-slign-in-link{color:#000;text-decoration:none;cursor:pointer;}
+a:hover, a:active,.section a:link,.section a:visited,#bodytext a:link,#bodytext a.story,#bodytext a.link {color:#2e6e9e;text-decoration:none;}
+a {cursor:pointer;}
+i {font-weight:bold;font-style:normal;}
+#screenstart,.night .opening{background-color:#002F5F;position:absolute;top:0;left:0;width:100%;height:100%;z-index:6000;box-sizing:border-box;}
+#screenstart.opening span p.booklead,#screenstart .backuplinks a,.night .opening span p.booklead,.night .backuplinks a {color:#FFF;}
+#screenstart.opening span p.booklead a, .night .opening span p.booklead a {font-weight:bold;color:#FFF;}
+#screenstart .progresscontainer, .night .progresscontainer{-webkit-box-shadow: 0 0 1px black;background-color: #002F5F;background-size: 22px;border: 1px inset #214A74;}
+#screenstart .progressbg{width:5%;}
+#screenstart .backuplinks {position:absolute;left:0;bottom:20px;width:100%;height:30px;line-height:30px;text-align:center;color:#FFF;-ms-animation-duration: 6s;-ms-animation-iteration-count: 1;-ms-animation-name:delayed-fade-in;-webkit-animation-duration: 6s;-webkit-animation-iteration-count: 1;-webkit-animation-name:delayed-fade-in;font-size:1.0625em;}
+.opening {display:table;width:100%;height:100%;background:#FFF1E0;margin:0 auto;min-width:320px;}
+.opening span{display:table-cell;vertical-align:middle;text-align:center;font-weight:bold;}
+.opening span p.booklead{font-size:1.3125em;font-weight:normal;color:#777;margin:30px auo;}
+.progresscontainer{width:43.9453%;min-width:266px;margin:30px auto;
+-webkit-border-radius: 3px;
+-webkit-box-shadow: inset 0 0 5px #C8B9A6;
+background: #F5E5D0;
+border-bottom: 1px solid white;
+border-radius: 3px;
+box-shadow: inset 0 0 5px #C8B9A6;
+padding: 2px;
+position: relative;
+overflow:hidden;
+}
+.progressbar{
+-moz-border-radius: 2px;
+-webkit-border-radius: 2px;
+background-size: 11px;
+border-radius: 2px;
+width:0;
+}
+
+.progressbg {
+-webkit-background-clip: content-box;
+-webkit-border-radius: 3px;
+background-clip: content-box;
+border: 1px solid #1F5E95;
+border-radius: 3px;
+display: block;
+height: 9px;
+margin: 10px auo;
+background-color: #24A7FF;
+background-image: -webkit-linear-gradient(-45deg, rgba(255,255,255,0.2) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.2) 75%, transparent 75%, transparent);
+background-image: -ms-linear-gradient(-45deg, rgba(255,255,255,0.2) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.2) 75%, transparent 75%, transparent);
+background-image: linear-gradient(135deg, rgba(255,255,255,0.2) 25%,transparent 25%,transparent 50%,rgba(255,255,255,0.2) 50%,rgba(255,255,255,0.2) 75%,transparent 75%,transparent);
+background-size: 9px 100%;
+}
+.uses3d {
+-ms-backface-visibility: hidden;
+-webkit-backface-visibility: hidden;
+}
+#loadstatus{
+font-size:1.0625em;
+}
+#screenstart #bookname {color:white;font-size:32px;display:inline-block;line-height:161.8%;font-family:georgia;font-weight:normal;}
+#loadNow{display:inline;}
+@media only screen and (width: 1024px) {
+    .is-ipad #screenstart,.is-ipad .night .opening,.is-ipad #fullbodycontainer {
+        height: 748px;
+        min-height: 748px;
+        max-height: 748px;
+    }
+}
+</style>
+<script>
+var gCustom = {
+  "template": "/index.php/ft/channel/phonetemplate.html?pagetype=academy&",
+  "appname":"FT商学院",
+  "startapi":false,
+  "productid":"mbagym",
+  "homePageStorageKey":"academyHome",
+  "newStoryStorageKey":"academyStories",
+  "fetchItems": {
+      "item1":{
+        "url":"/index.php/ft/channel/phonetemplate.html?channel=academymiddle&",
+        "storage":"academymiddle",
+        "wrapper":"#middle-content"
+      },
+      "item2":{
+        "url":"/index.php/ft/channel/phonetemplate.html?channel=academyright&",
+        "storage":"academyright",
+        "wrapper":"#right-content"
+      }
+  },
+  "css":"s.css",
+  "useFTScroller":true,
+  "pullRefresh":false
+}
+function handleLogoError(){
+    document.getElementById("bookname").innerHTML='FINANCIAL TIMES';
+}
+function commonProblem() {
+    if (/iphone/i.test(uaForMail) || /ip[ao]d/i.test(uaForMail)) {
+        document.getElementById("bookname").innerHTML='';
+        document.getElementById("startstatus").innerHTML='<div style="font-size:0.8em;padding:10px;">亲爱的读者，现在您似乎连接不上我们的服务器，如果您确定您的手机网络正常，请尝试一下我们的备用服务器，方法如下：<br>1. 用iPhone上的Safari打开<br><a href=http://app001.ftmailbox.com/phone.html target=_blank style="font-size:0.9em;">http://app001.ftmailbox.com/phone.html</a><br>2. 点击Safari程序下方的分享按钮，将新的应用添加到您的主屏幕上<br><br><a href="mailto:ftchinese.feedback@gmail.com?subject=Feedback about FTC Web App - from start screen&body=%0D%0A%0D%0A%0D%0A%0D%0A%0D%0A%0D%0A%0D%0A%0D%0AMy UA String for Your Reference: %0D%0A%0D%0A'+uaForMail+'%0D%0A%0D%0AResources version: '+window._currentVersion+'%0D%0A%0D%0AScreen Mode: '+screen.width+'X'+screen.height+'%0D%0A%0D%0Amy URL: ' + location.href +'">如问题仍未解决，请点击此处发邮件至ftchinese.feedback@gmail.com，我们会尽一切能力解决您的问题。</a></div>';
+    }
+}
+</script>
+<!-- build:css mba-2014/s.css -->
+<link rel="stylesheet" href="styles/main.css">
+<!-- endbuild -->
+</head>
+
+<body class=fullbody>
+
+<div id="screenstart" class=opening ontouchmove="event.preventDefault();"><span><font id="bookname"><img onerror='handleLogoError()' src="mba-2014/img/FTC-start.png" width="266" height="210"></font><p class=booklead id="startstatus"><span id="loadNow">正在连接服务器</span></p><div class="progresscontainer"><div id="startbar" class="progressbar standardprogressbar uses3d progressbg structureprogress"></div></div><p class=booklead id="loadstatus">&nbsp;</p></span>
+
+<div class="backuplinks"><a onclick="javascript:window.location.reload()">重新加载</a> &nbsp; <a href="http://m.ftchinese.com/">手机网站</a> &nbsp; <a id="startFeedback" href="mailto:ftchinese.feedback@gmail.com?subject=Feedback about FTC Web App - from start screen" onclick="commonProblem();">报告问题</a></div>
+</div>
+
+<div id=fullbodycontainer></div>
+</body>
+<!-- Google Analytics -->
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','/index.php/jsapi/analytics','ga');
+ga('create', 'UA-1608715-1');ga('require', 'displayfeatures');
+ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+<!-- FTC Analytics -->
+<script>
+(function(i,s,o,g,r,a,m){i['FtcAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o), 
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','/log/analytics.js','fa');
+fa('create','UA-XXXX-Y',{'alwaysSendReferrer':true});fa('send','pageview');
+</script>
+<!-- End FTC Analytics -->
+<script>
+    var uaForMail=navigator.userAgent || navigator.vendor || "";
+    uaForMail=uaForMail+"%0D%0A%0D%0Amy URL: " + location.href;
+    if (/iphone/i.test(uaForMail) || /ip[ao]d/i.test(uaForMail)) {
+        document.getElementById("startFeedback").href="#feedback";
+    } else {
+        document.getElementById("startFeedback").href="mailto:ftchinese.feedback@gmail.com?subject=Feedback about FTC Web App - from start screen&body=%0D%0A%0D%0A%0D%0A%0D%0A%0D%0A%0D%0A%0D%0A%0D%0AMy UA String for Your Reference: %0D%0A%0D%0A"+uaForMail+"%0D%0A%0D%0AResources version: "+window._currentVersion+"%0D%0A%0D%0AScreen Mode: "+screen.width+"X"+screen.height+"%0D%0A%0D%0Amy URL: " + location.href;
+    }
+    setTimeout (function() {
+        if (document.getElementById("loadNow")) {
+            document.getElementById("loadNow").innerHTML="无法成功连接，请检查您的网络连接";
+        }
+    },8000);
+    setTimeout (function() {
+        if (document.getElementById("loadNow") && navigator && navigator.onLine!=false) {
+            document.getElementById("loadNow").innerHTML='点这里切换到备用服务器试试<br>如果长期连接不上服务器，可尝试先删除程序再重新下载';
+            var backupHost;
+            if (location.host=="m.ftchinese.com") {
+                backupHost="http://app001.ftmailbox.com";
+            } else if (location.host=="app001.ftchinese.com") {
+                backupHost="http://app002.ftmailbox.com";
+            } else if (location.host=="app002.ftchinese.com") {
+                backupHost="http://app003.ftmailbox.com";
+            } else if (location.host=="app003.ftchinese.com") {
+                backupHost="http://app004.ftmailbox.com";
+            } else if (location.host=="app004.ftchinese.com") {
+                backupHost="http://app005.ftmailbox.com";
+            } else if (location.host=="app005.ftchinese.com") {
+                backupHost="http://m.ftchinese.com";
+            } else if (location.host=="m.corp.ftchinese.com") {
+                backupHost="http://m.ftchinese.com";
+            } else {
+                backupHost="http://m.ftchinese.com";
+            }
+            var backupUrl;
+            if (location.href.indexOf("phoneapp")>=0) {
+                backupUrl="phoneapp.html";
+            } else {
+                backupUrl="phone.html";
+            }
+            document.getElementById("loadNow").addEventListener("click",function(){
+                window.location.href=backupHost+"/"+backupUrl;
+            });
+        }
+    },12000);
+    if (/ipad/i.test(uaForMail)) {
+        document.getElementsByTagName("html")[0].className="is-ipad";
+    }
+</script>
+
+<script>
+    try {
+        var cacheStatusValues = [ 'uncached',
+                                  'idle',
+                                  'checking',
+                                  'downloading',
+                                  'undateready',
+                                  'obsolete'],
+            cacheListening = [    'cached',
+                                  'checking',
+                                  'downloading',
+                                  'error',
+                                  'noupdate',
+                                  'obsolete',
+                                  'progress',
+                                  'updateready'],
+            cache = window.applicationCache;
+        window.applicationCache.addEventListener('updateready', function() {
+            window.applicationCache.swapCache();
+            console.log('swap cache has been called');
+        }, false);
+        setTimeout(function() { if(cache && navigator.online==true) cache.update();},10000);
+    }
+    catch(e) {
+    }
+</script>
+<script type="text/javascript">window.scrollTo(0, 0);</script>
+<script type="text/javascript">
+    var FTAdch = "NP_Home";
+    function checkJS(jsName,jsUrl,runJS) {
+        if (localStorage && localStorage.getItem(jsName)) {
+            if (runJS==true) {eval(localStorage.getItem(jsName));runJS=false;}
+        }
+        if(window.jQuery && navigator && navigator.onLine != false){
+            $.get(jsUrl+"?"+theMinute,function(data){
+                if (runJS==true){eval(data);}
+                localStorage.removeItem(jsName);
+                localStorage.setItem(jsName,data);
+            });
+        }
+    }
+</script>
+
+<!-- build:js mba-2014/m.js -->
+<!-- bower:js -->
+<script type="text/javascript" src="phone/html5storage.js"></script>
+<script type="text/javascript" src="phone/tracking.js"></script>
+<script type="text/javascript" src="../bower_components/jquery/dist/jquery.js"></script>
+<script src="../bower_components/fastclick/lib/fastclick.js"></script>
+<script src="../bower_components/ftscroller/lib/ftscroller.js"></script>
+<script type="text/javascript" src="scripts/main.js"></script>
+<!-- endbower -->
+<!-- endbuild -->
+
+<script type="text/javascript">
+if (document.getElementById("startbar")) {document.getElementById("startbar").style.width="25%";}
+if (osVersion.indexOf("Android")<0) {
+    new FastClick(document.body);
+}
+</script>
+
+</html>

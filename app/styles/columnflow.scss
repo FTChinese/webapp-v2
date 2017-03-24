@@ -1,0 +1,71 @@
+// .column-story-header {
+// 	padding: 0 14px;
+// 	.image figure {
+// 		opacity: 1;
+// 	}
+// 	.byline {
+// 		padding-bottom: 10px;
+// 	}
+// }
+// .column-story-headline {
+// 	font-size: 1.8em;
+// 	padding: 10px 0;
+// 	line-height: 140%;
+// }
+// .column-story-time {
+// 	font-size: 15px;
+// 	color: #9E2F50;
+// 	padding: 0 14px;
+// }
+
+// #story-column-flow {
+// 	display: none;
+// 	width: 100%;
+// 	height: 100%;
+// 	overflow: hidden;
+// 	//padding-top: 5px;
+// 	box-sizing: border-box;
+// 	p {
+// 		line-height: 161.8%;
+// 		font-size: 1.2em;
+// 		padding: 0 14px;
+// 		text-indent: 2em;
+// 	}
+// 	.banner {
+// 		margin-top:0;
+// 	}
+// }
+
+// #storyview {
+// 	&.columnFlowOn {
+// 		#story-column-flow {
+// 			display: block;
+// 		}
+// 		#storyScroller {
+// 			display: none;
+// 		}
+// 		padding:0;
+// 		z-index:999999;
+// 	}
+// }
+
+// #story-column-viewport {
+// 	overflow: hidden;
+// 	height: 100%;
+// 	.adiframe {
+// 		background-color: #f6e9d8;
+// 		&:after {
+// 			display: none;
+// 		}
+// 	}
+// 	.mpu-phone {
+// 		margin-bottom: 0;
+// 		padding-bottom: 0;
+// 	}
+// 	.o-overlay__close-icon {
+// 		display:none;
+// 	}
+// 	.overlay {
+// 		display: block;
+// 	}
+// }
