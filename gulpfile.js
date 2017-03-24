@@ -222,14 +222,18 @@ gulp.task('copy', ['build'], function () {
   var cssbundle = fs.readFileSync('dist/phone/s.css', 'utf8');
   var googleanalytics = fs.readFileSync('dist/log/ga.js', 'utf8');
   var fa = fs.readFileSync('dist/log/analytics.js', 'utf8');
+
+  // MARK: - use the one m.js file 
+  var mainM = fs.readFileSync('dist/phone/m.js', 'utf8');
+
   // use jquery.min.js directly
   // to avoid gulp compiling bug
-  var jqueryM = fs.readFileSync('bower_components/jquery/dist/jquery.min.js', 'utf8');
-  var html5storageM = fs.readFileSync('dist/phone/html5storage-m.js', 'utf8');
-  var trackingM = fs.readFileSync('dist/phone/tracking-m.js', 'utf8');
-  var fastclickM = fs.readFileSync('dist/phone/fastclick-m.js', 'utf8');
-  var ftscrollerM = fs.readFileSync('dist/phone/ftscroller-m.js', 'utf8');
-  var mainM = fs.readFileSync('dist/phone/main-m.js', 'utf8');
+  // var jqueryM = fs.readFileSync('bower_components/jquery/dist/jquery.min.js', 'utf8');
+  // var html5storageM = fs.readFileSync('dist/phone/html5storage-m.js', 'utf8');
+  // var trackingM = fs.readFileSync('dist/phone/tracking-m.js', 'utf8');
+  // var fastclickM = fs.readFileSync('dist/phone/fastclick-m.js', 'utf8');
+  // var ftscrollerM = fs.readFileSync('dist/phone/ftscroller-m.js', 'utf8');
+  // var mainM = fs.readFileSync('dist/phone/main-m.js', 'utf8');
   //var swipeM = fs.readFileSync('dist/phone/swipe-m.js', 'utf8');
 
   gulp.src(['app/android.html'])
@@ -237,11 +241,11 @@ gulp.task('copy', ['build'], function () {
     .pipe(replace('{{cssbundle}}', cssbundle))
     .pipe(replace('{{googleanalytics}}', googleanalytics))
     .pipe(replace('{{fa}}', fa))
-    .pipe(replace('{{jquery-m}}', jqueryM))
-    .pipe(replace('{{html5storage-m}}', html5storageM))
-    .pipe(replace('{{tracking-m}}', trackingM))
-    .pipe(replace('{{fastclick-m}}', fastclickM))
-    .pipe(replace('{{ftscroller-m}}', ftscrollerM))
+    // .pipe(replace('{{jquery-m}}', jqueryM))
+    // .pipe(replace('{{html5storage-m}}', html5storageM))
+    // .pipe(replace('{{tracking-m}}', trackingM))
+    // .pipe(replace('{{fastclick-m}}', fastclickM))
+    // .pipe(replace('{{ftscroller-m}}', ftscrollerM))
     .pipe(replace('{{main-m}}', mainM))
     .pipe(replace('<html>', '<html manifest="android-2014.manifest">'))
     .pipe(rename('androidapp.html'))
