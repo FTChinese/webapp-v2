@@ -41,8 +41,25 @@ function listenToStory(ele) {
 			action: buttonAction
 		}
 		webkit.messageHandlers.listen.postMessage(audioMessage);
-
 	} catch (ignore) {
 
 	}
+}
+
+function stopeAudio() {
+	try {
+		var audioMessage = {
+			title: '',
+			text: text,
+			language: 'en-GB',
+			action: 'stop'
+		}
+		webkit.messageHandlers.listen.postMessage(audioMessage);
+	} catch (ignore) {
+
+	}
+}
+
+function refreshAudioButton() {
+	document.getElementById('audio-button-top-right').className = 'header-side right storyOnly';
 }
