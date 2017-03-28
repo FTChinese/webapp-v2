@@ -2050,8 +2050,6 @@ function readstory(theid, theHeadline) {
         }
     }, 10);	
 	pauseallvideo();
-    // MARK: The audio button should go back to the initial status
-    refreshAudioButton();
 }
 
 function removeTag(theCode) {
