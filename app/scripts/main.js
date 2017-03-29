@@ -1905,6 +1905,16 @@ function handlelinks() {
             adclick();
         }
     });
+
+    // MARK: - Wrap story images into a link:
+    if (gIsInSWIFT === true) {
+        $('#storyview .storybody .pic img').each(function(){
+            var src = this.src;
+            $(this).wrap('<a class="image-outer" href="'+src+'"></a>');
+            //$(this).parent().attr('href', src);
+            //console.log ($(this).parent().parent().html());
+        });
+    }
 }
 
 //将Unix时间戳转换为中文日期和星期
@@ -2386,6 +2396,7 @@ function displaystoryNormal(theid, language) {
         if (allId.ebody && allId.ebody.length > 30) {$('.chbutton').addClass('nowreading');} else {$('.cebutton,.enbutton,.chbutton').addClass('nowreading');}
         storyHeadline = allId.cheadline;
     }
+
 
 
 
