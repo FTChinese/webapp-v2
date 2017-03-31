@@ -253,6 +253,21 @@ try {
 
 <script>
 var adLinks, i, adHeight=0, gATag, gVideoTag, gImgTag, gDivTag, giFrameTag, gParentA, gParentHTML, gParentHTMLClass, gReferal, gParentDom;
+var isInAppPurchase;
+
+function isProductIdInApp(id) {
+    //console.log (parent.gIsInSWIFT);
+    if (typeof id === 'string' && parent.gIsInSWIFT === true && typeof parent.iapProducts === 'object') {
+        if (parent.iapProducts.length>0) {
+            for (var n=0; n<parent.iapProducts.length; n++) {
+                if (parent.iapProducts[n].id === id) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
 
 function checkDom(qString) {
     if (document.querySelectorAll(qString)) {
@@ -297,6 +312,7 @@ try {
         window.overlayLink = '';
     }
 
+
     if ((parent.window.useFTScroller===1 && gVideoTag === 0 && giFrameTag === 0 && (gATag===1 || (gATag === 0 && gImgTag === 0 && gDivTag === 0))) || (window.overlayLink !== undefined && window.overlayLink !== '')) {
         if (typeof window.forceLink === 'string') {
             adLink = window.forceLink;
@@ -315,14 +331,19 @@ try {
         }
         gParentA.className = "ad-overlay";
 
-        if (/(\index\.php\/ft\/tag\/)|(ftchinese\.com\/tag\/)|(user\.ftchinese\.com\/)|(users)|(ftchinese\.com\/story\/)|(channel\/slides\.html)/i.test(adLink)) {
+
+        //window.productId = 'com.ft.ftchinese.mobile.subscription.premium';
+        isInAppPurchase = isProductIdInApp(window.productId);
+        if (/(\index\.php\/ft\/tag\/)|(ftchinese\.com\/tag\/)|(user\.ftchinese\.com\/)|(users)|(ftchinese\.com\/story\/)|(channel\/slides\.html)/i.test(adLink) || isInAppPurchase === true) {
             adLink = decodeURIComponent(adLink);
             gParentA.onclick=function(){
                 var linkUrl;
                 var linkTitle;
                 var storyId;
                 var ccode = '';
-                if (/ftchinese\.com\/story\//i.test(adLink)) {
+                if (isInAppPurchase === true) {
+                    parent.showProductDetail(window.productId);
+                } else if (/ftchinese\.com\/story\//i.test(adLink)) {
                     storyId = adLink.replace(/^.*\/story\/([0-9]+).*$/g,'$1');
                     parent.readstory(storyId);
                 } else if (/(user\.ftchinese\.com\/)|(ftchinese\.com\/users\/gotourl)/i.test(adLink)) {
@@ -428,9 +449,10 @@ function sendMediaTypeToParent(el) {
 		type: videoEl ? 'video' : null,
 		url: location.href
 	};
-	console.log('send message to parent');
+	//console.log('send message to parent');
 	parent.postMessage(JSON.stringify(msg), '*');
 }
+
 
 function controlVideoPlayback(container) {	
 
