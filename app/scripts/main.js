@@ -3574,6 +3574,10 @@ function clipStory(){
             $('#addfavlink').html('已收藏!');
         } else {
 			$('#addfavlink').html('收藏未能成功，请在网络连接较好的时候再试一次');
+            var usernameTrack = getCookie('USER_NAME') || '';
+            var userIdTrack = getCookie('USER_ID') || ''
+            ga('send','event','CatchError', 'clip in app', usernameTrack+'('+userIdTrack+'): ' + data);
+            console.log (usernameTrack+'('+userIdTrack+'): ' + data);
 		}
     })
     .fail(function(){
@@ -3781,7 +3785,19 @@ function watchVideo(videoUrl, videoTitle, videoId, videoLead, videoImage){
 
 
 function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFrame){
-    var randomTime = new Date().getTime(),url = slideUrl, urlMore, interactiveTypeName = 'slide';
+    var randomTime = new Date().getTime();
+    var url = slideUrl;
+    var urlMore;
+    var interactiveTypeName = 'slide';
+    
+    // window.supportNativeAudio = true
+    // MARK: - For apps that support native audio play
+    if (window.supportNativeAudio === true && slideUrl.indexOf('&audio=')>=0) {
+        listenToAudio(slideUrl, slideTitle)
+        httpspv(gDeviceType + '/'+ interactiveTypeName +'/'+ slideUrl);
+        return;
+    }
+
     if (requireLogin !== undefined && requireLogin === 1 && (username === undefined || username ==='')) {
         $('#popup-title').html('提示');
         $('#popup-description').html('对不起，您需要先登录才能使用这个功能');
