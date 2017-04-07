@@ -226,33 +226,32 @@ gulp.task('copy', ['build'], function () {
   // MARK: - use the one m.js file 
   var mainM = fs.readFileSync('dist/phone/m.js', 'utf8');
 
-  // use jquery.min.js directly
-  // to avoid gulp compiling bug
-  // var jqueryM = fs.readFileSync('bower_components/jquery/dist/jquery.min.js', 'utf8');
-  // var html5storageM = fs.readFileSync('dist/phone/html5storage-m.js', 'utf8');
-  // var trackingM = fs.readFileSync('dist/phone/tracking-m.js', 'utf8');
-  // var fastclickM = fs.readFileSync('dist/phone/fastclick-m.js', 'utf8');
-  // var ftscrollerM = fs.readFileSync('dist/phone/ftscroller-m.js', 'utf8');
-  // var mainM = fs.readFileSync('dist/phone/main-m.js', 'utf8');
-  //var swipeM = fs.readFileSync('dist/phone/swipe-m.js', 'utf8');
-
-  gulp.src(['app/android.html'])
+  return gulp.src(['app/android.html'])
     .pipe($.if('*.html', $.htmlmin({collapseWhitespace: true})))
     .pipe(replace('{{cssbundle}}', cssbundle))
     .pipe(replace('{{googleanalytics}}', googleanalytics))
     .pipe(replace('{{fa}}', fa))
-    // .pipe(replace('{{jquery-m}}', jqueryM))
-    // .pipe(replace('{{html5storage-m}}', html5storageM))
-    // .pipe(replace('{{tracking-m}}', trackingM))
-    // .pipe(replace('{{fastclick-m}}', fastclickM))
-    // .pipe(replace('{{ftscroller-m}}', ftscrollerM))
     .pipe(replace('{{main-m}}', mainM))
     .pipe(replace('<html>', '<html manifest="android-2014.manifest">'))
     .pipe(rename('androidapp.html'))
-    .pipe(gulp.dest('../testing/dev_www/mobile_webroot/'));
-
-  console.log ('files copied');
+    .pipe(gulp.dest('../testing/dev_www/mobile_webroot/'))
+    .on('end', function() {
+      var fs = require('fs');
+      var chineseConv = require('chinese-conv');
+      var htmlFileInString = fs.readFileSync('../testing/dev_www/mobile_webroot/androidapp.html', 'utf8');
+      var data = chineseConv.tify(htmlFileInString);
+      var fileName = '../testing/dev_www/mobile_webroot/androidappbig5.html';
+      fs.writeFile(fileName, data, function(err) {
+            if(err) {
+                return console.log(err);
+            }
+            console.log('big 5 file writen to ' + fileName);
+      });
+    });
+    //.pipe(rename('androidappbig5.html'));
 });
+
+
 
 
 gulp.task('ga', function () {
@@ -290,6 +289,8 @@ gulp.task('publish', function () {
     .pipe(gulp.dest('../dev_www/mobile_webroot/'));
   gulp.src('../testing/dev_www/mobile_webroot/androidapp.html')
     .pipe(gulp.dest('../dev_www/mobile_webroot/'));
+  gulp.src('../testing/dev_www/mobile_webroot/androidappbig5.html')
+    .pipe(gulp.dest('../dev_www/mobile_webroot/'));
   gulp.src('../testing/dev_www/mobile_webroot/mba-2014.html')
     .pipe(gulp.dest('../dev_www/mobile_webroot/'));
   gulp.src('../testing/dev_www/mobile_webroot/images/**/*')
@@ -300,6 +301,9 @@ gulp.task('ios', ['publish'], function () {
   var rename = require("gulp-rename");
   gulp.src('../testing/dev_www/mobile_webroot/androidapp.html')
     .pipe(rename('index.html'))
+    .pipe(gulp.dest('../../sandbox/FTCiPhone/FT Academy/supporting/'));
+  gulp.src('../testing/dev_www/mobile_webroot/androidappbig5.html')
+    .pipe(rename('indexBig5.html'))
     .pipe(gulp.dest('../../sandbox/FTCiPhone/FT Academy/supporting/'));
 });
 

@@ -30,7 +30,8 @@
     "run-sequence": "^1.2.2",
     "wiredep": "^4.0.0",
     "gulp-replace": "^0.5.4",
-    "gulp-rename": "^1.2.2"
+    "gulp-rename": "^1.2.2",
+    "chinese-conv": "^1.0.1"
   },
   "eslintConfig": {
     "env": {

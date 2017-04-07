@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1153; //当前的版本号
+var _currentVersion = 1171; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -608,6 +608,11 @@ function fillContent(loadType) {
             }
         }
     }
+
+    
+
+
+
     //点击文章页底部可以翻页
     //This is potentially confusing to users, turn it off
     //It also increases the chance of triggering Apple's Webkit bug
@@ -3635,6 +3640,38 @@ function switchNotification() {
         } else {
             ftjavacriptapp.set_push('0');
         }
+    }
+}
+
+// MARK: - Support Changing to Big 5
+function enableChineseLanguageSetting() {
+    if (typeof window.chineseLanguagePreference === 'string') {
+        $('#setting .overlay-header').after('<div class="setting-toggler" id="chinese-language-preference"><strong>中文偏好</strong><span class="displayvalue" onclick="switchChineseLanguagePreference()"><span class="ui-toggle"><span class="ui-toggle-button2"></span><span class="ui-toggle-label ui-toggle-label-on">简</span><span class="ui-toggle-label ui-toggle-label-off">繁</span></span></span></div>');
+        if (window.chineseLanguagePreference === 'traditional') {
+        } else {
+            $('#chinese-language-preference').addClass('simplifiedOn');
+        }
+    }
+}
+
+function switchChineseLanguagePreference() {
+    if (window.chineseLanguagePreference === 'traditional') {
+        window.chineseLanguagePreference = 'simplified';
+        $('#chinese-language-preference').addClass('simplifiedOn');
+    } else {
+        window.chineseLanguagePreference = 'traditional';
+        $('#chinese-language-preference').removeClass('simplifiedOn');
+    }
+    // MARK: - send message to native app
+    var languageMessage = {
+        prefer: window.chineseLanguagePreference
+    }
+    var eventCategory = 'Language Preference';
+    try {
+        webkit.messageHandlers.language.postMessage(languageMessage);
+        ga('send','event',eventCategory, 'Set', window.chineseLanguagePreference);
+    } catch (ignore) {
+
     }
 }
 

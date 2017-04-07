@@ -1109,22 +1109,29 @@ margin: 8px;
 .big,.fontpreferences div.big,.big .slide{font-size:21px;}
 .extra-big,.fontpreferences div.extra-big,.extra-big .slide{font-size:25px;}
 .currentVersion{padding:12px;text-align:right;color:#777;font-size:12px;}
-.nightreading,.standalonebutton {
+.nightreading,.standalonebutton,.setting-toggler {
 padding:14px 14px 0 14px;
 position: relative;
 }
 .standalonebutton.last-child {padding:14px;}
-.nightreading {padding: 14px;border-bottom: 1px solid #e9decf;}
-
-.nightreading .description {
-display: block;
-margin: 20px 0 5px;
-font-size: 12px;
-line-height: 16px;
-color: #333;
+.nightreading, .setting-toggler {
+	padding: 14px;
+	border-bottom: 1px solid #e9decf;
 }
-.nightreading .displayvalue {
-float: right;
+
+.nightreading, .setting-toggler { 
+	.description {
+		display: block;
+		margin: 20px 0 5px;
+		font-size: 12px;
+		line-height: 16px;
+		color: #333;
+	}
+}
+.nightreading, .setting-toggler {
+	.displayvalue {
+		float: right;
+	}
 }
 .ui-toggle {
 display: block;
@@ -1151,7 +1158,7 @@ background-color: #dcdcdc;
 @include background-image( linear-gradient(to left, #FFF, #dcdcdc) );
 @include transition (all 0.1s ease-in);
 }
-.night .ui-toggle-button,.notificationOn .ui-toggle-button2{
+.night .ui-toggle-button,.notificationOn .ui-toggle-button2, .simplifiedOn .ui-toggle-button2{
 transform:translate3d(48px, 0, 0);
 -webkit-transform:translate3d(48px, 0, 0);
 -moz-transform:translate3d(48px, 0, 0);
