@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1171; //当前的版本号
+var _currentVersion = 1176; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -480,7 +480,7 @@ function fillContent(loadType) {
         }
     });
 
-    //是否已经登陆
+    //是否已经登录
     checkLogin();
 
     //读者发表评论
@@ -2405,7 +2405,7 @@ function displaystoryNormal(theid, language) {
 
 
 
-    // business logic on how to insert MPU ads into story body
+    // MARK: - Business logic on how to insert MPU ads into story body
     if (actualLanguage === 'ce') {
         paraGraphs = $('#storyview .cbodyt');
     } else {
@@ -3105,7 +3105,7 @@ function showchannel(url, channel, requireLogin, openIniFrame, channelDescriptio
     if (requireLogin !== undefined && requireLogin === 1 && (username === undefined || username ==='')) {
         $('#popup-title').html('提示');
         $('#popup-description').html('对不起，您需要先登录才能使用这个功能');
-        $('#popup-content').html('<div class=\'standalonebutton\'><button class=\'ui-light-btn\' onclick="turnonOverlay(\'loginBox\');">登陆</button></div><div class=\'standalonebutton last-child\'><button class=\'ui-light-btn\' onclick="$(\'#popup\').removeClass(\'on\');">取消</button></div>');
+        $('#popup-content').html('<div class=\'standalonebutton\'><button class=\'ui-light-btn\' onclick="turnonOverlay(\'loginBox\');">登录</button></div><div class=\'standalonebutton last-child\'><button class=\'ui-light-btn\' onclick="$(\'#popup\').removeClass(\'on\');">取消</button></div>');
         $('#popup').addClass('on');
         return;
     }
@@ -3135,7 +3135,7 @@ function showchannel(url, channel, requireLogin, openIniFrame, channelDescriptio
     }
 
     //extract tag information from url
-    gTagData = url.replace(/^.*channel=/,'').replace(/^.*tag\//,'').replace(/\?.*$/g,'');
+    gTagData = channelUrl.replace(/^.*channel=/,'').replace(/^.*tag\//,'').replace(/\?.*$/g,'');
     gTagData = decodeURIComponent(gTagData);
     if (gTagData !== '') {
         gTagData = gTagData.split(',');
@@ -3159,8 +3159,8 @@ function showchannel(url, channel, requireLogin, openIniFrame, channelDescriptio
         window.scrollTo(0, 0);
     }
     
-    navClass = getURLParameter(url, 'navClass');
-    navTitle = getURLParameter(url, 'navTitle');
+    navClass = getURLParameter(channelUrl, 'navClass');
+    navTitle = getURLParameter(channelUrl, 'navTitle');
     $('#navList li').removeClass('on');
     if (navClass !== null) {
         $('#navList li.' + navClass).addClass('on');
@@ -3173,17 +3173,16 @@ function showchannel(url, channel, requireLogin, openIniFrame, channelDescriptio
     //<div id="head"><div class="header"><div class="channeltitle">'+ channel + '</div></div></div>
     chview.html('<div class="loader-container"><div class="loader">正在读取文章数据...</div></div><div class="standalonebutton"><button class="ui-light-btn" onclick="backhome()">返回</button></div>');
 
-    //每次打开的时候都取新的链接，所以在网址后面要添加一个随机参数
+    //MARK: - 每次打开的时候都取新的链接，每分钟更新一次参数以减轻服务器压力
+    thisday = new Date();
     themi = thisday.getHours() * 10000 + thisday.getMinutes() * 100;
     thed = thisday.getFullYear() * 10000 + thisday.getMonth() * 100 + thisday.getDate();
     themi=thed*1000000+themi;
-    if (url.indexOf('?')>0) {
-        url=url+'&'+themi;
+    if (channelUrl.indexOf('?')>0) {
+        channelUrl=channelUrl+'&'+themi;
     } else {
-        url=url+'?'+themi;
+        channelUrl=channelUrl+'?'+themi;
     }
-
-
 
     //记录频道页浏览历史    
     if (hist && ((hist[0] && hist[0].url != url) || hist.length==0)) {
@@ -3203,14 +3202,14 @@ function showchannel(url, channel, requireLogin, openIniFrame, channelDescriptio
     } else {
         $.ajax({
             method: 'GET',
-            url: channelUrl, 
+            url: channelUrl,
         }).done(function(data, textStatus) {
             var pageTitle;
-            //$("#progressbar").animate({width:"100%"},300,function(){
             data = checkhttps(data);
             chview.html(data);
-            $('.channeltitle').html(channel);
 
+            //$('#header-title').html('<div style="font-size:8px">'+channelUrl+'</div>');
+            
             //频道页中的分页
             if (chview.find('.pagination').length>0) {
                 $('.p_input').parent().hide();
@@ -3838,7 +3837,7 @@ function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFra
     if (requireLogin !== undefined && requireLogin === 1 && (username === undefined || username ==='')) {
         $('#popup-title').html('提示');
         $('#popup-description').html('对不起，您需要先登录才能使用这个功能');
-        $('#popup-content').html('<div class=\'standalonebutton\'><button class=\'ui-light-btn\' onclick="turnonOverlay(\'loginBox\');">登陆</button></div><div class=\'standalonebutton last-child\'><button class=\'ui-light-btn\' onclick="$(\'#popup\').removeClass(\'on\');">取消</button></div>');
+        $('#popup-content').html('<div class=\'standalonebutton\'><button class=\'ui-light-btn\' onclick="turnonOverlay(\'loginBox\');">登录</button></div><div class=\'standalonebutton last-child\'><button class=\'ui-light-btn\' onclick="$(\'#popup\').removeClass(\'on\');">取消</button></div>');
         $('#popup').addClass('on');
         return;
     }

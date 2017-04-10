@@ -147,8 +147,16 @@ if (adCode=="ad300x250-SP" || (parent.window.gSpecial === true && adCode==="ad30
         adPositionId="0101";
         adType="ad50";
     }
+
+    // MARK: To Test Ad Id in Mobile App, use testid=XXXX in the url parameter
+    if (typeof parentLink === 'string') {
+        if (/testid=[0-9]{4}/.test(parentLink)) {
+            adchannelId = parentLink.replace(/^.*testid=([0-9]{4}).*$/, '$1');
+        }
+    }
     c=adchannelId + adPositionId;
 }
+
 
 if (/iPad/i.test(uaString)) {
     if (adType === 'mpu') {
