@@ -146,12 +146,13 @@ ul.navigation li,
 }
 
 .story-iap {
-    #contentRail {
+    #contentRail, &.storyview #fullbodycontainer #audio-button-top-right.storyOnly{
         display: none;
     }
     #iap-rail {
         display: block;
     }
+
 }
 
 // MARK: - CSS Ruls for Membership subscription
