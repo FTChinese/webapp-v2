@@ -235,6 +235,8 @@ if (testFullPage === true && adCode === 'fullScreen') {
 
 var dolphineInlineScript = '<div class="'+adType+'" id="ad-content"><scr'+'ipt type="text/javascript" src="http://dolphin.ftimg.net/s?z=ft&c=' + c + adReachability() + '&t='+Math.round(Math.random() * 1000000)+'" charset="gbk" ></scr'+'ipt></div>';
 
+
+
 if (adCode === 'fullScreen') {
     // MARK: - if a full screen ad is already displayed once, return immediately
     var popAd1 = parent.parent.document.getElementById("pop-ad");
@@ -244,8 +246,8 @@ if (adCode === 'fullScreen') {
         // console.log ('full screen ad displayed. ');
         document.writeln(dolphineInlineScript);
     }
-} else if (c === '20220003' && 1<0) {
-    
+} else if (c === '20220121' && 1<0) {
+
 } else {
     document.writeln(dolphineInlineScript);
 }
@@ -480,25 +482,25 @@ function controlVideoPlayback(container) {
 			return;
 		}
 
-        console.log('Recieved play command. Trye to find video tag.');
+        //console.log('Recieved play command. Trye to find video tag.');
 		var videoEl = container.querySelector('video');
 
 		if (!videoEl) {
-            console.log('Video tag is not found. Abort.')
+            //console.log('Video tag is not found. Abort.')
 			return;
 		}
 		
 		switch (data.action) {
 			case 'play':
 				if (videoEl.paused) {
-					console.log('Play the video');
+					//console.log('Play the video');
 					videoEl.play();
 				}
 				
 				break;
 
 			case 'pause':
-				console.log('Pause the video');
+				//console.log('Pause the video');
 				videoEl.pause();
 				break;
 		}
