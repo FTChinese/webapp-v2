@@ -223,10 +223,12 @@ function startpage() {
     }
     try {
         window.tracker = new FTCTracker();
-        //console.log (tracker);
+        // console.log (tracker);
+        // console.log ('successfully tracked! ');
     }catch(err){
-        //console.log (err);
         trackErr(err, 'FTCTracker');
+        // console.log (err);
+        // console.log ('did not track successfully');
     }
     if (useFTScroller===0) {window.scrollTo(0, 0);}
     //从网络获取数据的情况，判断其网络连接的好坏
