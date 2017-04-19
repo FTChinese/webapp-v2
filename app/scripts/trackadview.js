@@ -40,7 +40,7 @@ function adViewUpdate() {
             gViewableAds[adCount].status = 'viewed';
             adch = gViewableAds[adCount].adid.substring(0,4);
             adPosition = gViewableAds[adCount].adid.substring(4,8);
-            console.log (gViewableAds[adCount].adid + ' is viewed. adchi is ' + adch + ', ad position is ' + adPosition);
+            // console.log (gViewableAds[adCount].adid + ' is viewed. adchi is ' + adch + ', ad position is ' + adPosition);
             //document.getElementById('header-title').innerHTML = adch + adPosition;
             ga('send','event', 'Ad In View', adch, adPosition, {'nonInteraction':1});
             playVideoInAdIframe(adch + adPosition);

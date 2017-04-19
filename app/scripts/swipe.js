@@ -447,7 +447,7 @@ function initSwipeGesture() {
                     */
                     var dealWithSlide = function(option){
 
-                        console.log (option);
+                        //console.log (option);
                         if(option.operatedView1 && typeof option.operatedView1 == 'string'){
                             var operatedView1 = document.getElementById(option.operatedView1);
                         } else {
