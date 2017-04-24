@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1177; //当前的版本号
+var _currentVersion = 1183; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -1120,11 +1120,14 @@ function showAppImage(ele) {
         var imgUrl = this.src || '';
         if (this.complete) {
             showThisImage($(this), imgUrl);
+            // console.log (imgUrl + ' already loaded and displayed');
             // this image already loaded
             // do whatever you would do when it was loaded
         } else {
+            // console.log (imgUrl + ' will be loaded');
             $(this).load(function() {
                 showThisImage($(this), imgUrl);
+                // console.log (imgUrl + ' loaded and displayed');
             });
         }
         //console.log (imgUrl);
@@ -1513,7 +1516,8 @@ function loadToHome(data, loadType) {
     }
     addstoryclick();
     removeBrokenIMG();
-    //display app images when loaded
+    // MARK: - Display app images when loaded
+    // console.log ('will show app image');
     showAppImage('fullbody');
     //display button to download native app
     if (/baidu|micromessenger/i.test(uaString)) {
@@ -1637,12 +1641,14 @@ function loadHomePage(loadType) {
 
 function startFromOffline() {
     var data = gStartPageStorage || '';
+    var connectionType = window.gConnectionType || 'unknown connection';
     if (data !== '' && data.indexOf('data-pubdate') > 0) { //Use data from the local storage
         data = checkhttps(data);
         loadToHome(data);
         $('#startstatus').html('连接失败，加载缓存');
         try {
             updateStartStatus('load cache to start');
+            ga('send','event','CatchError', 'Launch From Cache', connectionType, {'nonInteraction':1});
         } catch (ignore) {
 
         }
@@ -1656,7 +1662,10 @@ function startFromOffline() {
         } catch (ignore) {
 
         }
+        // TODO: This is a serious problem. A user is stuck here. 
         $('#startstatus').html('连接失败，请稍候再次刷新');
+        // MARK: - Send Error Report to Google Analytics
+        ga('send','event','CatchError', 'Launch Fail Without Cache', connectionType, {'nonInteraction':1});
     }
 }
 
@@ -2055,7 +2064,7 @@ function readstory(theid, theHeadline) {
                 }
             }).fail(function(jqXHR){
                 if (gCurrentStoryId === theid) {
-                    sv.find('.storybody').html('<div class="loader-container"><div class="highlight">获取文章失败！</div><div class="standalonebutton"><button class="ui-light-btn" id="reload-story">重试</button></div></div>' + k);
+                    sv.find('.storybody').html('<div class="loader-container"><div class="highlight">获取文章失败！</div><div class="standalonebutton"><button class="ui-light-btn" id="reload-story">重试</button></div><div class="standalonebutton"><a href="http://www.ftchinese.com/story/'+ theid +'?isad=1&ccode=appfail1"><button class="ui-light-btn" id="reload-story">用浏览器打开文章</button></a></div></div>' + k);
                     $('#reload-story').unbind().bind('click', function(){
                         sv.find('.storybody').html('<div class="loader-container">重新加载文章...</div>');
                         setTimeout(function(){
@@ -2063,6 +2072,10 @@ function readstory(theid, theHeadline) {
                         },1000);
                     });
                 }
+                // MARK: - Track Story Open Failures in Google Analytics
+                // MARK: - Set alert in Google Analytics
+                var connectionType = window.gConnectionType || 'unknown connection';
+                ga('send','event','CatchError', 'App Fail to Load Story on '+ connectionType, theid, {'nonInteraction':1});
             });
         }
     }, 10);	
@@ -2886,7 +2899,7 @@ function httpspv(theurl) {
 	    document.title = $('#storyview .storytitle').html() + ' - FT中文网手机应用';
     } else if (theurl.indexOf('channelpage')>0) {
         theurl = theurl.replace(/[0-9\=\?\&]+$/,'');
-	    document.title = $('.channeltitle').html() + ' - FT中文网手机应用';
+	    document.title = $('#header-title').html() + ' - FT中文网手机应用';
     } else if (theurl.indexOf('photo')<0 && theurl.indexOf('interactive')<0 && theurl.indexOf('video')<0){
         document.title = gAppName;
     }
@@ -3252,7 +3265,8 @@ function showchannel(url, channel, requireLogin, openIniFrame, channelDescriptio
             //startslides();
 
             //记录频道页面PV
-            pvurl=url;
+            pvurl=orignialUrl;
+        
             if (url.indexOf('myftread')>0) {pvurl=url.replace(/\&/g,'|');}
 
             // no need to track pv for registration page
@@ -3464,6 +3478,8 @@ function backhome() {
     }
     _popstate=0;
     document.getElementById('header-title').innerHTML = '';
+    // MARK: - Check images in home page
+    showAppImage('fullbody');
 }
 
 function resizeImg(iMage,resizeWidth,resizeHeight) {

@@ -248,6 +248,12 @@ if (adCode === 'fullScreen') {
     }
 } else if (c === '20220121' && 1<0) {
 
+
+
+
+
+
+
 } else {
     document.writeln(dolphineInlineScript);
 }
@@ -452,9 +458,7 @@ function sendMediaTypeToParent(el) {
 	if (!parent || !parent.postMessage || window.top === window) {
 		return;
 	}
-
 	var videoEl = el.querySelector('video');
-
 	var msg = {
 		type: videoEl ? 'video' : null,
 		url: location.href
@@ -464,7 +468,12 @@ function sendMediaTypeToParent(el) {
 }
 
 
-function controlVideoPlayback(container) {	
+function controlVideoPlayback(container) {
+
+    if (!container) {
+        //console.log ('cannot find container for video');
+        return;
+    }
 
 	sendMediaTypeToParent(container);
 
