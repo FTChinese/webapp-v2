@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1188; //当前的版本号
+var _currentVersion = 1191; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -2272,7 +2272,7 @@ function displaystoryNormal(theid, language) {
     var storyTopics = allId.topic || '';
     var storyIndustry = allId.industry || '';
     var storyGenre = allId.genre || '';
-    var eauthor = allId.eauthor || 'FTChinese';
+    var eauthor = allId.eauthor || '';
     var insertAd = 3;
     var insertAd2 = 10;
     var insertAdCharCount = 0;
@@ -2473,7 +2473,7 @@ function displaystoryNormal(theid, language) {
 
     
 
-    if (byline.replace(/ /g,'')==''){byline = 'FT中文网';}
+    if (byline.replace(/ /g,'')==''){byline = '';}
     storyTag = ',' + storyTag + ',';
     storyTag = storyTag.replace(/，/g, ',')
                         .replace(/,白底,/g, ',')
@@ -4440,7 +4440,7 @@ $.fn.extend({
 });
 
 
-//Start the web app
+//MARK: - Start the web app
 try {
     checkDevice();
     startpage();

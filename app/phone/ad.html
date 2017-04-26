@@ -246,61 +246,7 @@ if (adCode === 'fullScreen') {
         // console.log ('full screen ad displayed. ');
         document.writeln(dolphineInlineScript);
     }
-} else if (c === '20220121' && 1>0) {
-
-
-
-Imp = 'http://ad.doubleclick.net/ddm/trackimp/N4517.281394FTCHINESE/B11269743.150239011;dc_trk_aid=320985129;dc_trk_cid=58162014;ord=[timestamp]?';
-AdName = 'testOliver';
-
-
-
-
-if (typeof Imp === 'string') {
-    asRandom = 'IMG' + Math.round(Math.random() * 1000000000000);
-    var timestamp = new Date().getTime();
-    var ImpNew = Imp.replace('ord=[timestamp]', 'ord=' + timestamp) + '&[ASRANDOM]';
-    if (typeof window.parent.gTrackThirdParyImpression !== 'object') {
-        window.parent.gTrackThirdParyImpression = {};
-    }
-    window.parent.gTrackThirdParyImpression[asRandom] = new Image();
-    window.parent.gTrackThirdParyImpression[asRandom].onload = function() {
-        window.parent.ga('send', 'event', AdName + ' ([ASSID])', 'Success', Imp, {
-            'nonInteraction': 1
-        });
-        console.log (window.parent.gTrackThirdParyImpression);
-        delete window.parent.gTrackThirdParyImpression[asRandom];
-        console.log (window.parent.gTrackThirdParyImpression);
-    };
-    window.parent.gTrackThirdParyImpression[asRandom].onerror = function() {
-        window.parent.ga('send', 'event', AdName + ' ([ASSID])', 'Fail', Imp, {
-            'nonInteraction': 1
-        });
-        var track2 = new Image();
-        track2.onload = function() {
-            window.parent.ga('send', 'event', AdName + ' ([ASSID]) Redo', 'Success', Imp, {
-                'nonInteraction': 1
-            });
-        }
-        track2.onerror = function() {
-            window.parent.ga('send', 'event', AdName + ' ([ASSID]) Redo', 'Fail', Imp, {
-                'nonInteraction': 1
-            });
-        }
-        track2.src = ImpNew;
-    };
-    //window.parent.gTrackThirdParyImpression[asRandom] = track;
-    window.parent.gTrackThirdParyImpression[asRandom].src = ImpNew;
-    window.parent.ga('send', 'event', AdName + ' ([ASSID])', 'Request', Imp, {
-        'nonInteraction': 1
-    });
-}
-
-// for (var i=0; i<window.parent.gTrackThirdParyImpression.length; i++) {
-//     console.log (window.parent.gTrackThirdParyImpression[i].src);
-// }
-
-
+} else if (c === '20220121' && 1<0) {
 
 
 
