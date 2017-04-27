@@ -250,6 +250,7 @@ function sendImpToThirdParty(Imp, AdName, assID) {
             ImpNew += '?';
         }
         ImpNew = ImpNew.replace('ord=[timestamp]', 'ord=' + timestamp) + '&' + asRandom + '&ftctime=' + timestamp;
+        ImpNew = ImpNew.replace('http://ad.doubleclick.net','https://ad.doubleclick.net');
         if (typeof window.parent.gTrackThirdParyImpression !== 'object') {
             window.parent.gTrackThirdParyImpression = {};
         }
@@ -269,8 +270,8 @@ function sendImpToThirdParty(Imp, AdName, assID) {
             window.parent.ga('send', 'event', this.title, 'Fail', this.alt, {
                 'nonInteraction': 1
             });
-            ImpNew = ImpNew.replace('http://','https://');
-            asRandom2 = 'IMG' + Math.round(Math.random() * 1000000000000);
+            ImpNew = ImpNew.replace('https://ad.doubleclick.net','http://ad.doubleclick.net');
+            var asRandom2 = 'IMG' + Math.round(Math.random() * 1000000000000);
             window.parent.gTrackThirdParyImpression[asRandom2] = new Image();
             window.parent.gTrackThirdParyImpression[asRandom2].src = ImpNew;
             window.parent.gTrackThirdParyImpression[asRandom2].title = this.title;
@@ -280,12 +281,12 @@ function sendImpToThirdParty(Imp, AdName, assID) {
                     'nonInteraction': 1
                 });
                 delete window.parent.gTrackThirdParyImpression[asRandom2];
-            }
+            };
             window.parent.gTrackThirdParyImpression[asRandom2].onerror = function() {
                 window.parent.ga('send', 'event', this.title, 'Fail on Retry', this.alt, {
                     'nonInteraction': 1
                 });
-            }
+            };
             delete window.parent.gTrackThirdParyImpression[asRandom];
         };
 
