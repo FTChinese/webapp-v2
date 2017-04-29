@@ -28,6 +28,16 @@ function GetCookie(name){
     return decodeURIComponent(document.cookie.substring(len,end));
 }
 
+function findTop(obj) {
+var curtop = 0;
+if (obj.offsetParent) {
+  do {
+    curtop += obj.offsetTop;
+  } while ((obj = obj.offsetParent));
+  return curtop;
+}
+}
+
 function adReachability() {
   var thirdPartyVendors = {
     'dcR': '_dc',
@@ -56,7 +66,6 @@ function adReachability() {
 var uaString=navigator.userAgent || navigator.vendor || "",deviceType="",k=window.location.href,c,adchannelId,adPositionId,adType,adType,adId,adLink,bodyWidth=document.body.offsetWidth || 0;
 var matchSpecial = false;
 var gSpecialAdId = '';
-var gAdContent;
 var parentLink = window.parent.location.href;
 var testFullPage = false;
 if (parentLink.indexOf('testfullpagead') > 0) {
@@ -233,8 +242,7 @@ if (testFullPage === true && adCode === 'fullScreen') {
     c = '20530107';
 }
 
-var dolphineInlineScript = '<div class="'+adType+'" id="ad-content"><scr'+'ipt type="text/javascript" src="http://dolphin.ftimg.net/s?z=ft&c=' + c + adReachability() + '&t='+Math.round(Math.random() * 1000000)+'" charset="gbk" ></scr'+'ipt></div>';
-
+var dolphineInlineScript = '<div class="'+adType+'" id="ad-content"><scr'+'ipt type="text/javascript" src="http://dolphin.ftimg.net/s?z=ft&c=' + c + adReachability() + '&t='+Math.round(Math.random() * 1000000)+'" charset="gbk" ></scr'+'ipt><div id="ad-bottom"></div></div>';
 
 
 if (adCode === 'fullScreen') {
@@ -256,6 +264,7 @@ if (adCode === 'fullScreen') {
 }
 
 
+
 try {
     window.parent.ga('send', 'event', 'Ad Impression', c.substring(0,4), c.substring(4,8), {'nonInteraction':1});
 } catch(ignore) {
@@ -264,9 +273,12 @@ try {
 </script>
 
 
+
 <script>
 var adLinks, i, adHeight=0, gATag, gVideoTag, gImgTag, gDivTag, giFrameTag, gParentA, gParentHTML, gParentHTMLClass, gReferal, gParentDom;
 var isInAppPurchase;
+var adBottom;
+
 
 function isProductIdInApp(id) {
     //console.log (parent.gIsInSWIFT);
@@ -401,23 +413,20 @@ try {
 adId = adId.replace(/ad\-/g,"");
 adId = 'ad-' + adId;
 
-
-
 try {
-	//console.log (adType);
+    // MARK: Handle only the switch between MPU and Half Page Ads
     if ((adType === 'halfpage' || adType === 'mpu' || adType === 'mpu-phone') && (gImgTag>0||gDivTag>0||giFrameTag>0)) {
-        gAdContent = document.getElementById("ad-content").innerHTML;
-        if (/height:600px|x600/i.test(gAdContent)) {
+        adBottom = document.getElementById('ad-bottom');
+        if (adBottom) {
+        adHeight = findTop(adBottom) || 0;
+        }
+        if (adHeight >= 600) {
             adHeight = 600;
-        } else if (adType === 'halfpage' && /height:250px|x250/i.test(gAdContent)){
-            adHeight = 250;
-        } else if (adType === 'halfpage') {
-            adHeight = 600;
-        } else {
+        } else if (adHeight >= 250) {
             adHeight = 250;
         }
-        //console.log (adHeight);
         if (adHeight === 250) {
+            console.log ('should switch to mpu');
         	if (adType !== 'mpu-phone') {
             	parent.document.getElementById(adId).className = "adiframe mpu";
             }
@@ -427,26 +436,6 @@ try {
             parent.document.getElementById(adId).style.height = "600px";
             document.getElementById('ad-content').style.height = "600px";
         }
-    } else { 
-        //if no ad is delivered, hide the ad position altogether
-        //console.log (adId + ' gDivTag: ' + gDivTag);
-
-        /*
-
-        gParentHTML = parent.document.getElementsByTagName("html")[0];
-        gParentHTMLClass = gParentHTML.className;
-
-        console.log (adType + adId + ': ' + parent.document.getElementById(adId).offsetTop);
-
-        if (gDivTag>0 || gImgTag>0 || gATag>0 || gVideoTag>0 || giFrameTag>0) {
-            parent.document.getElementById(adId).style.display = "block";
-            gParentHTMLClass = gParentHTMLClass.replace(/ no\-banner/g,"");
-        } else {
-            parent.document.getElementById(adId).style.display = "none";
-            gParentHTMLClass = gParentHTMLClass + ((gParentHTMLClass.indexOf("no-banner")<0) ? " no-banner" : "");
-        }
-        gParentHTML.className = gParentHTMLClass;
-        */
     }
 } catch (ignore) {
 }

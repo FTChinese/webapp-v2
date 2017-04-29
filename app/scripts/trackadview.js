@@ -194,7 +194,7 @@ function playVideoInAdIframe(adId) {
     return;
   }
 
-  console.log(theAdDiv.id + ' might contain video ad. Send play command.');
+  // console.log(theAdDiv.id + ' might contain video ad. Send play command.');
   var iframeEl = theAdDiv.querySelector('iframe');
   // console.log(iframeEl);
   var msg = {
