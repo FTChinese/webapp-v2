@@ -2963,7 +2963,10 @@ function httpspv(theurl) {
     try {
         ga('set', 'dimension7', _currentVersion.toString());
         ga('set', 'dimension2', vtype);
-        if (userId !== '') {ga('set', 'dimension14', userId);}
+        if (userId !== '') {
+            ga('set', 'dimension14', userId);
+            ga('set', 'userId', userId);
+        }
         ga('set', 'dimension4', pagetype);
         if (ftcteam !== '') {ga('set', 'dimension5', ftcteam);}
         ga('set', 'dimension17', langmode);
