@@ -9,6 +9,7 @@ var g = d.getElementsByTagName('body')[0];
 var windowHeight = w.innerHeight|| e.clientHeight|| g.clientHeight;
 var gAdImpressionExpose = 0.5;
 var gScrollerHeight = windowHeight - gBottomBarHeight;
+var gUserType = 'visitor';
 
 function adViewUpdate() {
   var scrollTop = document.getElementById(gCurrentScroller).scrollTop;

@@ -18,6 +18,8 @@ img {border:0;max-width:100%;}
 
 <body style="background-color:#FFF1E0;">
 <script>
+var gUserType = window.parent.gUserType || 'visitor';
+
 function GetCookie(name){
     var start = document.cookie.indexOf(name+"="),
         len = start+name.length+1,
@@ -38,6 +40,7 @@ if (obj.offsetParent) {
 }
 }
 
+
 function adReachability() {
   var thirdPartyVendors = {
     'dcR': '_dc',
@@ -54,14 +57,22 @@ function adReachability() {
          adReachabilityStatus = GetCookie(k);
          if (adReachabilityStatus === 'reachable') {
           adParameter += '&' + thirdPartyVendors[k] + '=1';
+         } else if (window.gIsSpider === true && (k === 'dcR' || k === 'amR')) {
+          // MARK: - If it's spam. Don't use DoubleClick and AdMaster to serve
+          adParameter += '&' + thirdPartyVendors[k] + '=0';
          } else if (adReachabilityStatus === null) {
           adParameter += '&' + thirdPartyVendors[k] + '=2';
          }
       }
   }
-//  console.log (adParameter);
+  if (typeof window.gUserType !== 'string') {
+    window.gUserType = 'visitor';
+  }
+  adParameter += '&' + '_ut=' + window.gUserType;
+  //console.log (adParameter);
   return adParameter;
 }
+
 
 var uaString=navigator.userAgent || navigator.vendor || "",deviceType="",k=window.location.href,c,adchannelId,adPositionId,adType,adType,adId,adLink,bodyWidth=document.body.offsetWidth || 0;
 var matchSpecial = false;
@@ -263,7 +274,7 @@ if (adCode === 'fullScreen') {
     document.writeln(dolphineInlineScript);
 }
 
-
+// console.log (dolphineInlineScript);
 
 try {
     window.parent.ga('send', 'event', 'Ad Impression', c.substring(0,4), c.substring(4,8), {'nonInteraction':1});

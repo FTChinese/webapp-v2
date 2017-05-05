@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1194; //当前的版本号
+var _currentVersion = 1196; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -17,6 +17,7 @@ var allstories = [];
 var osVersion;
 var connectInternet = 'no';
 var uaString = navigator.userAgent || navigator.vendor || '';
+var gIsSpider = (/spider|baidu|bidu|bot|crawler|crawling/i.test(uaString)) ? true: false;
 var osVersionMore = '';
 var useFTScroller = 0;
 var nativeVerticalScroll = false;
@@ -2908,9 +2909,12 @@ function httpspv(theurl) {
     var screenType;
     var deviceName;
 
-    if (username === undefined || username== null || username == '') {
+    if (gIsSpider === true) {
+        vtype = 'spider';
+    } else if (username === undefined || username== null || username == '') {
         vtype='visitor';
     }
+    gUserType = vtype;
     if (theurl.indexOf('story')>=0) {
         pagetype='Story';
     } else if (theurl.indexOf('interactive')>=0){
