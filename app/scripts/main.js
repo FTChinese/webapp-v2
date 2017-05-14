@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1198; //当前的版本号
+var _currentVersion = 1199; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -2511,6 +2511,11 @@ function displaystoryNormal(theid, language) {
             firstChild='';
         }
         storyTag += '<a class="oneTag oneStory more'+firstChild+'" onclick=\'showchannel("/index.php/ft/tag/' + tagdata[i] + '?i=2","' + tagdata[i] + '")\'>' + tagdata[i] + '</a>';
+        try {
+            ga('send','event','Story Tag',tagdata[i],theid,{'nonInteraction':1});
+        } catch (ignore) {
+
+        }
     }
     storyTag = storyTag.replace(/，$/g, '');
     $('#storyview .storymore').after('<div class="storyTag"><a class=section><span>相关话题</span></a><div class=container>'+ storyTag +'</div></div>');
