@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1201; //当前的版本号
+var _currentVersion = 1202; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -3006,6 +3006,11 @@ function httpspv(theurl) {
         }
     } else {
         new Image().src = 'http://m.ftchinese.com/track/ga.php?utmac=MO-1608715-1&utmn=2013101610&utmr=-&utmp=%2Fmissed'+theurl+'&guid=ON';
+    }
+    try {
+        yl('send', 'pageview', theurl);
+    } catch (ignore) {
+
     }
     updateAds();
     setTimeout (function (){freezeCheck();},200);
