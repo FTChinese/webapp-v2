@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1199; //当前的版本号
+var _currentVersion = 1201; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -2023,7 +2023,7 @@ function readstory(theid, theHeadline) {
             document.getElementById('storyScroller').scrollTop = 0;
         } 
         if (allstories[theid]) {
-            displaystory(theid, langmode);
+            displaystory(theid, langmode, theHeadline);
         } else {//online
             //sv.find('.storybody').html('正在读取文章数据...3');
             if (typeof theHeadline === 'string') {
@@ -2057,7 +2057,7 @@ function readstory(theid, theHeadline) {
                 // display story only when the loader is present
                 // otherwise the story body will scroll to top while reader is reading 
                 if (gCurrentStoryId === myid && sv.find('.storybody .loader-container').length > 0) {
-                    displaystory(myid, langmode);
+                    displaystory(myid, langmode, theHeadline);
                 } else if (gCurrentStoryId !== myid) {
                     ga('send','event','Stop displaystory', 'Another Story', myid, {'nonInteraction':1});
                 } else if (sv.find('.storybody .loader-container').length === 0) {
@@ -2097,7 +2097,7 @@ function removeTag(theCode) {
 }
 
 
-function displaystory(theid, language) {
+function displaystory(theid, language, forceTitle) {
     var storyViewMode = 'normal';
     var allId;
     var storyTag;
@@ -2129,7 +2129,7 @@ function displaystory(theid, language) {
     //     $('#storyview').addClass('columnFlowOn');
     //     displaystoryColumn(theid, language);
     // }
-    displaystoryNormal(theid, language);
+    displaystoryNormal(theid, language, forceTitle);
 }
 
 
@@ -2236,7 +2236,7 @@ function displaystory(theid, language) {
 // }
 
 
-function displaystoryNormal(theid, language) {
+function displaystoryNormal(theid, language, forceTitle) {
     var columnintro = ''; 
     var storyimage;
     var allId = allstories[theid];
@@ -2392,7 +2392,7 @@ function displaystoryNormal(theid, language) {
         $('.cebutton').addClass('nowreading');
         storyHeadline = allId.eheadline;
     } else {
-        $('#storyview').removeClass('ceview').find('.storytitle').html(allId.cheadline);
+        
         actualLanguage = 'ch';
         byline = (allId.cbyline_description||'').replace(/作者[：:]/g, '') + ' ' + (allId.cauthor||'').replace(/,/g, '、') + ' ' + (allId.cbyline_status || '');
         //alert (allId.cbody);
@@ -2415,11 +2415,15 @@ function displaystoryNormal(theid, language) {
             });
         }
         if (allId.ebody && allId.ebody.length > 30) {$('.chbutton').addClass('nowreading');} else {$('.cebutton,.enbutton,.chbutton').addClass('nowreading');}
-        storyHeadline = allId.cheadline;
+        // MARK: - If a user taps a notification to open the story, display the alert message rather than the current Chinese headline
+        if (typeof forceTitle === 'string' && forceTitle !== '' ) {
+            storyHeadline = forceTitle;
+        } else {
+            storyHeadline = allId.cheadline;
+        }
+        $('#storyview').removeClass('ceview').find('.storytitle').html(storyHeadline);
+        
     }
-
-
-
 
     // MARK: - Business logic on how to insert MPU ads into story body
     if (actualLanguage === 'ce') {
