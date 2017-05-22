@@ -384,6 +384,11 @@ margin-bottom:8px;
 #fullbodycontainer .user_id.password {
 margin-bottom:14px;
 }
+.no-ad {
+	.adiframe {
+		display:none;
+	}
+}
 .adiframe{
 	position: relative;
 	overflow: hidden;

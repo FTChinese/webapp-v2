@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1202; //当前的版本号
+var _currentVersion = 1203; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -58,7 +58,7 @@ var gPrefix = {};//存储有关浏览器css前缀的变量
 // test the home page with a different html template
 var homeFileName = (window.location.href.indexOf('nexthometest') >= 0) ? 'nexthometest': 'nexthome';
 var fullScreenAdPara = (window.location.href.indexOf('useNativeLaunchAd') >= 0 && Math.random() < 0) ? '&noFullScreenAd': '';
-
+var gHideAd = (window.location.href.indexOf('hideAd=yes') >= 0) ? true: false;
 
 //开机的时候检查屏幕宽度，以便节约流量
 //我们的基本假设是，不管横屏还是竖屏，只要宽度小于700，那就是手机；否则就是平板
@@ -2804,6 +2804,9 @@ function checkDevice() {
     } else {
         $('html').addClass('noScroller').removeClass('hasScroller');
     }
+    if (gHideAd === true) {
+        $('html').addClass('no-ad');
+    }
     if (noFixedPosition==1) {
         $('html').addClass('noFixedPosition');
     } else {
@@ -3012,7 +3015,11 @@ function httpspv(theurl) {
     } catch (ignore) {
 
     }
-    updateAds();
+    if (gHideAd === false) {
+        updateAds();
+    } else {
+        console.log ('ad is not displaying');
+    }
     setTimeout (function (){freezeCheck();},200);
 }
 
