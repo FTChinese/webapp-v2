@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1203; //当前的版本号
+var _currentVersion = 1206; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -796,7 +796,7 @@ function freezeScroll() {
     }
 
     
-    gNowView = document.body.className;
+    //gNowView = document.body.className;
     n = $('#' + gNowView);
     f = n.find('.fixed-content').eq(0);
     i = document.getElementById(gNowView+'Inner');
@@ -845,7 +845,7 @@ function freezeCheck() {
     screenWidth = $(window).width();
     if (screenWidth>=700 && screenHeight>=400 && noFixedPosition===0 && osVersion.indexOf('Android')<0) {
         var n,c,c1,r,r1;
-        gNowView = document.body.className;
+        //gNowView = document.body.className;
         n = $('#' + gNowView).eq(0);
         c = n.find('.fixed-content');
         r = n.find('.layout-a_region-4 .inner');
@@ -1359,7 +1359,7 @@ function jumpToPage(){
     var hashURI = location.hash || '', _channel_name, _channel_title, k;
     if (hashURI.indexOf('story/')>=0) {
         k=hashURI.replace(/^.*story\//g, '');
-        if (document.body.className != 'storyview' || readingid!=k) {
+        if (gNowView != 'storyview' || readingid!=k) {
             readstory(k);
         }
     } else if (hashURI.indexOf('channel/')>0) {
@@ -1688,45 +1688,6 @@ function refresh(forceDownload){
             }
         }, 2000);
     }
-    /*
-    if (location.href.indexOf("android")>=0) {
-        $("#refreshButton").addClass("blue");
-        requestTime = new Date().getTime();
-        $.ajax("/index.php/jsapi/get_last_updatetime?"+requestTime)
-            .done(function(data) {
-                $("#refreshButton").removeClass("blue");
-                var k=isNaN(parseInt(data,10));
-                if (k===false) {
-                    successTime=new Date().getTime();
-                    if (successTime-requestTime < 300 || forceDownload === true || gHomePageIsLatest === false) {
-                        window.location.reload();
-                    } else if (data==lateststory) {
-                        lateststory=data;
-                        $('#popup-title').html("提示");
-                        $('#popup-description').html("FT中文网没有发布更新的内容，仍然刷新？");
-                        $('#popup-content').html("<div class='standalonebutton'><button class='ui-light-btn' onclick=\"window.location.reload();\">确定</button></div><div class='standalonebutton last-child'><button class='ui-light-btn' onclick=\"$('#popup').removeClass('on');\">取消</button></div>");
-                        $('#popup').addClass('on');
-                    } else {
-                        lateststory=data;
-                        $('#popup-title').html("提示");
-                        $('#popup-description').html("您的网速似乎不大理想，仍然刷新？");
-                        $('#popup-content').html("<div class='standalonebutton'><button class='ui-light-btn' onclick=\"window.location.reload();\">确定</button></div><div class='standalonebutton last-child'><button class='ui-light-btn' onclick=\"$('#popup').removeClass('on');\">取消</button></div>");
-                        $('#popup').addClass('on');
-                    }
-                } else {
-                    $('#popup-title').html("提示");
-                    $('#popup-description').html("您现在无法正确获取FT中文网的数据，请稍后尝试刷新");
-                    $('#popup-content').html("<button class='ui-light-btn' onclick=\"$('#popup').removeClass('on');\">我知道了</button></div>");
-                    $('#popup').addClass('on');
-                }
-            })
-            .fail(function() {
-                $('#popup-title').html("提示");
-                $('#popup-description').html("您现在连接不到FT中文网的服务器，请稍后尝试刷新");
-                $('#popup-content').html("<button class='ui-light-btn' onclick=\"$('#popup').removeClass('on');\">我知道了</button></div>");
-                $('#popup').addClass('on');
-            });
-    } else */
     if (gIsInSWIFT === true || 1 === 1) {
         $('html').addClass('is-refreshing');
         $('#homeload .loadingStatus').html('检查新内容...');
@@ -1768,8 +1729,6 @@ function checkbreakingnews() {
     	function(data) { $('#breakingnews').html(data);});
 }
 */
-
-
 
 
 
@@ -3168,6 +3127,7 @@ function showchannel(url, channel, requireLogin, openIniFrame, channelDescriptio
     var channelDetail = channelDescription || '';
     var orignialUrl = url;
     var channelUrl = url;
+    var channelClass = getURLParameter(url, 'channel');
 
     if (window.location.hostname === 'localhost' || window.location.hostname.indexOf('192.168') === 0 || window.location.hostname.indexOf('10.113') === 0 || window.location.hostname.indexOf('127.0') === 0) {
         if (url.indexOf('/index.php/users/register')>=0) {
@@ -3185,8 +3145,7 @@ function showchannel(url, channel, requireLogin, openIniFrame, channelDescriptio
     } else {
         gTagData = [];
     }
-    //console.log (url);
-    //console.log (gTagData);
+
 
     if (channelView.find('#channelScroller').length<=0) {
         channelView.html('<div id=channelScroller><div id=channelContent></div></div>');
@@ -3196,7 +3155,9 @@ function showchannel(url, channel, requireLogin, openIniFrame, channelDescriptio
         if ($('body').hasClass('storyview')==false) {scrollHeight = window.pageYOffset;}
     }
     closeOverlay();
-    document.body.className = 'channelview';
+    // MARK: - Set the body class to reflect both channelview and channel name such china and ftacademy
+
+    document.body.className = 'channelview ' + channelClass;
     gNowView = 'channelview';
     if (useFTScroller===0) {
         window.scrollTo(0, 0);

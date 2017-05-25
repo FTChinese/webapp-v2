@@ -115,7 +115,7 @@ function startTrackingAdViews(scrollerId) {
 
 // MARK: - 刷新广告位
 function updateAds() {
-    var nowV = $('body').attr('class') || '';
+    var nowV = gNowView;
     var isColumnFlow = false;
     var currentViewPortAds;
     if (nowV !== 'storyview') {
@@ -138,6 +138,7 @@ function updateAds() {
             currentViewPortAds = $('#'+nowV).find('.adiframe');
         }
         nowV = nowV.replace(/\-/g, '');
+        console.log (nowV);
         currentViewPortAds.each(function(index) {
             var adHeight=$(this).attr('type') || 0;
             var adFrame=$(this).attr('frame') || '';

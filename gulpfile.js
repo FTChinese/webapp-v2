@@ -253,10 +253,11 @@ gulp.task('copy', ['build'], function () {
 
 
 
-
 gulp.task('ga', function () {
-    getUrltoFile('http://m.ftchinese.com/index.php/jsapi/analytics', './app/log/ga.js');
-    getUrltoFile('http://m.ftchinese.com/index.php/jsapi/analytics', './dist/log/ga.js');
+    //var gaUrl = 'http://m.ftchinese.com/index.php/jsapi/analytics';
+    var gaUrl = 'https://www.google-analytics.com/analytics.js';
+    getUrltoFile(gaUrl, './app/log/ga.js');
+    getUrltoFile(gaUrl, './dist/log/ga.js');
 });
 
 
