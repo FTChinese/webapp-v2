@@ -506,7 +506,9 @@ function controlVideoPlayback(container) {
 			case 'play':
 				if (videoEl.paused) {
 					//console.log('Play the video');
-					videoEl.play();
+                    if ((typeof window.parent.gConnectionType === 'string') && window.parent.gConnectionType === 'wifi') {
+                        videoEl.play();
+                    }
 				}
 				
 				break;
