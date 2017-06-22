@@ -306,8 +306,9 @@ function isProductIdInApp(id) {
 }
 
 function checkDom(qString) {
-    if (document.querySelectorAll(qString)) {
-        return document.querySelectorAll(qString).length;
+    var adContent = document.getElementById('ad-content');
+    if (adContent && adContent.querySelectorAll(qString)) {
+        return adContent.querySelectorAll(qString).length;
     } else {
         return 0;
     }
@@ -324,12 +325,15 @@ if (document.getElementById("ad-content") && document.getElementById("ad-content
 adId = "ad-"+adId;
 
 //alert (typeof window.videoAd);
+
+
+
 try {
-    gATag = checkDom('#ad-content a');
-    gVideoTag = checkDom('#ad-content video');
-    giFrameTag = checkDom('#ad-content iframe');
-    gImgTag = checkDom('#ad-content img');
-    gDivTag = checkDom('#ad-content div');
+    gATag = checkDom('a');
+    gVideoTag = checkDom('video') + checkDom('#video');
+    giFrameTag = checkDom('iframe');
+    gImgTag = checkDom('img');
+    gDivTag = checkDom('div');
 
     //console.log (adId);
     try {
@@ -347,7 +351,6 @@ try {
         gVideoTag = 1;
         window.overlayLink = '';
     }
-
 
     if ((parent.window.useFTScroller===1 && gVideoTag === 0 && giFrameTag === 0 && (gATag===1 || (gATag === 0 && gImgTag === 0 && gDivTag === 0))) || (window.overlayLink !== undefined && window.overlayLink !== '')) {
         if (typeof window.forceLink === 'string') {
