@@ -79,6 +79,20 @@ var matchSpecial = false;
 var gSpecialAdId = '';
 var parentLink = window.parent.location.href;
 var testFullPage = false;
+
+function removeAd() {
+    //alert ('removeAd');
+    window.parent.ga('send', 'event', 'Ad Impression: Error', c.substring(0,4), c.substring(4,8), {'nonInteraction':1});
+}
+
+function loaded() {
+    //alert ('loaded');
+    if (window.isHouseAd === true) {
+        window.parent.ga('send', 'event', 'Ad Impression: House Ad', c.substring(0,4), c.substring(4,8), {'nonInteraction':1});
+    }
+}
+
+
 if (parentLink.indexOf('testfullpagead') > 0) {
     testFullPage = true;
 }
@@ -253,7 +267,7 @@ if (testFullPage === true && adCode === 'fullScreen') {
     c = '20530107';
 }
 
-var dolphineInlineScript = '<div class="'+adType+'" id="ad-content"><scr'+'ipt type="text/javascript" src="http://dolphin.ftimg.net/s?z=ft&c=' + c + adReachability() + '&t='+Math.round(Math.random() * 1000000)+'" charset="gbk" ></scr'+'ipt><div id="ad-bottom"></div></div>';
+var dolphineInlineScript = '<div class="'+adType+'" id="ad-content"><scr'+'ipt type="text/javascript" src="http://54.251.12.141/s?z=ft&c=' + c + adReachability() + '&t='+Math.round(Math.random() * 1000000)+'" charset="gbk" onerror="removeAd()" onload="loaded()"></scr'+'ipt><div id="ad-bottom"></div></div>';
 
 
 if (adCode === 'fullScreen') {
