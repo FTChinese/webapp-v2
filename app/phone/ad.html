@@ -522,7 +522,7 @@ function controlVideoPlayback(container) {
 				if (videoEl.paused) {
 					//console.log('Play the video');
                     if ((typeof window.parent.gConnectionType === 'string') && window.parent.gConnectionType === 'wifi') {
-                        // videoEl.volume = 0.0;
+                        videoEl.volume = 0.0;
                         videoEl.play();
                     }
 				}
