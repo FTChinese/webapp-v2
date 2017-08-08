@@ -79,6 +79,8 @@ var matchSpecial = false;
 var gSpecialAdId = '';
 var parentLink = window.parent.location.href;
 var testFullPage = false;
+var slotNumber = '000000';
+var slotString = '';
 
 function removeAd() {
     //alert ('removeAd');
@@ -98,8 +100,18 @@ if (parentLink.indexOf('testfullpagead') > 0) {
 }
 
 adCode=k.replace(/^.*adtype=([0-9A-Za-z\-]+).*$/,"$1");
-adId=k.replace(/^.*adid=([0-9A-Za-z]+).*$/,"$1");
+adId=k.replace(/^.*adid=([0-9A-Za-z]+).*$/,"$1") || '';
 
+
+if (adId.indexOf('fullbody') === 0) {
+    slotNumber = '000001'
+} else if (adId.indexOf('storyview') === 0) {
+    slotNumber = '000002'
+} else if (adId.indexOf('channelview') === 0) {
+    slotNumber = '000003'
+}
+
+slotString = '&slot=' + slotNumber;
 
 
 if (adCode=="ad300x250-SP" || (parent.window.gSpecial === true && adCode==="ad300x250-2")) {//code for special report VFTT
@@ -267,7 +279,7 @@ if (testFullPage === true && adCode === 'fullScreen') {
     c = '20530107';
 }
 
-var dolphineInlineScript = '<div class="'+adType+'" id="ad-content"><scr'+'ipt type="text/javascript" src="http://dualstack.adsame-1421766300.ap-southeast-1.elb.amazonaws.com/s?z=ft&c=' + c + adReachability() + '&t='+Math.round(Math.random() * 1000000)+'" charset="gbk" onerror="removeAd()" onload="loaded()"></scr'+'ipt><div id="ad-bottom"></div></div>';
+var dolphineInlineScript = '<div class="'+adType+'" id="ad-content"><scr'+'ipt type="text/javascript" src="http://dualstack.adsame-1421766300.ap-southeast-1.elb.amazonaws.com/s?z=ft&c=' + c + adReachability() + slotString + '&t='+Math.round(Math.random() * 1000000)+'" charset="gbk" onerror="removeAd()" onload="loaded()"></scr'+'ipt><div id="ad-bottom"></div></div>';
 
 
 if (adCode === 'fullScreen') {
