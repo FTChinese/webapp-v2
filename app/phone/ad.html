@@ -79,7 +79,7 @@ var matchSpecial = false;
 var gSpecialAdId = '';
 var parentLink = window.parent.location.href;
 var testFullPage = false;
-var slotNumber = '000000';
+var slotNumber = '';
 var slotString = '';
 
 function removeAd() {
@@ -103,12 +103,11 @@ adCode=k.replace(/^.*adtype=([0-9A-Za-z\-]+).*$/,"$1");
 adId=k.replace(/^.*adid=([0-9A-Za-z]+).*$/,"$1") || '';
 
 
-if (adId.indexOf('fullbody') === 0) {
-    slotNumber = '000001'
-} else if (adId.indexOf('storyview') === 0) {
-    slotNumber = '000002'
-} else if (adId.indexOf('channelview') === 0) {
-    slotNumber = '000003'
+if (typeof parent.window.gSlotNumber === 'string') {
+    slotNumber = parent.window.gSlotNumber;
+} else {
+    slotNumber = parseInt(Math.random() * 1000000, 10).toString();
+    parent.window.gSlotNumber = slotNumber;
 }
 
 slotString = '&slot=' + slotNumber;
@@ -282,6 +281,8 @@ if (testFullPage === true && adCode === 'fullScreen') {
 var dolphineInlineScript = '<div class="'+adType+'" id="ad-content"><scr'+'ipt type="text/javascript" src="http://dualstack.adsame-1421766300.ap-southeast-1.elb.amazonaws.com/s?z=ft&c=' + c + adReachability() + slotString + '&t='+Math.round(Math.random() * 1000000)+'" charset="gbk" onerror="removeAd()" onload="loaded()"></scr'+'ipt><div id="ad-bottom"></div></div>';
 
 
+
+
 if (adCode === 'fullScreen') {
     // MARK: - if a full screen ad is already displayed once, return immediately
     var popAd1 = parent.parent.document.getElementById("pop-ad");
@@ -291,7 +292,7 @@ if (adCode === 'fullScreen') {
         // console.log ('full screen ad displayed. ');
         document.writeln(dolphineInlineScript);
     }
-} else if (c === '20220121' && 1<0) {
+} else if (c === '20220107' && 1<0) {
 
 
 } else {
@@ -376,9 +377,7 @@ try {
 
     }
 
-
-
-    if (typeof window.videoAd === 'object') {
+    if (typeof window.videoAd === 'object' || typeof window.videoUrl === 'string' || typeof window.vid === 'string') {
         gVideoTag = 1;
         window.overlayLink = '';
     }
