@@ -188,6 +188,9 @@ if (adCode=="ad300x250-SP" || (parent.window.gSpecial === true && adCode==="ad30
     } else if (adCode=="banner-paid-post-home") {
         adPositionId="0121";
         adType="full-width";
+    } else if (adCode=="banner-paid-post-home-2") {
+        adPositionId="0123";
+        adType="full-width";
     } else {
         adPositionId="0101";
         adType="ad50";
@@ -279,8 +282,6 @@ if (testFullPage === true && adCode === 'fullScreen') {
 }
 
 var dolphineInlineScript = '<div class="'+adType+'" id="ad-content"><scr'+'ipt type="text/javascript" src="http://dualstack.adsame-1421766300.ap-southeast-1.elb.amazonaws.com/s?z=ft&c=' + c + adReachability() + slotString + '&t='+Math.round(Math.random() * 1000000)+'" charset="gbk" onerror="removeAd()" onload="loaded()"></scr'+'ipt><div id="ad-bottom"></div></div>';
-
-
 
 
 if (adCode === 'fullScreen') {
