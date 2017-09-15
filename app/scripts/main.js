@@ -1531,7 +1531,7 @@ function loadToHome(data, loadType) {
     }
 
     // if there are data for iap products
-    if (typeof iapProducts === 'object' && iapProducts.length > 0) {
+    if (gIsInSWIFT === true && typeof iapProducts === 'object' && iapProducts.length > 0) {
         try {
             displayProductsOnHome(iapProducts);
         } catch (ignore) {
