@@ -185,6 +185,9 @@ if (adCode=="ad300x250-SP" || (parent.window.gSpecial === true && adCode==="ad30
     } else if (adCode=="banner-bottom-story") {
         adPositionId="0115";
         adType="ad50";
+    } else if (adCode=="banner-top-story") {
+        adPositionId="0102";
+        adType="ad50";
     } else if (adCode=="banner-paid-post-home") {
         adPositionId="0121";
         adType="full-width";
@@ -192,7 +195,7 @@ if (adCode=="ad300x250-SP" || (parent.window.gSpecial === true && adCode==="ad30
         adPositionId="0123";
         adType="full-width";
     } else {
-        adPositionId="0101";
+        adPositionId = (adId.indexOf('story')>=0) ?  "0102": "0101";
         adType="ad50";
     }
 
