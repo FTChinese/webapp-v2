@@ -91,7 +91,10 @@ window.columnFlowKeyWords = 'lifestyle,technology,managment,business,china,ä¸­å›
 <!-- build:css phone/s.css -->
 <link rel="stylesheet" href="styles/main.css">
 <!-- endbuild -->
-
+<script type="text/javascript" src="scripts/adChannel.js"></script>
+<script type="text/javascript" src="scripts/adPattern.js"></script>
+<script type="text/javascript" src="scripts/adDevice.js"></script>
+<script type="text/javascript" src="scripts/writeAdNew.js"></script>
 
 </head>
 
@@ -166,7 +169,22 @@ window.columnFlowKeyWords = 'lifestyle,technology,managment,business,china,ä¸­å›
 <div id=storyview class=fullbodyView>
 <div id=story-column-flow></div>
 <div id=storyScroller>
-<div class="adiframe banner" type="fullwidth" frame="100%"></div>
+
+<!-- OldAd
+<div class="adiframe banner" type="fullwidth" frame="100%">
+    
+</div>
+-->
+        
+<script type="text/javascript">
+    document.write(writeAdNew({
+     devices: ['iPhoneWeb','iPhoneApp', 'AndroidApp'],
+     pattern:'Banner',
+     position:'Num1'
+    }));
+ </script>
+
+
 <div class=layout-a_region-3>
 <div class=inner>
 <div class="storycontainer container">
@@ -190,7 +208,16 @@ window.columnFlowKeyWords = 'lifestyle,technology,managment,business,china,ä¸­å›
 </div>
 </div>
 <div class=clearfloat></div>
+<!-- Old Ad
 <div class="adiframe banner" type="50" frame="banner-bottom-story"></div>
+-->
+<script type="text/javascript">
+    document.write (writeAdNew({
+        devices: ['iPhoneApp','AndroidApp'],
+        pattern:'MPU',
+        position:'Middle1'
+    }));
+</script>
 
 <!--<div class="adiframe mpu-phone for-phone" type="250" frame="ad300x250-story-bottom"></div>-->
 

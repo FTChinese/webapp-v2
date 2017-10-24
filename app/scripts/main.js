@@ -2975,7 +2975,7 @@ function httpspv(theurl) {
 
     }
     if (gHideAd === false) {
-        updateAds();
+        //updateAds();
     } else {
         console.log ('ad is not displaying');
     }
