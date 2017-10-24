@@ -54,6 +54,7 @@ function adViewUpdate() {
   }
 }
 
+
 function createViewableAds() {
   // initiate the array for all viewable ad units
   gViewableAds = [];
