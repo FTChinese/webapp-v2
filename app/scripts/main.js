@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1208; //当前的版本号
+var _currentVersion = 1217; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -1531,7 +1531,7 @@ function loadToHome(data, loadType) {
     }
 
     // if there are data for iap products
-    if (typeof iapProducts === 'object' && iapProducts.length > 0) {
+    if (gIsInSWIFT === true && typeof iapProducts === 'object' && iapProducts.length > 0) {
         try {
             displayProductsOnHome(iapProducts);
         } catch (ignore) {

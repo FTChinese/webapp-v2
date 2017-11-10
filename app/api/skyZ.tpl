@@ -61,9 +61,10 @@
 <div class="section">FT中文网专栏</div>
 <div class="loadonce righthd">
 
-<div url="/index.php/ft/column/007000010?i=2" class="channel oneStory more first-child">中间论坛</div>
+<div url="/index.php/ft/column/007000049?i=2" class="channel oneStory more first-child">经济人</div>
+<div url="/index.php/ft/column/007000072?i=2" class="channel oneStory more">公司治理新视野</div>
+<div url="/index.php/ft/column/007000010?i=2" class="channel oneStory more">中间论坛</div>
 <div url="/index.php/ft/column/007000005?i=2" class="channel oneStory more">第一时间解读</div>
-<div url="/index.php/ft/column/007000049?i=2" class="channel oneStory more">经济人</div>
 <div url="/index.php/ft/column/007000007?i=2" class="channel oneStory more">中国纪事</div>
 <div url="/index.php/ft/column/007000054?i=2" class="channel oneStory more">一知半解</div>
 <div url="/index.php/ft/column/007000044?i=2" class="channel oneStory more">天则横议</div>
@@ -71,6 +72,7 @@
 <div url="/index.php/ft/column/007000060?i=2" class="channel oneStory more">谈艺录</div>
 <div url="/index.php/ft/column/007000036?i=2" class="channel oneStory more">市场的边界</div>
 <div url="/index.php/ft/column/007000004?i=2" class="channel oneStory more">远观中国</div>
+<div url="/index.php/ft/column/007000068?i=2" class="channel oneStory more">边城记</div>
 <div url="/index.php/ft/column/007000027?i=2" class="channel oneStory more">智库</div>
 <div url="/index.php/ft/column/007000059?i=2" class="channel oneStory more">时代的噪音</div>
 <div url="/index.php/ft/column/007000020?i=2" class="channel oneStory more">剃刀边缘</div>
@@ -83,6 +85,10 @@
 <div url="/index.php/ft/column/007000052?i=2" class="channel oneStory more">切问近思录</div>
 <div url="/index.php/ft/column/007000056?i=2" class="channel oneStory more">投资者的敌人</div>
 <div url="/index.php/ft/column/007000055?i=2" class="channel oneStory more">名利场</div>
+<div url="/index.php/ft/column/007000053?i=2" class="channel oneStory more">纽约范儿</div>
+<div url="/index.php/ft/column/007000069?i=2" class="channel oneStory more">流动的盛宴</div>
+<div url="/index.php/ft/column/007000070?i=2" class="channel oneStory more">半酣记</div>
+<div url="/index.php/ft/column/007000071?i=2" class="channel oneStory more">居食趣</div>
 
 </div>
 
