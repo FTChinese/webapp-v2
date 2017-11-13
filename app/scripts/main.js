@@ -198,7 +198,12 @@ function updateTimeStamp() {
     expiredayunix = thisdayunix + 7776000;
     actionTimeStamp=Math.round(thisday.getTime() / 1000);
 }
-
+function pauseAllVideos() {
+    var videos = document.getElementsByTagName('video');
+    for(var i=0,len=videos.length; i<len; i++) {
+        videos[i].pause();
+    }
+}
 //Start the App
 function startpage() {
     var savedhomepage;
