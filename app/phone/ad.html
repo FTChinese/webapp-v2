@@ -130,7 +130,7 @@ slotString = '&slot=' + slotNumber;
 
 // New Ad
 // MARK: determin device type 
-if(gSearchVars.newad && gSearchVars.newad == "yes") {
+//if(gSearchVars.newad && gSearchVars.newad == "yes") {
     console.log("newad:" + gSearchVars.newad);
     if (/iPad/i.test(uaString)) {
         deviceId = '6000'; //PadApp
@@ -252,7 +252,8 @@ if(gSearchVars.newad && gSearchVars.newad == "yes") {
     if(deviceId == "6000" && adType === 'mpu') {//MARK:当既是PadApp又是MPU时就是6000xxxx04xx
         document.body.style.backgroundColor = '#f6e9d8';
     }
-} else {// Old Ad
+//} else {// Old Ad
+    /*
     if (adCode=="ad300x250-SP" || (parent.window.gSpecial === true && adCode==="ad300x250-2")) {//code for special report VFTT
         c="20400004";//2040原为view from the top iPad
         adType="mpu";
@@ -356,7 +357,7 @@ if(gSearchVars.newad && gSearchVars.newad == "yes") {
 
 
 }
-
+*/
 
 
 // MARK: - 检查parent里面的gSpecialAnchors，根据这个来确定当前的页面是不是要投放赞助的adid
