@@ -199,9 +199,17 @@ function updateTimeStamp() {
     actionTimeStamp=Math.round(thisday.getTime() / 1000);
 }
 function pauseAllVideos() {
-    var videos = document.getElementsByTagName('video');
-    for(var i=0,len=videos.length; i<len; i++) {
-        videos[i].pause();
+    var iframes = document.getElementsByTagName('iframe');
+    for(var j=0, len=iframes.length;j<len;j++) {
+        var oneIframe = iframes[j];
+        var videos = oneIframe.contentWindow.document.getElementsByTagName('video');
+        for(var i=0, l=videos.length;i<l;i++) {
+            videos[i].pause();
+        }
+    }
+    var videosAtTop = document.getElementsByTagName('video');
+    for(var i=0,l=videosAtTop.length; i<l; i++) {
+        videosAtTop[i].pause();
     }
 }
 //Start the App
