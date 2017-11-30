@@ -185,7 +185,7 @@ slotString = '&slot=' + slotNumber;
 
     } else if (adCode=="ad300x250-story-bottom") {
         adPatternId="0402";
-        adType="halfpage";
+        adType="mpu-phone";
         adPattern = "MPU-Middle2";
     } else {
 
@@ -549,6 +549,8 @@ try {
         window.overlayLink = '';
     }
 
+
+
     if ((parent.window.useFTScroller===1 && gVideoTag === 0 && giFrameTag === 0 && (gATag===1 || (gATag === 0 && gImgTag === 0 && gDivTag === 0))) || (window.overlayLink !== undefined && window.overlayLink !== '')) {
         if (typeof window.forceLink === 'string') {
             adLink = window.forceLink;
@@ -623,6 +625,8 @@ try {
 }
 adId = adId.replace(/ad\-/g,"");
 adId = 'ad-' + adId;
+
+
 
 try {
     // MARK: Handle only the switch between MPU and Half Page Ads
