@@ -72,7 +72,7 @@
 <div url="/index.php/ft/column/007000060?i=2" class="channel oneStory more">谈艺录</div>
 <div url="/index.php/ft/column/007000036?i=2" class="channel oneStory more">市场的边界</div>
 <div url="/index.php/ft/column/007000004?i=2" class="channel oneStory more">远观中国</div>
-<div url="/index.php/ft/column/007000068?i=2" class="channel oneStory more">边城记</div>
+<div url="/index.php/ft/column/007000068?i=2" class="channel oneStory more">边���记</div>
 <div url="/index.php/ft/column/007000027?i=2" class="channel oneStory more">智库</div>
 <div url="/index.php/ft/column/007000059?i=2" class="channel oneStory more">时代的噪音</div>
 <div url="/index.php/ft/column/007000020?i=2" class="channel oneStory more">剃刀边缘</div>
@@ -89,6 +89,7 @@
 <div url="/index.php/ft/column/007000069?i=2" class="channel oneStory more">流动的盛宴</div>
 <div url="/index.php/ft/column/007000070?i=2" class="channel oneStory more">半酣记</div>
 <div url="/index.php/ft/column/007000071?i=2" class="channel oneStory more">居食趣</div>
+<div url="/index.php/ft/column/007000073?i=2" class="channel oneStory more">社交媒体与潮营销</div>
 
 </div>
 
@@ -113,7 +114,7 @@
 <div url="/index.php/ft/column/007000034?i=2" class="channel oneStory more">卢克•约翰逊</div>
 <div url="/index.php/ft/column/007000017?i=2" class="channel oneStory more">钱眼太太</div>
 <div url="/index.php/ft/column/007000050?i=2" class="channel oneStory more">简氏酒庄</div>
-<div url="/index.php/ft/column/007000065?i=2" class="channel oneStory more">安德鲁•希尔</div>
+<div url="/index.php/ft/column/007000065?i=2" class="channel oneStory more">安德鲁•���尔</div>
 <div url="/index.php/ft/column/007000067?i=2" class="channel oneStory more">斯卡平克</div>
 <div url="/index.php/ft/column/007000066?i=2" class="channel oneStory more">西蒙•库柏</div>
 </div>
