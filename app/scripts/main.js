@@ -2405,10 +2405,10 @@ function displaystoryNormal(theid, language, forceTitle) {
     }
 
 
-
+    /*
     pCount = 0;
     insertAdForVW = ($('#fullbody [frame=ad300x250-home-vw]').length >0)? true: false;
-
+    
     if (insertAdForVW === true) {
         // this means VW's ad is on
         // two mpu ads need to be displayed in story
@@ -2434,22 +2434,27 @@ function displaystoryNormal(theid, language, forceTitle) {
         }
     }
     insertAd = pCount;
+    */
 
-
-    insert ad position into story page
-    insert to the end of the target paragraph
+    //insert ad position into story page
+    //insert to the end of the target paragraph
 
     if (insertAd > 0) {
         insertAd = insertAd - 1;
     }
     $('<div class="adiframe mpu-phone for-phone" type="250" frame="ad300x250-story"></div>').insertAfter(paraGraphs.eq(insertAd));
-    if (insertAdForVW === true) {
+    //if (insertAdForVW === true) {
+        /*
         if (insertAd2 > 0) {
             insertAd2 = insertAd2 -1;
         }
+        
         insertAd2  = 10;
-        $('<div class="adiframe mpu-phone for-phone" type="250" frame="ad300x250-story-vw"></div>').insertAfter(paraGraphs.eq(insertAd2));        
-    }
+        */
+      
+        $('<div class="adiframe mpu-phone for-phone" type="250" frame="ad300x250-story-vw"></div>').insertAfter(paraGraphs.eq(insertAd2));
+             
+    //}
 
 
     
