@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1229; //当前的版本号
+var _currentVersion = 1231; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -2403,6 +2403,9 @@ function displaystoryNormal(theid, language, forceTitle) {
     } else {
         paraGraphs = $('#storyview .storybody p, #storyview .storybody div');
     }
+
+
+
     pCount = 0;
     insertAdForVW = ($('#fullbody [frame=ad300x250-home-vw]').length >0)? true: false;
 
@@ -2433,8 +2436,8 @@ function displaystoryNormal(theid, language, forceTitle) {
     insertAd = pCount;
 
 
-    // insert ad position into story page
-    // insert to the end of the target paragraph
+    insert ad position into story page
+    insert to the end of the target paragraph
 
     if (insertAd > 0) {
         insertAd = insertAd - 1;
@@ -2444,6 +2447,7 @@ function displaystoryNormal(theid, language, forceTitle) {
         if (insertAd2 > 0) {
             insertAd2 = insertAd2 -1;
         }
+        insertAd2  = 10;
         $('<div class="adiframe mpu-phone for-phone" type="250" frame="ad300x250-story-vw"></div>').insertAfter(paraGraphs.eq(insertAd2));        
     }
 
@@ -3488,6 +3492,9 @@ function resizeImg(iMage,resizeWidth,resizeHeight) {
     //return iMage; //r.ftimg.net returns unreliable images, disable for now. 
     var r=iMage;
     var h='';
+    if (!iMage) {
+        return '';
+    }
     r = encodeURIComponent(r);
     if (typeof resizeHeight !== 'undefined') {
         h = '&height=' + resizeHeight;

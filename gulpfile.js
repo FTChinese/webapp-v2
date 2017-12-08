@@ -30,14 +30,18 @@ function getUrltoFile (urlSource, fileName) {
       //console.log (data);
       res.on('end', function () {
         var fs = require('fs');
-        fs.writeFile(fileName, data, function(err) {
-            if(err) {
-                return console.log(err);
-            }
-            console.log(urlSource);
-            console.log('writen to');
-            console.log(fileName);
-        });
+        if (data !== '') {
+          fs.writeFile(fileName, data, function(err) {
+              if(err) {
+                  return console.log(err);
+              }
+              console.log(urlSource);
+              console.log('writen to');
+              console.log(fileName);
+          });
+        } else {
+          console.log (fileName + ' is empty! Not Updated! ')
+        }
       });
   });
   request.on('error', function (e) {
