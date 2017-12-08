@@ -391,6 +391,7 @@ if (parent.window.gSpecialAnchors && parent.window.gSpecialAnchors.length > 0 &&
 
 //console.log (adCode);
 //Old Ad
+/*
 if (gSpecialAdId !== '' && matchSpecial === true) {
     //console.log ('speical ad!');
     if (adCode === 'ad300x600') {
@@ -424,13 +425,15 @@ if (gSpecialAdId !== '' && matchSpecial === true) {
         c = gSpecialAdId + c;
     }
 }//special report sponsor
-
+*/
 
 // test full page ad
 //Old Ad
+/*
 if (testFullPage === true && adCode === 'fullScreen') {
     c = '20530107';
 }
+*/
 
 
 var dolphineInlineScript = '<div class="'+adType+'" id="ad-content"><scr'+'ipt type="text/javascript" src="http://dualstack.adsame-1421766300.ap-southeast-1.elb.amazonaws.com/s?z=ft&c=' + c + adReachability() + slotString + '&t='+Math.round(Math.random() * 1000000)+'" charset="gbk" onerror="removeAd()" onload="loaded()"></scr'+'ipt><div id="ad-bottom"></div></div>';
@@ -460,6 +463,10 @@ if (adCode === 'fullScreen') {
 
 } else {
     document.writeln(dolphineInlineScript);
+    console.log("adId:");
+    console.log(adId);
+    console.log("adFrameContainerDiv:");
+    console.log(document.getElementById('ad-' + adId));
 }
 
 // console.log (dolphineInlineScript);

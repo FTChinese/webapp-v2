@@ -628,7 +628,7 @@ background-color: rgba(0,0,0,0.14) !important;
 					<div>1. 全选并复制下方文字</div>
 					<textarea class="commentTextArea paste" rows=4 type="text" id="shareSinaWeibo"></textarea>
 				</div>
-                <div class="standalonebutton last-child"><a class="button ui-light-btn" href="weibo://" id="openWeibo">2. 打开微博客户端并粘贴</a></div>
+                <div class="standalonebutton last-child"><a class="button ui-light-btn" href="weibo://" id="openWeibo">2. 打开微���客户端并粘贴</a></div>
 			</div>
 		</div>
 	</div>
