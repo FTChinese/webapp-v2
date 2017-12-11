@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1231; //当前的版本号
+var _currentVersion = 1232; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -59,6 +59,9 @@ var gPrefix = {};//存储有关浏览器css前缀的变量
 var homeFileName = (window.location.href.indexOf('nexthometest') >= 0) ? 'nexthometest': 'nexthome';
 var fullScreenAdPara = (window.location.href.indexOf('useNativeLaunchAd') >= 0 && Math.random() < 0) ? '&noFullScreenAd': '';
 var gHideAd = (window.location.href.indexOf('hideAd=yes') >= 0) ? true: false;
+
+// MARK: For Tencent market, hide ad sign
+var gHideAdSign = (window.location.href.indexOf('utm_campaign=an_tencent') >= 0) ? true: false;
 
 //开机的时候检查屏幕宽度，以便节约流量
 //我们的基本假设是，不管横屏还是竖屏，只要宽度小于700，那就是手机；否则就是平板
@@ -2787,6 +2790,11 @@ function checkDevice() {
     }
     if (gHideAd === true) {
         $('html').addClass('no-ad');
+    }
+    if (gHideAdSign === true) {
+         $('html').addClass('hide-ad-sign');
+    } else {
+        $('html').removeClass('hide-ad-sign');
     }
     if (noFixedPosition==1) {
         $('html').addClass('noFixedPosition');

@@ -408,7 +408,7 @@ margin-bottom:14px;
 		right: 0;
 		//background-color: #E9DECF;
 	}
-	:after {
+	&:after {
 		content: '广告';
 		position: absolute;
 		bottom:0;
@@ -423,6 +423,20 @@ margin-bottom:14px;
 	&.banner{
 		:after {
 			display:none;
+		}
+	}
+}
+.hide-ad-sign {
+	.adiframe{
+		&:after {
+			display:none;
+		}
+	}
+}
+#paid-post-mpu-new {
+	div {
+		span {
+			display: none;
 		}
 	}
 }
