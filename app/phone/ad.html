@@ -127,7 +127,36 @@ if (typeof parent.window.gSlotNumber === 'string') {
 
 slotString = '&slot=' + slotNumber;
 
-
+// MARK: - 检查parent里面的gSpecialAnchors，根据这个来确定当前的页面是不是要投放赞助的adid
+if (parent.window.gSpecialAnchors && parent.window.gSpecialAnchors.length > 0 && parent.window.gTagData.length >0) {
+    console.log('computeSpectial adid');
+    console.log (parent.window.gSpecialAnchors[0]);
+    for (var i=0; i < parent.window.gSpecialAnchors.length && matchSpecial === false; i++) {
+        // MARK: - this is added per request of ad sales
+        // MARK: - to exclude situations where ad sales don't want to invoke sponsored special report code
+        var useSpecialCode = true;
+        try {
+            if (parent.gNowView === 'storyview' && parent.window.gSpecialAnchors[i].adid === '2062') {
+                useSpecialCode = false;
+            }
+        } catch (ignore) {
+            
+        }
+        var keywordsOfCurrentPage = parent.window.gTagData;
+        var keywordForCheck = parent.window.gSpecialAnchors[i].tag;
+        if (keywordForCheck.indexOf('http') >= 0 && parent.window.gSpecialAnchors[i].channel) {
+            console.log('keywordForCheck:'+keywordForCheck);
+            keywordForCheck = parent.window.gSpecialAnchors[i].channel;
+        }
+        console.log('useSpecialCode'+useSpecialCode);
+        console.log('keywordsOfCurrentPage'+keywordsOfCurrentPage);
+        if (useSpecialCode === true && keywordsOfCurrentPage.indexOf(keywordForCheck) >=0) {
+            gSpecialAdId = parent.window.gSpecialAnchors[i].adid;
+            console.log('gSpecialAdId:'+gSpecialAdId);
+            matchSpecial = true;
+        }
+    }
+}
 // New Ad
 // MARK: determin device type 
 //if(gSearchVars.newad && gSearchVars.newad == "yes") {
@@ -250,6 +279,9 @@ slotString = '&slot=' + slotNumber;
 
         }
     }
+    if(gSpecialAdId) {
+        adchannelId = gSpecialAdId;
+    }
     c = deviceId + adchannelId + adPatternId;
 
     if(deviceId == "6000" && adType === 'mpu') {//MARK:当既是PadApp又是MPU时就是6000xxxx04xx
@@ -363,31 +395,7 @@ slotString = '&slot=' + slotNumber;
 */
 
 
-// MARK: - 检查parent里面的gSpecialAnchors，根据这个来确定当前的页面是不是要投放赞助的adid
-if (parent.window.gSpecialAnchors && parent.window.gSpecialAnchors.length > 0 && parent.window.gTagData.length >0) {
-    //console.log (parent.window.gSpecialAnchors[0]);
-    for (var i=0; i < parent.window.gSpecialAnchors.length && matchSpecial === false; i++) {
-        // MARK: - this is added per request of ad sales
-        // MARK: - to exclude situations where ad sales don't want to invoke sponsored special report code
-        var useSpecialCode = true;
-        try {
-            if (parent.gNowView === 'storyview' && parent.window.gSpecialAnchors[i].adid === '2062') {
-                useSpecialCode = false;
-            }
-        } catch (ignore) {
-            
-        }
-        var keywordsOfCurrentPage = parent.window.gTagData;
-        var keywordForCheck = parent.window.gSpecialAnchors[i].tag;
-        if (keywordForCheck.indexOf('http') >= 0 && parent.window.gSpecialAnchors[i].channel) {
-            keywordForCheck = parent.window.gSpecialAnchors[i].channel;
-        }
-        if (useSpecialCode === true && keywordsOfCurrentPage.indexOf(keywordForCheck) >=0) {
-            gSpecialAdId = parent.window.gSpecialAnchors[i].adid;
-            matchSpecial = true;
-        }
-    }
-}
+
 
 //console.log (adCode);
 //Old Ad
