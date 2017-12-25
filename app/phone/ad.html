@@ -129,8 +129,6 @@ slotString = '&slot=' + slotNumber;
 
 // MARK: - 检查parent里面的gSpecialAnchors，根据这个来确定当前的页面是不是要投放赞助的adid
 if (parent.window.gSpecialAnchors && parent.window.gSpecialAnchors.length > 0 && parent.window.gTagData.length >0) {
-    console.log('computeSpectial adid');
-    console.log (parent.window.gSpecialAnchors[0]);
     for (var i=0; i < parent.window.gSpecialAnchors.length && matchSpecial === false; i++) {
         // MARK: - this is added per request of ad sales
         // MARK: - to exclude situations where ad sales don't want to invoke sponsored special report code
@@ -145,14 +143,11 @@ if (parent.window.gSpecialAnchors && parent.window.gSpecialAnchors.length > 0 &&
         var keywordsOfCurrentPage = parent.window.gTagData;
         var keywordForCheck = parent.window.gSpecialAnchors[i].tag;
         if (keywordForCheck.indexOf('http') >= 0 && parent.window.gSpecialAnchors[i].channel) {
-            console.log('keywordForCheck:'+keywordForCheck);
             keywordForCheck = parent.window.gSpecialAnchors[i].channel;
         }
-        console.log('useSpecialCode'+useSpecialCode);
-        console.log('keywordsOfCurrentPage'+keywordsOfCurrentPage);
+
         if (useSpecialCode === true && keywordsOfCurrentPage.indexOf(keywordForCheck) >=0) {
             gSpecialAdId = parent.window.gSpecialAnchors[i].adid;
-            console.log('gSpecialAdId:'+gSpecialAdId);
             matchSpecial = true;
         }
     }
