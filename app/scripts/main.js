@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1235; //当前的版本号
+var _currentVersion = 1236; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -1944,6 +1944,7 @@ function gotowebapp(url) {
 //阅读文章
 function readstory(theid, theHeadline) {
     var h,theurl, backto, sv, allViewsId, jsondata, myid;
+
     if (useFTScroller===0) {
         if ($('body').hasClass('storyview')==false) {scrollHeight = window.pageYOffset;}
     }
@@ -2019,19 +2020,34 @@ function readstory(theid, theHeadline) {
             //sv.find('.storybody').html(k);
             sv.find('.storybody').html('<div class="loader-container" style="height: 1000px;"><div class="loader">正在读取文章数据...</div></div>' + k);
             //return;
+            var apiForOneStory = '/index.php/jsapi/get_story_more_info/'+ theid + '?' + themi;
+            var isInLocalTest = false;
+            if (window.location.hostname === 'localhost' || window.location.hostname.indexOf('192.168') === 0 || window.location.hostname.indexOf('10.113') === 0 || window.location.hostname.indexOf('127.0') === 0) {
+                apiForOneStory = 'api/one-story.json';
+                isInLocalTest = true
+            }
+
             $.ajax({
                 method: 'GET',
-                url: '/index.php/jsapi/get_story_more_info/'+ theid + '?' + themi, 
+                url: apiForOneStory, 
             }).done(function(data, textStatus) {
-                data = checkhttps(data);
-                jsondata = $.parseJSON(data);
+                //data = checkhttps(data);
+                if (typeof data === 'string') {
+                    jsondata = $.parseJSON(data);
+                    // console.log ('it is a string');
+                } else {
+                    jsondata = data;
+                    // console.log ('it is a ' + (typeof jsondata));
+                    // console.log (jsondata);
+                }
                 myid = jsondata.id;
+                //console.log ('id is ' + myid);
                 allstories[myid] = jsondata;
                 // display the story only when Id matches
                 // otherwise reader will be interupted when connection is slow
                 // display story only when the loader is present
                 // otherwise the story body will scroll to top while reader is reading 
-                if (gCurrentStoryId === myid && sv.find('.storybody .loader-container').length > 0) {
+                if ((gCurrentStoryId === myid || isInLocalTest) && sv.find('.storybody .loader-container').length > 0) {
                     displaystory(myid, langmode, theHeadline);
                 } else if (gCurrentStoryId !== myid) {
                     ga('send','event','Stop displaystory', 'Another Story', myid, {'nonInteraction':1});
