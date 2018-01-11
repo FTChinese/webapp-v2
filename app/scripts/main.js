@@ -309,9 +309,9 @@ function startpage() {
                 connectInternet='unknown';
             },299000);
         });
-        checkbreakingnews();
+        //checkbreakingnews();
     },100000);
-    if (isOnline()=='possible') {checkbreakingnews();}
+    //if (isOnline()=='possible') {checkbreakingnews();}
 
     autoPrefix();
     
@@ -1738,16 +1738,7 @@ function refresh(forceDownload){
     }
 }
 
-
 /*
-function checkbreakingnews() {
-    $.get('/index.php/ft/channel/phonetemplate.html?channel=breaking', 
-    	function(data) { $('#breakingnews').html(data);});
-}
-*/
-
-
-
 function checkbreakingnews() {
     var message={};
     message.head = {};
@@ -1757,7 +1748,6 @@ function checkbreakingnews() {
     message.body = {};
     message.body.ielement = {};
     message.body.ielement.type = 'breaking';
-
     $.ajax({
         method: gPostMethod,
         url: gApiUrl.a10007,
@@ -1776,7 +1766,7 @@ function checkbreakingnews() {
         trackErr(message.head.transactiontype, 'breaking news');
     });
 }
-
+*/
 
 function addstoryclick() {
     $('.story').unbind().bind('click', function() {
