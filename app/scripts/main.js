@@ -3843,29 +3843,16 @@ function watchVideo(videoUrl, videoTitle, videoId, videoLead, videoImage,videoTa
     if (!/【|：|:/i.test(shareTitle)) {
         shareTitle = '视频：' + shareTitle;
     }
-    
+
     if (videoUrl.indexOf('/')>=0) {
         $('#videoContent').html('<video src="'+videoUrl+'" controls="" style="width:100%;height:100%;" id="videoPlay"></video>');
-        console.log('videoTag:'+videoTag);
-        $('#videoContent').click(function() {
-            if (videoTag.indexOf('高端视点') >= 0 ) {
-                var trackImp = 'http://bsch.serving-sys.com/serving/adServer.bs?cn=display&c=19&mc=imp&pli=23613159&PluID=0&ord=__TIME__&rtu=-1&mb=1';
-                var trackVideoImpression = new Image();
-                trackVideoImpression.onload = function() {
-                    window.ga('send', 'event', 'testvideo impression', 'SuccessOnAndroid', trackImp, {'nonInteraction': 1});
-                }
-                trackVideoImpression.onerror = function() {
-                    window.ga('send', 'event', 'testvideo impression', 'FailOnAndroid', trackImp, {'nonInteraction': 1});
-                }
-                
-                trackVideoImpression.src = trackImp;
-            }
-        });
+        
     } else {
         w=$(window).width();
         h=w*9/16;
         h=parseInt(h, 10);
-        $('#videoContent').html('<iframe style="margin:0 auto;" frameborder=0 marginheight="0" marginwidth="0" frameborder="0" scrolling="no" src="/index.php/ft/channel/phonetemplate.html?video='+videoUrl+'&width='+w+'&height='+h+'" border=0 width="'+w+'" height="'+h+'"></iframe>');
+        $('#videoContent').html('<iframe style="margin:0 auto;" frameborder=0 marginheight="0" marginwidth="0" frameborder="0" scrolling="no" src="/index.php/ft/channel/phonetemplate.html?video='+videoUrl+'&tag='+ videoTag +'&width='+w+'&height='+h+'" border=0 width="'+w+'" height="'+h+'"></iframe>');
+
     }
     $('#videoContent').removeClass('showPic');
     v=document.getElementById('videoPlay');
