@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1239; //当前的版本号
+var _currentVersion = 1241; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -104,7 +104,7 @@ if (window.location.href.indexOf('isInSWIFT')>=0) {
 
 // MARK: This is the best way to know it is in Android Native App
 var gIsNativeApp = false;
-if (window.location.href.indexOf('androidapp')>=0 || gIsInSWIFT === true) {
+if (window.location.href.indexOf('androidapp')>=0 || gIsInSWIFT === true || window.ftjavacriptapp !== undefined) {
     gIsNativeApp = true;
 }
 
