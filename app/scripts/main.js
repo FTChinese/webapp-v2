@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1237; //当前的版本号
+var _currentVersion = 1241; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -101,6 +101,13 @@ var gIsInSWIFT = false;
 if (window.location.href.indexOf('isInSWIFT')>=0) {
     gIsInSWIFT = true;
 }
+
+// MARK: This is the best way to know it is in Android Native App
+var gIsNativeApp = false;
+if (window.location.href.indexOf('androidapp')>=0 || gIsInSWIFT === true || window.ftjavacriptapp !== undefined) {
+    gIsNativeApp = true;
+}
+
 //在本地测试
 if (window.location.hostname === 'localhost' || window.location.hostname.indexOf('192.168') === 0 || window.location.hostname.indexOf('10.113') === 0 || window.location.hostname.indexOf('127.0') === 0) {
     gApiUrl.a10001 = 'api/ea001.json';
@@ -2660,7 +2667,7 @@ function updateShare(domainUrl, mobileDomainUrl, contentType, contentId, content
     $('#shareEmail').attr('href','mailto:?subject='+contentTitle+'&body='+ contentLongTitle + decodeURIComponent(url));
     //如果是iOS原生应用，传参数给SDK分享微信
     $('#webappWeixin,#nativeWeixin').hide();
-    if ((/phoneapp.html/i.test(location.href) && osVersion.indexOf('ios')>=0 && (osVersion.indexOf('ios7')<0)) || /android|isInSWIFT/i.test(location.href) || iOSShareWechat==1) {
+    if ((/phoneapp.html/i.test(location.href) && osVersion.indexOf('ios')>=0 && (osVersion.indexOf('ios7')<0)) || /android|isInSWIFT/i.test(location.href) || gIsNativeApp === true) {
         $('#nativeWeixin').show();
         // if (gIsInSWIFT === true) {
         //     l = resizeImg(l,72,72);
