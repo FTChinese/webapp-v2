@@ -1965,13 +1965,7 @@ function readstory(theid, theHeadline) {
     if (hist && ((hist[0] && hist[0].url != 'story/' + theid) || hist.length==0)) {
         hist.unshift({'url': 'story/'+ theid, 'title': theHeadline});
         if (historyAPI()==true && _popstate==0) {
-           if (premiumPara!==undefined || premiumPara!==''){
-                premiumPara = premiumPara;
-            }else{
-                premiumPara = '';
-            }
-            theurl=premiumPara+'#/story/'+theid;
-            // theurl='#/story/'+theid;
+            theurl='#/story/'+theid;
             if (location.href.indexOf(theid)<0) {
                 window.history.pushState(null, null, gAppRoot + theurl);
             }
@@ -2330,10 +2324,12 @@ function displaystoryNormal(theid, language, forceTitle) {
         $('#storyview').addClass('enview').find('.storytitle').html(allId.eheadline);
         actualLanguage = 'en';
         byline = (allstories[theid].ebyline_description || 'By') + ' ' + eauthor;
-  
-        if (premiumPara==='premium=1'){
+        console.log("story id:"+allId.cheadline)
+
+        if (allId.premium === '1'){
             $('#storyview .storybody').html(storyimage).append(premiumHintHtml);
         }else{
+            console.log("story1 id:"+allId.cheadline)
             $('#storyview .storybody').html(storyimage).append(allId.ebody);
         }
         
@@ -2384,7 +2380,7 @@ function displaystoryNormal(theid, language, forceTitle) {
         }
         ceDiff = cbodyTotal - ebodyTotal;
         
-        if (premiumPara==='premium=1'){
+        if (allId.premium === '1'){
             $('#storyview .storybody').html(premiumHintHtml);
         }else{
             $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
@@ -2406,7 +2402,7 @@ function displaystoryNormal(theid, language, forceTitle) {
         actualLanguage = 'ch';
         byline = (allId.cbyline_description||'').replace(/作者[：:]/g, '') + ' ' + (allId.cauthor||'').replace(/,/g, '、') + ' ' + (allId.cbyline_status || '');
         //alert (allId.cbody);
-        if (premiumPara==='premium=1'){
+        if (allId.premium === '1'){
             $('#storyview .storybody').html(storyimage).append(premiumHintHtml);
         }else{
             $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));
