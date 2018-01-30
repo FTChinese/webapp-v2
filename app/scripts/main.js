@@ -1936,6 +1936,12 @@ function gotowebapp(url) {
 //启动
 
 
+var premiumPara = getPremiumPara();
+function getPremiumPara(){
+    var para = window.location.search.substring(1);
+    console.log(para)
+    return para;
+}
 
 
 //阅读文章
@@ -1959,7 +1965,13 @@ function readstory(theid, theHeadline) {
     if (hist && ((hist[0] && hist[0].url != 'story/' + theid) || hist.length==0)) {
         hist.unshift({'url': 'story/'+ theid, 'title': theHeadline});
         if (historyAPI()==true && _popstate==0) {
-            theurl='#/story/'+theid;
+           if (premiumPara!==undefined || premiumPara!==''){
+                premiumPara = premiumPara;
+            }else{
+                premiumPara = '';
+            }
+            theurl=premiumPara+'#/story/'+theid;
+            // theurl='#/story/'+theid;
             if (location.href.indexOf(theid)<0) {
                 window.history.pushState(null, null, gAppRoot + theurl);
             }
@@ -2222,7 +2234,7 @@ function displaystory(theid, language, forceTitle) {
 //     });
 //     updateAds();
 // }
-
+var premiumHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">使用FT中文网 iOS应用</div><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="subscribe-btn"><a style="color:white" href="http://a.app.qq.com/o/simple.jsp?pkgname=com.ft" >下载应用▶︎</a></div></div></div>';
 
 function displaystoryNormal(theid, language, forceTitle) {
     var columnintro = ''; 
@@ -2318,8 +2330,13 @@ function displaystoryNormal(theid, language, forceTitle) {
         $('#storyview').addClass('enview').find('.storytitle').html(allId.eheadline);
         actualLanguage = 'en';
         byline = (allstories[theid].ebyline_description || 'By') + ' ' + eauthor;
-
-        $('#storyview .storybody').html(storyimage).append(allId.ebody);
+  
+        if (premiumPara==='premium=1'){
+            $('#storyview .storybody').html(storyimage).append(premiumHintHtml);
+        }else{
+            $('#storyview .storybody').html(storyimage).append(allId.ebody);
+        }
+        
         $('.enbutton').addClass('nowreading');
         storyHeadline = allId.eheadline;
     } else if (language == 'ce' && allId.ebody && allId.ebody.length > 30) {
@@ -2366,7 +2383,12 @@ function displaystoryNormal(theid, language, forceTitle) {
             //console.log ("i: " + i + " ebodyTotal: " + ebodyTotal + ' cbodyTotal: ' + cbodyTotal);
         }
         ceDiff = cbodyTotal - ebodyTotal;
-        $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
+        
+        if (premiumPara==='premium=1'){
+            $('#storyview .storybody').html(premiumHintHtml);
+        }else{
+            $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
+        }
         $('#storyview .storybody').prepend('<div id="ceTwoColumn" class=centerButton><button class="ui-light-btn">中英文并排</button></div>');
         $('#ceTwoColumn').unbind().bind('click',function(){
             $('div.ebodyt').css({'float':'left','width':'48%','overflow':'hidden'});
@@ -2384,7 +2406,12 @@ function displaystoryNormal(theid, language, forceTitle) {
         actualLanguage = 'ch';
         byline = (allId.cbyline_description||'').replace(/作者[：:]/g, '') + ' ' + (allId.cauthor||'').replace(/,/g, '、') + ' ' + (allId.cbyline_status || '');
         //alert (allId.cbody);
-        $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));
+        if (premiumPara==='premium=1'){
+            $('#storyview .storybody').html(storyimage).append(premiumHintHtml);
+        }else{
+            $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));
+        }
+        
         if (allId.cbody.indexOf('inlinevideo')>=0) {
             $('#storyview .storybody .inlinevideo').each(function (){
                 // if FT Scroller is used, add an overlay to the iframe
