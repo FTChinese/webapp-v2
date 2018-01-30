@@ -1936,12 +1936,7 @@ function gotowebapp(url) {
 //启动
 
 
-var premiumPara = getPremiumPara();
-function getPremiumPara(){
-    var para = window.location.search.substring(1);
-    console.log(para)
-    return para;
-}
+
 
 
 //阅读文章
@@ -2324,12 +2319,10 @@ function displaystoryNormal(theid, language, forceTitle) {
         $('#storyview').addClass('enview').find('.storytitle').html(allId.eheadline);
         actualLanguage = 'en';
         byline = (allstories[theid].ebyline_description || 'By') + ' ' + eauthor;
-        console.log("story id:"+allId.cheadline)
 
         if (allId.premium === '1'){
             $('#storyview .storybody').html(storyimage).append(premiumHintHtml);
         }else{
-            console.log("story1 id:"+allId.cheadline)
             $('#storyview .storybody').html(storyimage).append(allId.ebody);
         }
         
@@ -2478,10 +2471,15 @@ function displaystoryNormal(theid, language, forceTitle) {
     //insert ad position into story page
     //insert to the end of the target paragraph
 
-    if (insertAd > 0) {
-        insertAd = insertAd - 1;
-    }
-    $('<div class="adiframe mpu-phone for-phone" type="250" frame="ad300x250-story"></div>').insertAfter(paraGraphs.eq(insertAd));
+
+    if (allId.premium === '1'){
+
+    }else{
+
+        if (insertAd > 0) {
+            insertAd = insertAd - 1;
+        }
+        $('<div class="adiframe mpu-phone for-phone" type="250" frame="ad300x250-story"></div>').insertAfter(paraGraphs.eq(insertAd));
     //if (insertAdForVW === true) {
         /*
         if (insertAd2 > 0) {
@@ -2492,6 +2490,8 @@ function displaystoryNormal(theid, language, forceTitle) {
         */
       
         $('<div class="adiframe mpu-phone for-phone" type="250" frame="ad300x250-story-vw"></div>').insertAfter(paraGraphs.eq(insertAd2));
+    }
+
              
     //}
 
