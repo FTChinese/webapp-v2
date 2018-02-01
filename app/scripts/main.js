@@ -2316,12 +2316,9 @@ function displaystoryNormal(theid, language, forceTitle) {
     $('#storyview').removeClass('ceview enview');
 
     if (language == 'en' && allId.ebody && allId.ebody.length > 30) {
-        if (allId.premium === 1){
-            $('#storyview').addClass('enview').find('.storytitle').html(allId.eheadline+'.');
-        }else{
-            $('#storyview').addClass('enview').find('.storytitle').html(allId.eheadline);
-        }
-        
+
+        $('#storyview').addClass('enview').find('.storytitle').html(allId.eheadline);
+
         actualLanguage = 'en';
         byline = (allstories[theid].ebyline_description || 'By') + ' ' + eauthor;
 
@@ -2430,13 +2427,9 @@ function displaystoryNormal(theid, language, forceTitle) {
         } else {
             storyHeadline = allId.cheadline;
         }
-        if (allId.premium === 1){
-            $('#storyview').removeClass('ceview').find('.storytitle').html(storyHeadline+'.');
-        }else{
-            $('#storyview').removeClass('ceview').find('.storytitle').html(storyHeadline);
-        }
-        
-        
+
+        $('#storyview').removeClass('ceview').find('.storytitle').html(storyHeadline);
+  
     }
 
     // MARK: - Business logic on how to insert MPU ads into story body
