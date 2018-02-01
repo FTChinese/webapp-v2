@@ -224,6 +224,7 @@ function pauseAllVideos() {
 }
 //Start the App
 function startpage() {
+    console.log("startpage");
     var savedhomepage;
     updateTimeStamp();
     gStartStatus = 'startpage start';
