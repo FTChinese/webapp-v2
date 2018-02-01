@@ -2316,11 +2316,16 @@ function displaystoryNormal(theid, language, forceTitle) {
     $('#storyview').removeClass('ceview enview');
 
     if (language == 'en' && allId.ebody && allId.ebody.length > 30) {
-        $('#storyview').addClass('enview').find('.storytitle').html(allId.eheadline);
+        if (allId.premium === 1){
+            $('#storyview').addClass('enview').find('.storytitle').html(allId.eheadline+'.');
+        }else{
+            $('#storyview').addClass('enview').find('.storytitle').html(allId.eheadline);
+        }
+        
         actualLanguage = 'en';
         byline = (allstories[theid].ebyline_description || 'By') + ' ' + eauthor;
 
-        if (allId.premium === '1'){
+        if (allId.premium === 1){
             $('#storyview .storybody').html(storyimage).append(premiumHintHtml);
         }else{
             $('#storyview .storybody').html(storyimage).append(allId.ebody);
@@ -2329,7 +2334,12 @@ function displaystoryNormal(theid, language, forceTitle) {
         $('.enbutton').addClass('nowreading');
         storyHeadline = allId.eheadline;
     } else if (language == 'ce' && allId.ebody && allId.ebody.length > 30) {
-        $('#storyview').addClass('ceview').find('.storytitle').html(allId.eheadline).append('<br>' + allId.cheadline);
+        if (allId.premium === 1){
+            $('#storyview').addClass('ceview').find('.storytitle').html(allId.eheadline).append('<br>' + allId.cheadline+'.');
+        }else{
+            $('#storyview').addClass('ceview').find('.storytitle').html(allId.eheadline).append('<br>' + allId.cheadline);
+        }
+        // $('#storyview').addClass('ceview').find('.storytitle').html(allId.eheadline).append('<br>' + allId.cheadline);
         actualLanguage = 'ce';
 
         byline = (allId.cbyline_description||'').replace(/作者[：:]/g, '') + ' ' + (allId.cauthor||'').replace(/,/g, '、') + ' ' + (allId.cbyline_status||'');
@@ -2373,7 +2383,7 @@ function displaystoryNormal(theid, language, forceTitle) {
         }
         ceDiff = cbodyTotal - ebodyTotal;
         
-        if (allId.premium === '1'){
+        if (allId.premium === 1){
             $('#storyview .storybody').html(premiumHintHtml);
         }else{
             $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
@@ -2395,7 +2405,7 @@ function displaystoryNormal(theid, language, forceTitle) {
         actualLanguage = 'ch';
         byline = (allId.cbyline_description||'').replace(/作者[：:]/g, '') + ' ' + (allId.cauthor||'').replace(/,/g, '、') + ' ' + (allId.cbyline_status || '');
         //alert (allId.cbody);
-        if (allId.premium === '1'){
+        if (allId.premium === 1){
             $('#storyview .storybody').html(storyimage).append(premiumHintHtml);
         }else{
             $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));
@@ -2425,7 +2435,12 @@ function displaystoryNormal(theid, language, forceTitle) {
         } else {
             storyHeadline = allId.cheadline;
         }
-        $('#storyview').removeClass('ceview').find('.storytitle').html(storyHeadline);
+        if (allId.premium === 1){
+            $('#storyview').removeClass('ceview').find('.storytitle').html(storyHeadline+'.');
+        }else{
+            $('#storyview').removeClass('ceview').find('.storytitle').html(storyHeadline);
+        }
+        
         
     }
 
@@ -2472,7 +2487,7 @@ function displaystoryNormal(theid, language, forceTitle) {
     //insert to the end of the target paragraph
 
 
-    if (allId.premium === '1'){
+    if (allId.premium === 1){
 
     }else{
 
