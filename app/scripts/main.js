@@ -224,7 +224,6 @@ function pauseAllVideos() {
 }
 //Start the App
 function startpage() {
-    console.log('startpage');
     var savedhomepage;
     updateTimeStamp();
     gStartStatus = 'startpage start';
@@ -2487,8 +2486,10 @@ function displaystoryNormal(theid, language, forceTitle) {
     //insert to the end of the target paragraph
 
 
-    if (allId.premium === 1){
 
+    if (allId.premium === 1){
+        var adInPremium = $('.subscribe-lock-container');
+        $('<div class="adiframe mpu-phone for-phone" type="250" frame="ad300x250-story"></div>').insertAfter(adInPremium);
     }else{
 
         if (insertAd > 0) {
@@ -2505,6 +2506,7 @@ function displaystoryNormal(theid, language, forceTitle) {
         */
       
         $('<div class="adiframe mpu-phone for-phone" type="250" frame="ad300x250-story-vw"></div>').insertAfter(paraGraphs.eq(insertAd2));
+        console.log('aa:'+paraGraphs.eq(insertAd));
     }
 
              
