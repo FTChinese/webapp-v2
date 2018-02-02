@@ -1777,6 +1777,15 @@ function checkbreakingnews() {
 */
 
 function addstoryclick() {
+
+    $('.premium').unbind().bind('click', function() {
+        var storyid = $(this).attr('storyid'), 
+            storyHeadline = $(this).find('.headline, .hl').html() || '';
+        pageStarted=1;
+        _popstate=0;
+        readstory(storyid, storyHeadline);
+    });     
+
     $('.story').unbind().bind('click', function() {
         var storyid = $(this).attr('storyid'), 
             storyHeadline = $(this).find('.headline, .hl').html() || '';
@@ -1784,6 +1793,8 @@ function addstoryclick() {
         _popstate=0;
         readstory(storyid, storyHeadline);
     });
+
+    
 }
 // 装入热门文章或热门评论，以及年度文章
 function fillArticles(data, place) {

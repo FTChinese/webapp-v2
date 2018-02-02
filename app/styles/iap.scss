@@ -210,7 +210,7 @@ $pink-dark: #eadecd;
     }
     
 }
-.lock{
+@mixin locked{
     display: inline-block;
         &:after {
             content: " ";
@@ -223,7 +223,7 @@ $pink-dark: #eadecd;
             background-size: 100% 100%;
     }
 }
-.unlocked {
+@mixin unlocked {
     display: inline-block;
     &:after {
         content: " ";
@@ -239,10 +239,10 @@ $pink-dark: #eadecd;
 @media only screen and (max-width: 1024px) {
     .oneStory {
         .narrow-locked {
-            @extend .lock;
+            @include locked
         }
         .narrow-unlocked {
-            @extend .unlock;
+            @include unlocked
         }
         .wide-locked {display: none;}
         .wide-unlocked {display: none;}
@@ -251,12 +251,13 @@ $pink-dark: #eadecd;
 @media only screen and (min-width: 1024px) {
     .oneStory {
         .wide-locked {
-            @extend .lock;
+                @include locked
+            }
         }
         .wide-unlocked {
-            @extend .unlock;
+            @include unlocked
         }
         .narrow-locked {display: none;}
         .narrow-unlocked {display: none;}
-    }
+
 }
