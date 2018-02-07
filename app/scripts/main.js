@@ -2234,7 +2234,7 @@ function displaystory(theid, language, forceTitle) {
 //     });
 //     updateAds();
 // }
-var premiumHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">使用FT中文网 iOS应用</div><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="subscribe-btn"><a style="color:white" href="http://a.app.qq.com/o/simple.jsp?pkgname=com.ft&" >下载应用▶︎</a></div></div></div>';
+var paywallHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">使用FT中文网 iOS应用</div><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="subscribe-btn"><a style="color:white" href="http://a.app.qq.com/o/simple.jsp?pkgname=com.ft&" >下载应用▶︎</a></div></div></div>';
 
 function displaystoryNormal(theid, language, forceTitle) {
     var columnintro = ''; 
@@ -2333,8 +2333,8 @@ function displaystoryNormal(theid, language, forceTitle) {
         actualLanguage = 'en';
         byline = (allstories[theid].ebyline_description || 'By') + ' ' + eauthor;
 
-        if (allId.premium === 1){
-            $('#storyview .storybody').html(storyimage).append(premiumHintHtml);
+        if (allId.paywall === 1){
+            $('#storyview .storybody').html(storyimage).append(paywallHintHtml);
         }else{
             $('#storyview .storybody').html(storyimage).append(allId.ebody);
         }
@@ -2386,8 +2386,8 @@ function displaystoryNormal(theid, language, forceTitle) {
         }
         ceDiff = cbodyTotal - ebodyTotal;
         
-        if (allId.premium === 1){
-            $('#storyview .storybody').html(premiumHintHtml);
+        if (allId.paywall === 1){
+            $('#storyview .storybody').html(paywallHintHtml);
         }else{
             $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
         }
@@ -2408,8 +2408,8 @@ function displaystoryNormal(theid, language, forceTitle) {
         actualLanguage = 'ch';
         byline = (allId.cbyline_description||'').replace(/作者[：:]/g, '') + ' ' + (allId.cauthor||'').replace(/,/g, '、') + ' ' + (allId.cbyline_status || '');
         //alert (allId.cbody);
-        if (allId.premium === 1){
-            $('#storyview .storybody').html(storyimage).append(premiumHintHtml);
+        if (allId.paywall === 1){
+            $('#storyview .storybody').html(storyimage).append(paywallHintHtml);
         }else{
             $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));
         }
@@ -2487,9 +2487,9 @@ function displaystoryNormal(theid, language, forceTitle) {
 
 
 
-    if (allId.premium === 1){
-        var adInPremium = $('.subscribe-lock-container');
-        $('<div class="adiframe mpu-phone for-phone" type="250" frame="ad300x250-story"></div>').insertAfter(adInPremium);
+    if (allId.paywall === 1){
+        var adInPaywall = $('.subscribe-lock-container');
+        $('<div class="adiframe mpu-phone for-phone" type="250" frame="ad300x250-story"></div>').insertAfter(adInPaywall);
     }else{
 
         if (insertAd > 0) {
