@@ -115,6 +115,7 @@ function startTrackingAdViews(scrollerId) {
 
 // MARK: - 刷新广告位
 function updateAds() {
+   console.log('execute updateAds');
     var nowV = gNowView;
     var isColumnFlow = false;
     var currentViewPortAds;

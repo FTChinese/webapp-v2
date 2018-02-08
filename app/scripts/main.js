@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1241; //当前的版本号
+var _currentVersion = 1242; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -103,8 +103,9 @@ if (window.location.href.indexOf('isInSWIFT')>=0) {
 }
 
 // MARK: This is the best way to know it is in Android Native App
+
 var gIsNativeApp = false;
-if (window.location.href.indexOf('androidapp')>=0 || gIsInSWIFT === true || window.ftjavacriptapp !== undefined) {
+if (window.location.href.indexOf('androidapp')>=0 || gIsInSWIFT === true || typeof window.ftjavacriptapp !== 'undefined') {
     gIsNativeApp = true;
 }
 
@@ -225,6 +226,7 @@ function pauseAllVideos() {
 //Start the App
 function startpage() {
     var savedhomepage;
+    console.log('start page');
     updateTimeStamp();
     gStartStatus = 'startpage start';
     try {
@@ -624,7 +626,7 @@ function fillContent(loadType) {
             $('#setting .nightreading').after('<div class="nightreading notificationOn" id="notification"><strong>通知</strong><span class="displayvalue" onclick="switchNotification()"><span class="ui-toggle"><span class="ui-toggle-button2"></span><span class="ui-toggle-label ui-toggle-label-on">开</span><span class="ui-toggle-label ui-toggle-label-off">关</span></span></span></div>');
         }
         $('#setting .description').remove();
-        if (window.ftjavacriptapp !== undefined) {
+        if (typeof window.ftjavacriptapp !== 'undefined') {
             if (ftjavacriptapp.is_push()=='0') {
                 ftjavacriptapp.set_push('0');
                 $('#notification').addClass('notificationOn');
@@ -2237,6 +2239,7 @@ function displaystory(theid, language, forceTitle) {
 var paywallHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">使用FT中文网 iOS应用</div><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="subscribe-btn"><a style="color:white" href="http://a.app.qq.com/o/simple.jsp?pkgname=com.ft&" >下载应用▶︎</a></div></div></div>';
 
 function displaystoryNormal(theid, language, forceTitle) {
+    console.log('Display story normal');
     var columnintro = ''; 
     var storyimage;
     var allId = allstories[theid];
@@ -2292,7 +2295,6 @@ function displaystoryNormal(theid, language, forceTitle) {
     $('#storyview .storydate').html(unixtochinese(allId.last_publish_time||allId.fileupdatetime, 1));
     $('.story[storyid*=\'' + theid + '\']').addClass('visited');
     if (/<p>[_\-]+<\/p>/gi.test(allId.cbody)) {allId.cbody = allId.cbody.replace(/<p>[_\-]+<\/p>/gi,'<hr/><br/>');}
-
     if (allId.columninfo && allId.columninfo.piclink && allId.columninfo.description) {
         allIdColumnIfoHeadline = allId.columninfo.headline.replace(/《/g, '').replace(/》/g, '');
         columnintro = '<div class=channel url="/index.php/ft/column/' 
@@ -2587,10 +2589,11 @@ function displaystoryNormal(theid, language, forceTitle) {
     $('#storyview .allcomments').remove();
     $('#storyview .readerCommentTitle').after('<div id=allcomments class="allcomments container"></div>');
     loadcomment(theid, 'allcomments', 'story');
-
-    //记录文章页面PV
-    httpspv(gDeviceType + '/storypage/'+ theid);
     
+    //记录文章页面PV
+    httpspv(gDeviceType + '/storypage/'+ theid);//wycNOTE:之前是这个里面的updateAds()执行时有bug导致后面都没有执行
+
+
     //记录文章被阅读
     recordAction('/phone/storypage/'+ theid);
 
@@ -2670,6 +2673,7 @@ function displaystoryNormal(theid, language, forceTitle) {
         }
     }
 
+    console.log('before updateShare');
     updateShare('http://www.ftchinese.com', 'http://www.ftchinese.com', '/story/', allId.id, allId.cheadline, sinten, l, d, k);
     //Sticky Right Rail
     freezeCheck();
@@ -2682,12 +2686,14 @@ function displaystoryNormal(theid, language, forceTitle) {
     if (nativeVerticalScroll === true) {
         document.getElementById('storyScroller').scrollTop = 0;
     } 
+    
 }
 //阅读文章
 
 
 //share to social buttons
 function updateShare(domainUrl, mobileDomainUrl, contentType, contentId, contentTitle, contentLongTitle, contentImage, contentDescription, shareMobile) {
+    console.log('exect updateShare');
     var url = encodeURIComponent(domainUrl) + encodeURIComponent(contentType) + contentId;
     var mobileUrl = encodeURIComponent(mobileDomainUrl) + encodeURIComponent(contentType) + contentId;
     var l = contentImage;
@@ -2707,7 +2713,9 @@ function updateShare(domainUrl, mobileDomainUrl, contentType, contentId, content
     $('#shareEmail').attr('href','mailto:?subject='+contentTitle+'&body='+ contentLongTitle + decodeURIComponent(url));
     //如果是iOS原生应用，传参数给SDK分享微信
     $('#webappWeixin,#nativeWeixin').hide();
-    if ((/phoneapp.html/i.test(location.href) && osVersion.indexOf('ios')>=0 && (osVersion.indexOf('ios7')<0)) || /android|isInSWIFT/i.test(location.href) || gIsNativeApp === true) {
+    //if ((/phoneapp.html/i.test(location.href) && osVersion.indexOf('ios')>=0 && (osVersion.indexOf('ios7')<0)) || /android|isInSWIFT/i.test(location.href) || gIsNativeApp === true) {
+    if ((/phoneapp.html/i.test(location.href) && osVersion.indexOf('ios')>=0 && (osVersion.indexOf('ios7')<0)) || /isInSWIFT/i.test(location.href) || gIsNativeApp === true) {
+        console.log('native show');
         $('#nativeWeixin').show();
         // if (gIsInSWIFT === true) {
         //     l = resizeImg(l,72,72);
@@ -2742,6 +2750,7 @@ function updateShare(domainUrl, mobileDomainUrl, contentType, contentId, content
             $('#iOSAction, #iOS-video-action').attr('href',k);
         }
     } else {
+        console.log('web show');
         $('#webappWeixin').show();
     }
     //如果是中文或中英对照模式，取前N段分享到微信客户端
@@ -3018,6 +3027,7 @@ function httpspv(theurl) {
         }
     }
     //console.log (deviceName);
+
     try {
         ga('set', 'dimension7', _currentVersion.toString());
         ga('set', 'dimension2', vtype);
@@ -3040,6 +3050,7 @@ function httpspv(theurl) {
 
     } catch(ignore) {
     }
+
     if (_localStorage===1) {
         try {
             tracker.push(theurl);
@@ -3057,11 +3068,18 @@ function httpspv(theurl) {
     } catch (ignore) {
 
     }
+
     if (gHideAd === false) {
-        updateAds();
+        console.log(gHideAd);
+        try {
+            updateAds(); //wyc Note:这里会有错，然后导致后面的全部无法执行
+        } catch (ignore) {
+
+        }
     } else {
         console.log ('ad is not displaying');
     }
+
     setTimeout (function (){freezeCheck();},200);
 }
 
@@ -3726,7 +3744,7 @@ function switchNotification() {
     } else {
         $('#notification').addClass('notificationOn');
     }
-    if (window.ftjavacriptapp !== undefined) {
+    if (typeof window.ftjavacriptapp !== 'undefined') {
         if (ftjavacriptapp.is_push()==0) {
             ftjavacriptapp.set_push('1');
         } else {
