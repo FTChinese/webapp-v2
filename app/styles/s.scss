@@ -1630,3 +1630,33 @@ html.noScroller,.noScroller body,.noScroller .fullbody,.noScroller #storyScrolle
         padding-left: 14px;
     }
 }
+
+// form image style
+@media only screen and (min-width: 690px) {
+	.form-list{
+		width: 50%;
+	}
+}
+@media only screen and (max-width: 690px) {
+	.form-list{
+		width: 100%;
+	}
+}
+.form-list-container{
+	background-color: #faeadd;
+	.form-list{
+		float: left;
+		padding: 10px 10px 0px;
+		text-align: center;
+		div{
+			padding-bottom: 10px;
+		}
+		h3{
+			padding-bottom: 10px;
+			font-size:1.1em;
+		}
+		p{
+			text-align: left;
+		}
+	}
+}

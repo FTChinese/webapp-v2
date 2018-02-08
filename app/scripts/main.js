@@ -4526,4 +4526,101 @@ try {
     trackErr(err + ', where: ' + gStartStatus, 'startpage');
 }
 
+//MARK: - refresh page to update lock class
+window.onload = function(){
+    var headlineDiv = document.querySelectorAll('.headline');
+    var toPayHeadline = [];
 
+    function payWall(){  
+        var xhrpw = new XMLHttpRequest();
+        xhrpw.open('get', '/index.php/jsapi/paywall');
+        xhrpw.setRequestHeader('Content-Type', 'application/text');
+        xhrpw.onload = function() {
+            if (xhrpw.status === 200) {
+                var data = xhrpw.responseText;
+                var dataObj = JSON.parse(data); 
+                if (dataObj.paywall === 1) {
+                    console.log('get paywall1:'+data);
+                    updateLockClass();
+                }
+            } else {
+                // updateLockClass();
+                console.log('fail to get paywall');
+            }
+        };
+        xhrpw.send(null);
+    }
+    var userId1 = getCookie('USER_ID') || ''
+    if (userId1 !== null) {
+    // payWall();  
+      for (var i = 0; i < 5; i++) {
+        setTimeout((function(i){
+            return function(){
+                payWall();
+                console.log(i);
+            };
+        })(i), 3000);
+       }
+    }
+
+
+    // 过滤出包含locked的headline类数组
+ function getPayStory(){
+    var len = headlineDiv.length;
+    
+    if (len>0){
+        for (var i = 0; i < len; i++) {
+            if (hasClass(headlineDiv[i],'narrow-locked')||hasClass(headlineDiv[i],'wide-locked')){
+                toPayHeadline.push(headlineDiv[i]);
+            }
+            
+        }
+    }
+   
+ }
+    getPayStory();
+
+    function updateLockClass(){
+      if (toPayHeadline.length>0){
+        for (var k = 0, len=toPayHeadline.length; k < len; k++) {
+            if (hasClass(toPayHeadline[k],'narrow-locked')){
+                removeClass(toPayHeadline[k], 'narrow-locked');
+                addClass(toPayHeadline[k], 'narrow-unlocked');
+            } else if(hasClass(toPayHeadline[k],'wide-locked')){
+                removeClass(toPayHeadline[k], 'wide-locked');
+                addClass(toPayHeadline[k], 'wide-unlocked');
+            }else{
+                // break;
+            }
+            
+        }
+      }
+    }
+    // updateLockClass();
+    function hasClass(ele, cls) {
+        cls = cls || '';
+        if (cls.replace(/\s/g, '').length === 0) {
+            return false; 
+        }else{
+            return new RegExp(' ' + cls + ' ').test(' ' + ele.className + ' ');
+        }
+
+    }
+    
+    function addClass(ele, cls) {
+        if (!hasClass(ele, cls)) {
+            ele.className = ele.className === '' ? cls : ele.className + ' ' + cls;
+        }
+    }
+    
+    function removeClass(ele, cls) {
+        if (hasClass(ele, cls)) {
+            var newClass = ' ' + ele.className.replace(/[\t\r\n]/g, '') + ' ';
+            while (newClass.indexOf(' ' + cls + ' ') >= 0) {
+            newClass = newClass.replace(' ' + cls + ' ', ' ');
+            }
+            ele.className = newClass.replace(/^\s+|\s+$/g, '');
+        }
+    }
+
+}
