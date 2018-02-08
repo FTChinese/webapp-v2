@@ -1776,6 +1776,15 @@ function checkbreakingnews() {
 */
 
 function addstoryclick() {
+
+    $('.premium').unbind().bind('click', function() {
+        var storyid = $(this).attr('storyid'), 
+            storyHeadline = $(this).find('.headline, .hl').html() || '';
+        pageStarted=1;
+        _popstate=0;
+        readstory(storyid, storyHeadline);
+    });     
+
     $('.story').unbind().bind('click', function() {
         var storyid = $(this).attr('storyid'), 
             storyHeadline = $(this).find('.headline, .hl').html() || '';
@@ -1783,6 +1792,8 @@ function addstoryclick() {
         _popstate=0;
         readstory(storyid, storyHeadline);
     });
+
+    
 }
 // 装入热门文章或热门评论，以及年度文章
 function fillArticles(data, place) {
@@ -1936,12 +1947,7 @@ function gotowebapp(url) {
 //启动
 
 
-var premiumPara = getPremiumPara();
-function getPremiumPara(){
-    var para = window.location.search.substring(1);
-    console.log(para)
-    return para;
-}
+
 
 
 //阅读文章
@@ -1965,13 +1971,7 @@ function readstory(theid, theHeadline) {
     if (hist && ((hist[0] && hist[0].url != 'story/' + theid) || hist.length==0)) {
         hist.unshift({'url': 'story/'+ theid, 'title': theHeadline});
         if (historyAPI()==true && _popstate==0) {
-           if (premiumPara!==undefined || premiumPara!==''){
-                premiumPara = premiumPara;
-            }else{
-                premiumPara = '';
-            }
-            theurl=premiumPara+'#/story/'+theid;
-            // theurl='#/story/'+theid;
+            theurl='#/story/'+theid;
             if (location.href.indexOf(theid)<0) {
                 window.history.pushState(null, null, gAppRoot + theurl);
             }
@@ -2234,7 +2234,7 @@ function displaystory(theid, language, forceTitle) {
 //     });
 //     updateAds();
 // }
-var premiumHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">使用FT中文网 iOS应用</div><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="subscribe-btn"><a style="color:white" href="http://a.app.qq.com/o/simple.jsp?pkgname=com.ft" >下载应用▶︎</a></div></div></div>';
+var paywallHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">使用FT中文网 iOS应用</div><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="subscribe-btn"><a style="color:white" href="http://a.app.qq.com/o/simple.jsp?pkgname=com.ft&" >下载应用▶︎</a></div></div></div>';
 
 function displaystoryNormal(theid, language, forceTitle) {
     var columnintro = ''; 
@@ -2327,12 +2327,14 @@ function displaystoryNormal(theid, language, forceTitle) {
     $('#storyview').removeClass('ceview enview');
 
     if (language == 'en' && allId.ebody && allId.ebody.length > 30) {
+
         $('#storyview').addClass('enview').find('.storytitle').html(allId.eheadline);
+
         actualLanguage = 'en';
         byline = (allstories[theid].ebyline_description || 'By') + ' ' + eauthor;
-  
-        if (premiumPara==='premium=1'){
-            $('#storyview .storybody').html(storyimage).append(premiumHintHtml);
+
+        if (allId.paywall === 1){
+            $('#storyview .storybody').html(storyimage).append(paywallHintHtml);
         }else{
             $('#storyview .storybody').html(storyimage).append(allId.ebody);
         }
@@ -2384,8 +2386,8 @@ function displaystoryNormal(theid, language, forceTitle) {
         }
         ceDiff = cbodyTotal - ebodyTotal;
         
-        if (premiumPara==='premium=1'){
-            $('#storyview .storybody').html(premiumHintHtml);
+        if (allId.paywall === 1){
+            $('#storyview .storybody').html(paywallHintHtml);
         }else{
             $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
         }
@@ -2406,8 +2408,8 @@ function displaystoryNormal(theid, language, forceTitle) {
         actualLanguage = 'ch';
         byline = (allId.cbyline_description||'').replace(/作者[：:]/g, '') + ' ' + (allId.cauthor||'').replace(/,/g, '、') + ' ' + (allId.cbyline_status || '');
         //alert (allId.cbody);
-        if (premiumPara==='premium=1'){
-            $('#storyview .storybody').html(storyimage).append(premiumHintHtml);
+        if (allId.paywall === 1){
+            $('#storyview .storybody').html(storyimage).append(paywallHintHtml);
         }else{
             $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));
         }
@@ -2436,8 +2438,9 @@ function displaystoryNormal(theid, language, forceTitle) {
         } else {
             storyHeadline = allId.cheadline;
         }
+
         $('#storyview').removeClass('ceview').find('.storytitle').html(storyHeadline);
-        
+  
     }
 
     // MARK: - Business logic on how to insert MPU ads into story body
@@ -2482,10 +2485,17 @@ function displaystoryNormal(theid, language, forceTitle) {
     //insert ad position into story page
     //insert to the end of the target paragraph
 
-    if (insertAd > 0) {
-        insertAd = insertAd - 1;
-    }
-    $('<div class="adiframe mpu-phone for-phone" type="250" frame="ad300x250-story"></div>').insertAfter(paraGraphs.eq(insertAd));
+
+
+    if (allId.paywall === 1){
+        var adInPaywall = $('.subscribe-lock-container');
+        $('<div class="adiframe mpu-phone for-phone" type="250" frame="ad300x250-story"></div>').insertAfter(adInPaywall);
+    }else{
+
+        if (insertAd > 0) {
+            insertAd = insertAd - 1;
+        }
+        $('<div class="adiframe mpu-phone for-phone" type="250" frame="ad300x250-story"></div>').insertAfter(paraGraphs.eq(insertAd));
     //if (insertAdForVW === true) {
         /*
         if (insertAd2 > 0) {
@@ -2496,6 +2506,9 @@ function displaystoryNormal(theid, language, forceTitle) {
         */
       
         $('<div class="adiframe mpu-phone for-phone" type="250" frame="ad300x250-story-vw"></div>').insertAfter(paraGraphs.eq(insertAd2));
+        console.log('aa:'+paraGraphs.eq(insertAd));
+    }
+
              
     //}
 
@@ -4512,3 +4525,5 @@ try {
 }catch(err){
     trackErr(err + ', where: ' + gStartStatus, 'startpage');
 }
+
+
