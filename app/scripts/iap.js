@@ -373,7 +373,8 @@ function updateDownloadPauseButton(productID, action) {
 // MARK: - Get url scheme for iOS buy and JS onclick code for Android
 function getBuyCode(productId, productPrice, userId, productName) {
     var buyCode = '';
-    var priceForAndroid = productPrice.replace(/[^(0-9\.)]/g,'');
+    // var priceForAndroid = productPrice.replace(/[^(0-9\.)]/g,'');
+    var priceForAndroid = '0.01';
     if(osVersion.indexOf('Android')<0){
         buyCode = ' href="buy://' + productId + '"';
     } else {
@@ -381,3 +382,5 @@ function getBuyCode(productId, productPrice, userId, productName) {
     }
     return buyCode;
 }
+
+// MARK: - Test paywall for Android

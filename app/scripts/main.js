@@ -352,6 +352,14 @@ function startpage() {
             displayProducts(window.iapProducts, iapAction, iapTitle);
         }
     });
+    $('body').on('click', '.paywall-channel', function(){
+        var iapAction = $(this).attr('iap-action');
+        var iapTitle = $(this).attr('iap-title') || $(this).html() || 'FT中文网';
+        if (iapAction) {
+            displayProducts(window.iapProducts, iapAction, iapTitle);
+        }
+    });
+    
     /*
     $('body').on('click', '.iap-item', function(){
         var productId = this.getAttribute('product-id') || '';
@@ -2236,7 +2244,7 @@ function displaystory(theid, language, forceTitle) {
 //     });
 //     updateAds();
 // }
-var paywallHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">使用FT中文网 iOS应用</div><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="subscribe-btn"><a style="color:white" href="http://premium.ftacademy.cn/subscription.html" >立即订阅▶︎</a></div></div></div>';
+var paywallHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">使用FT中文网 iOS应用</div><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="subscribe-btn iap-channel" iap-action="membership" iap-title="会员"><span style="color:white">立即订阅▶︎</span></div></div></div>';
 
 function displaystoryNormal(theid, language, forceTitle) {
     console.log('Display story normal');
