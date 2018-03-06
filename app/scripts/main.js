@@ -2236,7 +2236,7 @@ function displaystory(theid, language, forceTitle) {
 //     });
 //     updateAds();
 // }
-var paywallHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">使用FT中文网 iOS应用</div><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="subscribe-btn"><a style="color:white" href="http://a.app.qq.com/o/simple.jsp?pkgname=com.ft&" >下载应用▶︎</a></div></div></div>';
+var paywallHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">使用FT中文网 iOS应用</div><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="subscribe-btn"><a style="color:white" href="http://premium.ftacademy.cn/subscription.html" >立即订阅▶︎</a></div></div></div>';
 
 function displaystoryNormal(theid, language, forceTitle) {
     console.log('Display story normal');
@@ -4562,22 +4562,20 @@ window.onload = function(){
                     updateLockClass();
                 }
             } else {
-                console.log('fail to get paywall');
+                console.log('fail to get pw');
             }
         };
         xhrpw.send(null);
     }
     var userId1 = getCookie('USER_ID') || ''
     if (userId1 !== null) {
-       if (userId1 !== null) {
-            payWall();   
-            var interval = setInterval(function(){
-            payWall();
-            },3000);
-            setTimeout(function( ) {
-            clearInterval(interval); 
-            }, 15000); 
-        }
+        payWall();   
+        var interval = setInterval(function(){
+        payWall();
+        },3000);
+        setTimeout(function( ) {
+        clearInterval(interval); 
+        }, 15000); 
     }
 
 
