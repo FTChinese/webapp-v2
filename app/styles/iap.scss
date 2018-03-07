@@ -55,9 +55,12 @@ ul.navigation li,
     position: relative;
     overflow: visible;
     button {
+        background-color: #26747a;
+        color: white;
         position: absolute;
         right: 0;
-        bottom: 0;
+        bottom: 0px;
+        margin-bottom: 10px;
         &.iap-move-left {
             right: 60px;
         }
@@ -157,19 +160,16 @@ ul.navigation li,
 
 // MARK: - CSS Ruls for Membership subscription
 $teal-1: #26747a;
-$pink-light: #f8ebda;
+$black: #000000;
+$pink-light:#ffffff;
 $pink-dark: #eadecd;
 .iap-member {
     background-color: $pink-light;
-    margin: 1em 0 !important;
+    margin: 1em 1em !important;
     .headline {
         text-align: center;
     }
     .iap-benefits li {
-        background-image: url("https://www.ft.com/__origami/service/image/v2/images/raw/fticon-v1:tick?tint=26747a&format=svg&source=ftchinese");
-        background-repeat: no-repeat;
-        background-position: left top;
-        background-size: 1.5em;
         padding-left: 1.5em;
         margin: 0.5em 1em;
     }
@@ -177,27 +177,50 @@ $pink-dark: #eadecd;
     .iap-button {
         text-align: center;
         height: auto;
-        padding: 2em 0;
+        padding: 1em 0 0;
         .iap-teaser {
-            color: $teal-1;
+            color: $black;
             text-align: center;
-            margin-bottom: 1em;
+           
         }
         button {
             position: static;
-            padding: 0.5em 1em 0.5em 2em;
-            letter-spacing: 1em;
+            padding: 0.5em 1em;
+            width: 80%;
+            font-size: 1.2em;
+            font-weight: 600;
         }
     }
 
-    &__standard {
-        background-color: $pink-dark;
-        .iap-button  button {
-            background-color: $teal-1;
-            color: #fff;
+    // &__standard {
+        // .iap-button  button {
+        //     background-color: $teal-1;
+        //     color: #fff;
+        // }
+    // }
+}
+.channel-iap{
+    .headline{
+        font-size: 1.3em;
+    }
+    .iap-intruction{
+        margin: 1em !important;
+        .hint-headline{
+            font-size: 1.1em;
+            color: #000;
+            font-weight: bold;
+            margin: 15px 0 5px;
+        }
+        .hint-content{
+            font-size: 1.0em; 
         }
     }
+    .container{
+        max-width: 550px;
+        margin: 0 auto;
+    }
 }
+
 
 @media only screen and (min-width: 700px) {
     .channel-iap {
