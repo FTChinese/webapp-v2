@@ -331,3 +331,28 @@ function getBuyCode(productId, productPrice, userId, productName) {
 }
 
 // MARK: - Test paywall for Android
+function postPayState(productId, productPrice, userId, productName){
+    if (!!userId){
+        var xhrpw = new XMLHttpRequest();
+        xhrpw.open('post', '/index.php/jsapi/paywall');
+        xhrpw.setRequestHeader('Content-Type', 'application/text');
+        var payInfo = {
+            productId:productId,
+            productPrice:productPrice,
+            userId:userId,
+            productName:productName
+        }
+        xhrpw.onload = function() {
+            if (xhrpw.status === 200) {
+                var data = xhrpw.responseText;
+                var dataObj = JSON.parse(data); 
+                // console.log('get data:'+data);
+    
+            } else {
+                console.log('fail to get st');
+            }
+        };
+        xhrpw.send(payInfo);
+    }
+
+}
