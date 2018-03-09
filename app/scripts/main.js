@@ -4570,7 +4570,7 @@ window.onload = function(){
                     updateLockClass();
                 }
             } else {
-                console.log('fail to get pw');
+                // console.log('fail to get pw');
             }
         };
         xhrpw.send(null);

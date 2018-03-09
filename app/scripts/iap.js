@@ -1,4 +1,4 @@
-window.iapProducts = [{title: '普通会员',description: '<p>All the benefits of a Standard FT Subscription, plus exclusive news and analysis</p><p>Mobile and tablet access via our award-winning apps</p><p>Exclusive access to the Lex Column, and Instant Insight for comment and analysis as news unfolds</p>',price: '¥198.00',id: 'com.ft.ftchinese.mobile.subscription.premium.'+new Date().getTime(),image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为普通会员', isPurchased: false, isDownloaded: false, group: 'membership', groupTitle: '会员',benefits:['- 阅读FT中文网所有独家内容','- 收听英文文章音频'],period:'year'},{title: '高端会员',description: '<p>Unlimited access to all Standard-access articles and blogs</p><p>Mobile and tablet access via our award-winning apps</p><p>Personalised email briefings and alerts</p><p>Portfolio tools to track your investments</p>',price: '¥1,998.00',id: 'com.ft.ftchinese.mobile.subscription.standard.'+new Date().getTime(),image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为高端会员', isPurchased: false, isDownloaded: false, group: 'membership', groupTitle: '会员',benefits:['- 《FT编辑精选》，每周不可错过的独家必读内容','- 获得两张价值3999元的FT中文网年会门票','- 阅读FT中文网所有独家内容','- 收听英文文章音频'],period:'year'}];
+window.iapProducts = [{title: '普通会员',description: '<p>All the benefits of a Standard FT Subscription, plus exclusive news and analysis</p><p>Mobile and tablet access via our award-winning apps</p><p>Exclusive access to the Lex Column, and Instant Insight for comment and analysis as news unfolds</p>',price: '¥198.00',id: '1premium',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为普通会员', isPurchased: false, isDownloaded: false, group: 'membership', groupTitle: '会员',benefits:['- 阅读FT中文网所有独家内容','- 收听英文文章音频'],period:'year'},{title: '高端会员',description: '<p>Unlimited access to all Standard-access articles and blogs</p><p>Mobile and tablet access via our award-winning apps</p><p>Personalised email briefings and alerts</p><p>Portfolio tools to track your investments</p>',price: '¥1,998.00',id: '2standard',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为高端会员', isPurchased: false, isDownloaded: false, group: 'membership', groupTitle: '会员',benefits:['- 《FT编辑精选》，每周不可错过的独家必读内容','- 获得两张价值3999元的FT中文网年会门票','- 阅读FT中文网所有独家内容','- 收听英文文章音频'],period:'year'}];
 
 var subscribeIntruction = {
     title: '订阅说明与注意事项',
@@ -213,19 +213,21 @@ function showProductDetail(productId) {
 function updateProductStatus(productIndex, isProductPurchased, isProductDownloaded) {
     if (productIndex >= 0 && window.iapProducts[productIndex]) {
         window.iapProducts[productIndex].isPurchased = isProductPurchased;
-        // window.iapProducts[productIndex].isDownloaded = isProductDownloaded;
     }
 }
 
+// iapActions('new Date().getTime()'+'com.ft.ftchinese.mobile.subscription.premium', 'success', '');
+
+
 // MARK: - Update DOM UI based on user actions
-function iapActions(productID, actionType, expireDate) {
-    var iapButtons;
+function iapActions(productID, actionType, expireDate) {    
+    var iapButtons='';
     var iapRailHTML = '';
     var iapHTMLCode = '';
     var productPrice = '';
     var productTeaser = '';
-    var productIndex;
-    var productName;
+    var productIndex = 0;
+    var productName ='';
     var productExpire = '为止';
  
     // MARK: get iapButtons based on the current view
@@ -235,18 +237,10 @@ function iapActions(productID, actionType, expireDate) {
     } else if (gNowView.indexOf('channelview') >= 0) {
         currentView = 'channelview';
     }
-
+    
     iapButtons = document.getElementById(currentView).querySelectorAll('.iap-button');
 
-    // MARK: - Get the index number of the current product for window.iapProducts
-    if (productID !== '') {
-        for (var i = 0; i < window.iapProducts.length; i++) {
-            if (productID === iapProducts[i].id) {
-                productIndex = i;
-                break;
-            }
-        }
-    }
+    productIndex = getproductIndex(productID)
 
     // MARK: - get product price here
     productPrice = window.iapProducts[productIndex].price || '0￥';
@@ -257,76 +251,78 @@ function iapActions(productID, actionType, expireDate) {
     var productType = '';
     if (/premium$|standard$|trial$/.test(productID)) {
         productType = 'membership';
-    } else if (/subscription/.test(productID)) {
-        productType = 'subscription';
-    } else {
+    }else {
         productType = 'eBook';
     }
-
     // MARK: - iapHTMLCode is used for home and channel page, iapRailHTML is used for product detail page
-    switch (actionType) {
+    switch (actionType) { 
         case 'success':
             if (productType === 'membership') {
                 productExpire = expireDate || '未知';
-                iapHTMLCode = '<a'+getBuyCode(productID, productPrice, gUserId, productName)+'><button class="iap-move-left">已订阅</button></a><p class="iap-teaser">成功订阅'+productName+'</p>';
-                iapRailHTML = '';
-            } else {
-                // iapHTMLCode = '<a href="readbook://' + productID + '"><button class="iap-move-left">打开</button></a><a href="removedownload://' + productID + '"><button>删除</button></a>';
-                // iapRailHTML = '<a href="readbook://' + productID + '"><button class="floatright iap-highlight">打开</button></a><a href="removedownload://' + productID + '"><button class="floatleft">删除</button></a>';
-            }
+                iapHTMLCode = '<a><button class="iap-move-left">已订阅</button></a><p class="iap-teaser">'+ productPrice + '/年' + '</p>';
+            } 
             updateProductStatus(productIndex, true, true);
             break;
-        case 'pending':
-            if (productType === 'membership') {
-                iapHTMLCode = '<p class="iap-teaser">请求...</p>';
-                iapRailHTML = '';
-            } else {
-                iapHTMLCode = '<button>请求...</button>';
-            }
-            updateProductStatus(productIndex, false, false);
-            break;
         case 'fail':
-            if (productType === 'membership') {
-                iapHTMLCode = '<a'+getBuyCode(productID, productPrice, gUserId, productName)+'><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productTeaser + ' ' + productPrice + '/年' + '</p>';
-                iapRailHTML = '';
-            } else {
-                iapHTMLCode = '<a'+getBuyCode(productID, productPrice, gUserId, productName)+'><button class="iap-move-left">' + productPrice + '</button></a><button onclick="showProductDetail(\'' + productID + '\');" class="iap-detail">查看</button>';
-            }
-            updateProductStatus(productIndex, false, false);
+            if (productType === 'membership') {  
+                
+                iapHTMLCode = '<a'+getBuyCode(productID, productPrice, gUserId, productName)+'><button class="iap-move-left">订阅1</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>'; 
+            } 
+            updateProductStatus(productIndex, false, false); 
             break;
         default:
     }
-
     // MARK: - for each of the iap button containers that fit the criteria, update its innerHTML
-    for (var i = 0; i < iapButtons.length; i++) {
-        //productPrice = iapButtons[i].getAttribute('product-price') || '购买';
-        if (productID === iapButtons[i].getAttribute('product-id')) {
-            //iapHTMLCode = iapHTMLCode.replace('[productprice]',productPrice);
-            iapButtons[i].innerHTML = iapHTMLCode;
-        } else if (productID === '') {
-            iapHTMLCode = '<a'+getBuyCode(iapButtons[i].getAttribute('product-id'), iapButtons[i].getAttribute('product-price'), gUserId, iapButtons[i].getAttribute('product-title'))+'><a href="buy://' + iapButtons[i].getAttribute('product-id') + '"><button class="iap-move-left">' + productPrice + '</button></a><button onclick="showProductDetail(\'' + products[i].id + '\');" class="iap-detail">查看</button>';
-            iapButtons[i].innerHTML = iapHTMLCode;
+    if (iapButtons.length>0){
+        for (var i = 0,len=iapButtons.length; i < len; i++) {
+            if (productID === iapButtons[i].getAttribute('product-id')) {
+                iapButtons[i].innerHTML = iapHTMLCode; 
+            } else if (productID === '') {
+                iapHTMLCode = '<a'+getBuyCode(iapButtons[i].getAttribute('product-id'), iapButtons[i].getAttribute('product-price'), gUserId, iapButtons[i].getAttribute('product-title'))+'><button class="iap-move-left">' + productPrice + '</button></a>';
+                iapButtons[i].innerHTML = iapHTMLCode;
+            }
         }
     }
-
-    // Mark: Update iap Button at the bottom of the detail view
-    if (productID !== '' && document.getElementById('iap-rail').getAttribute('data-id') === productID && gNowView.indexOf('storyview') >= 0) {
-        document.getElementById('iap-rail').innerHTML = iapRailHTML;
-    }
-
+    actionType = '';
 }
-
+ // MARK: - Get the index number of the current product for window.iapProducts
+function getproductIndex(productID){
+    var productIndex = 0;
+    var length = window.iapProducts.length;
+    if (productID !== '') {
+        for (var i = 0; i < length; i++) {
+            if (productID === iapProducts[i].id) {
+                productIndex = i;
+                break;
+            }
+        }
+    }
+    return productIndex;
+}
 
 // MARK: - Get url scheme for iOS buy and JS onclick code for Android
 function getBuyCode(productId, productPrice, userId, productName) {
-    var buyCode = '';
-    // var priceForAndroid = productPrice.replace(/[^(0-9\.)]/g,'');
-    var priceForAndroid = '0.01';
-    if(osVersion.indexOf('Android')<0){
-        buyCode = ' href="buy://' + productId + '"';
-    } else {
-        buyCode = ' onclick="ftjavacriptapp.payzfb(\''+ productId +'\',\''+ priceForAndroid +'\',\''+ userId +'\',\''+ productName +'\')"';
+    var buyCode = ''; 
+    var priceForAndroid = '';
+    if (productId==='1premium'){
+        priceForAndroid = '0.01';
+    }else{
+        priceForAndroid = '0.02';
     }
+    alert('productID:'+productId+' price:'+priceForAndroid+' userid:'+userId+' name:'+productName);
+    // var productIndex = 0;
+    // productIndex = getproductIndex();
+    // if (productIndex >= 0) {
+        // if (window.iapProducts[productIndex].isPurchased !== true){
+           if(osVersion.indexOf('Android')<0){
+                buyCode = ' href="buy://' + productId + '"';
+            } else {
+                buyCode = ' onclick="ftjavacriptapp.payzfb(\''+ productId +'\',\''+ priceForAndroid +'\',\''+ userId +'\',\''+ productName +'\')"';
+            }
+        // }else{
+        //     buyCode = '';
+        // }
+    // }
     return buyCode;
 }
 
