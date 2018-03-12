@@ -11,11 +11,12 @@ var subscribeIntruction = {
 function getSubscribeIntructionHtml(){
     var intructionHtml = '';
     var items = subscribeIntruction.items;
+    var services = subscribeIntruction.moreService
     var itemsHtml = '';
     for (var i = 0 ,len = items.length; i < len; i++) {
         itemsHtml += '<div class="hint-headline">'+items[i].headline+'</div><div class="hint-content">'+items[i].lead+'</div>';
     }
-    intructionHtml = '<div class="iap-intruction"><div class="headline">'+subscribeIntruction.title+'</div>'+itemsHtml+'</div>';
+    intructionHtml = '<div class="iap-intruction"><div class="headline">'+subscribeIntruction.title+'</div>'+itemsHtml+'<div class="more-service"><div class="hint-headline">更多服务与信息</div><div class="policy" url="http://www.ftchinese.com/m/corp/privacy-policy.html?ad=no">'+services[0]+'<span>></span></div><div class="policy" url="http://www.ftchinese.com/m/corp/service.html?ad=no">'+services[1]+'<span>></span></div><div class="policy" url="http://www.ftchinese.com/m/corp/faq.html?ad=no">'+services[2]+'<span>></span></div></div></div>';
     return intructionHtml;
 }
 var subscribeIntructionHtml = getSubscribeIntructionHtml();
@@ -31,6 +32,8 @@ var memberTemplate = '<div product-id="{{id}}" class="iap-item oneStory iap-memb
 '<div class="clearfloat"></div>';
 
 var gUserId = getCookie('USER_ID') || '';
+
+
 
 // MARK: - Display all the iap products on the home page
 function displayProductsOnHome(products) {
@@ -156,6 +159,12 @@ function displayProducts(products, page, pageTitle) {
                 hist.unshift({ 'url': '/channelpage/iap/' + page, 'title': pageTitle });
             }
         }
+
+        $('.policy').unbind().bind('click', function() {
+          var url = $(this).attr('url');
+          window.location.href = url;
+          console.log('open policy')
+        });
     }
 }
 
@@ -255,6 +264,8 @@ function iapActions(productID, actionType, expireDate) {
         productType = 'eBook';
     }
     // MARK: - iapHTMLCode is used for home and channel page, iapRailHTML is used for product detail page
+    // alert('productID:'+productID+' actionType:'+actionType);
+    // alert('productID:'+productId+' price:'+priceForAndroid+' userid:'+userId+' name:'+productName);
     switch (actionType) { 
         case 'success':
             if (productType === 'membership') {
@@ -265,8 +276,8 @@ function iapActions(productID, actionType, expireDate) {
             break;
         case 'fail':
             if (productType === 'membership') {  
-                
-                iapHTMLCode = '<a'+getBuyCode(productID, productPrice, gUserId, productName)+'><button class="iap-move-left">订阅1</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>'; 
+                alert('交易失败，您的钱还在口袋里');
+                iapHTMLCode = '<a'+getBuyCode(productID, productPrice, gUserId, productName)+'><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>'; 
             } 
             updateProductStatus(productIndex, false, false); 
             break;
@@ -309,7 +320,7 @@ function getBuyCode(productId, productPrice, userId, productName) {
     }else{
         priceForAndroid = '0.02';
     }
-    alert('productID:'+productId+' price:'+priceForAndroid+' userid:'+userId+' name:'+productName);
+    
     // var productIndex = 0;
     // productIndex = getproductIndex();
     // if (productIndex >= 0) {
@@ -352,3 +363,4 @@ function postPayState(productId, productPrice, userId, productName){
     }
 
 }
+

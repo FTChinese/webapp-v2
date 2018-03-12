@@ -214,6 +214,15 @@ $pink-dark: #eadecd;
         .hint-content{
             font-size: 1.0em; 
         }
+        .more-service{
+            .policy{
+                border-bottom:solid #ded5d5 0.5px;
+                padding: 5px 0px;
+                span{
+                    float:right;
+                }
+            }
+        }
     }
     .container{
         max-width: 550px;
