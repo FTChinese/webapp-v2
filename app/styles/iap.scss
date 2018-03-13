@@ -293,3 +293,34 @@ $pink-dark: #eadecd;
         .narrow-unlocked {display: none;}
 
 }
+.iap-hint{
+    .settingbox{
+        border-radius: 15px;
+    }
+    .overlay-header{
+        background-color: #ffffff;
+        padding: 15px 0px 10px; 
+        
+        div{
+            text-align: center;
+            font-size: 13px;
+            color: black;
+        }
+        .iap-fail{
+            font-size: 18px;
+        }
+        .iap-connect{
+            margin: 2px 0px 15px;
+        }
+        #iap-know{
+            font-size: 18px;
+            color: #6581da;
+            padding: 12px 0px 0px;
+            margin-top: 5px;
+            border-top:solid 0.2px #dacaca;
+        }
+    }
+    
+    
+    
+}

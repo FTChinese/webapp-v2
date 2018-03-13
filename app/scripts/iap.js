@@ -277,7 +277,8 @@ function iapActions(productID, actionType, expireDate) {
             break;
         case 'fail':
             if (productType === 'membership') {  
-                alert('交易失败，您的钱还在口袋里');
+                // alert('交易失败，您的钱还在口袋里');
+                turnonOverlay('iap-hint');
                 iapHTMLCode = '<a'+getBuyCode(productID, productPrice, gUserId, productName)+'><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>'; 
             } 
             updateProductStatus(productIndex, false, false); 
@@ -314,6 +315,7 @@ function getproductIndex(productID){
 
 // MARK: - Get url scheme for iOS buy and JS onclick code for Android
 function getBuyCode(productId, productPrice, userId, productName) {
+    
     var buyCode = ''; 
     var priceForAndroid = '';
     if (productId==='1premium'){
@@ -365,3 +367,7 @@ function postPayState(productId, productPrice, userId, productName){
 
 }
 
+
+$('body').on('click', '#iap-know', function(){
+    $('#iap-hint').removeClass('on');
+});
