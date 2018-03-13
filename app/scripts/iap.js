@@ -164,7 +164,7 @@ function displayProducts(products, page, pageTitle) {
           var url = $(this).attr('url');
         //   window.location.href = url;
           window.open(url,'_blank');
-          console.log('open policy')
+          console.log('open policy');
         });
     }
 }
