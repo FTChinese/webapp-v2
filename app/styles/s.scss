@@ -743,7 +743,23 @@ background-position: 24px 18px;
 
 .navigationScroller {background:#a7a49b;width:100%;overflow:hidden;}
 ul.navigation {display:table;white-space:nowrap;}
-ul.navigation li {display:inline-block;color:#FFF;font-size:17px;line-height:44px;height:44px;padding:0 10px 0 10px;white-space:nowrap;cursor: pointer;}
+ul.navigation li {display:inline-block;color:#FFF;font-size:17px;line-height:44px;height:44px;padding:0 10px 0 10px;white-space:nowrap;cursor: pointer;
+ &.new {
+	position:relative;
+	&::before {
+		content: "";
+		position: absolute;
+		right: 0;
+		top: 2px;
+		height: 9px;
+		width: 21px;
+		background-image: url(http://static.ftchinese.com/ftc-icons/png/new-nav.png);
+		background-size: contain;
+		background-repeat: no-repeat;
+		background-position: 50%;
+	}
+ }
+}
 ul.navigation li.on{background:$navOn;}
 
 
