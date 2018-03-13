@@ -646,6 +646,7 @@ function commonProblem() {
 </div>
 
 
+
 <div id=shareWeiboChoose class=overlay>
 <div class=overlayBG></div>
 <div class=inner>
@@ -675,6 +676,21 @@ function commonProblem() {
 </div>
 </div>
 </div>
+</div>
+
+<div id=iap-hint class="overlay  iap-hint">
+    <div class="overlayBG"></div>
+    <div class=inner>
+        <div class=cell>
+            <div class=settingbox>
+            <div class=overlay-header>
+                <div class='iap-fail'>交易失败，您的钱还在口袋里</div>
+                <div class='iap-connect'>没连接到支付平台</div>
+                <div id="iap-know">我知道了</div>
+            </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div id=remindBack onclick="histback()"><span class="ft-icon-back-arrow ft-icon"></span>&nbsp;点击文章左侧回退</div>
@@ -717,6 +733,9 @@ function commonProblem() {
 
 
 </div>
+
+
+
 <script type="text/javascript">
     var uaForMail=navigator.userAgent || navigator.vendor || "";
     function updateStartStatus(startMessage) {

@@ -352,13 +352,13 @@ function startpage() {
             displayProducts(window.iapProducts, iapAction, iapTitle);
         }
     });
-    $('body').on('click', '.paywall-channel', function(){
-        var iapAction = $(this).attr('iap-action');
-        var iapTitle = $(this).attr('iap-title') || $(this).html() || 'FT中文网';
-        if (iapAction) {
-            displayProducts(window.iapProducts, iapAction, iapTitle);
-        }
-    });
+    // $('body').on('click', '.paywall-channel', function(){
+    //     var iapAction = $(this).attr('iap-action');
+    //     var iapTitle = $(this).attr('iap-title') || $(this).html() || 'FT中文网';
+    //     if (iapAction) {
+    //         displayProducts(window.iapProducts, iapAction, iapTitle);
+    //     }
+    // });
     
     /*
     $('body').on('click', '.iap-item', function(){
