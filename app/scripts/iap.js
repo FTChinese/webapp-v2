@@ -163,7 +163,8 @@ function displayProducts(products, page, pageTitle) {
         $('.policy').unbind().bind('click', function() {
           var url = $(this).attr('url');
         //   window.location.href = url;
-          window.open(url,'_blank');
+          window.open(url);
+        //   window.open(url,'_blank');
           console.log('open policy');
         });
     }

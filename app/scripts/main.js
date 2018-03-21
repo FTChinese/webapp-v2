@@ -3546,7 +3546,7 @@ function histback(gesture) {
 function closead() {
     document.body.className = gNowView;
     if (useFTScroller===0) {setTimeout(function() {window.scrollTo(0, scrollHeight);},10);}
-    $('body').css('background', '#FFF1E0');
+    $('body').css('background', '#FFF1E5');
     $('#adiframe').attr('src', '');
     //记录首页PV
     httpspv(gDeviceType + '/homepage');
