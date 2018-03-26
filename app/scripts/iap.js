@@ -92,20 +92,21 @@ function getProductHTMLCode(products, forGroup) {
                 var benefitsArray = [];
                 var productName = products[i].title || '';
                 // MARK: If the forGroup is set to all, display all products in groups
-                if (forGroup === 'all' && currentGroup !== products[i].group) {
-                    currentGroup = products[i].group;
-                    productsHTML += '<div class="section"><a class="iap-channel" iap-action="' + currentGroup + '" iap-title="' + products[i].groupTitle + '"><span>' + products[i].groupTitle + '</span></a><a href="restorepurchases://"><button class="floatright">恢复</button></a></div>';
-                    firstChildClass = ' first-child';
-                }
-                if (products[i].expire) {
+                // if (forGroup === 'all' && currentGroup !== products[i].group) {
+                //     currentGroup = products[i].group;
+                //     productsHTML += '<div class="section"><a class="iap-channel" iap-action="' + currentGroup + '" iap-title="' + products[i].groupTitle + '"><span>' + products[i].groupTitle + '</span></a><a><button class="floatright">恢复</button></a></div>';
+                //     firstChildClass = ' first-child';
+                // }
+                // if (products[i].expire) {
                     // MARK: There is expire
-                    if (products[i].group === 'membership') {
-                        // MARK: - Button HTML for membership
-                        productActionButton = '<div class="iap-button" product-id="' + products[i].id + '" product-price="' + productPrice + '" product-title="' + productName + '"><a'+getBuyCode(products[i].id, productPrice, gUserId, productName)+'><button class="iap-move-left">续订</button></a><p class="iap-teaser">您已订阅'+ productName +'，到期日为' + products[i].expire + '</p></div>';
-                    } else if (products[i].group === 'subscription') {
-                        productActionButton = '';
-                    }
-                }else if (products[i].isPurchased === true) {
+                    // if (products[i].group === 'membership') {
+                    //     // MARK: - Button HTML for membership
+                    //     productActionButton = '<div class="iap-button" product-id="' + products[i].id + '" product-price="' + productPrice + '" product-title="' + productName + '"><a><button class="iap-move-left">续订</button></a><p class="iap-teaser">您已订阅'+ productName +'，到期日为' + products[i].expire + '</p></div>';
+                    // } else if (products[i].group === 'subscription') {
+                    //     productActionButton = '';
+                    // }
+                // }else
+                if (products[i].isPurchased === true) {
                     if (products[i].group === 'membership') {
                         // MARK: - Button HTML for membership
                         productActionButton = '<div class="iap-button" product-id="' + products[i].id + '" product-price="' + productPrice + '" product-title="' + productName + '"><a><button class="iap-move-left">已订阅</button></a><p class="iap-teaser">' + products[i].price + '/年' + '</p></div>';
@@ -264,6 +265,7 @@ function iapActions(productID, actionType, expireDate) {
             if (productID === iapButtons[i].getAttribute('product-id')) {
                 iapButtons[i].innerHTML = iapHTMLCode; 
             } else if (productID === '') {
+                // 这里应该一直不会执行
                 iapHTMLCode = '<a'+getBuyCode(iapButtons[i].getAttribute('product-id'), iapButtons[i].getAttribute('product-price'), gUserId, iapButtons[i].getAttribute('product-title'))+'><button class="iap-move-left">' + productPrice + '</button></a>';
                 iapButtons[i].innerHTML = iapHTMLCode;
             }
@@ -288,22 +290,29 @@ function getproductIndex(productID){
 
 // MARK: - Get url scheme for iOS buy and JS onclick code for Android
 function getBuyCode(productId, productPrice, userId, productName) {
-    
-    var buyCode = ''; 
-    var priceForAndroid = '';
-    if (productId==='com.ft.ftchinese.mobile.subscription.premium'){
-        priceForAndroid = '0.01';
+    // turnonOverlay('iap-hint');
+    // alert('请登录')
+    if (!userId){
+        turnonOverlay('loginBox');
+        return '';
     }else{
-        priceForAndroid = '0.02';
+        var buyCode = ''; 
+        var priceForAndroid = '';
+        if (productId==='com.ft.ftchinese.mobile.subscription.premium'){
+            priceForAndroid = '0.01';
+        }else{
+            priceForAndroid = '0.02';
+        }
+        
+        if(osVersion.indexOf('Android')<0){
+            buyCode = ' href="buy://' + productId + '"';
+        } else {
+            buyCode = ' onclick="ftjavacriptapp.payzfb(\''+ productId +'\',\''+ priceForAndroid +'\',\''+ userId +'\',\''+ productName +'\')"';
+        }
+
+        return buyCode;
     }
     
-    if(osVersion.indexOf('Android')<0){
-        buyCode = ' href="buy://' + productId + '"';
-    } else {
-        buyCode = ' onclick="ftjavacriptapp.payzfb(\''+ productId +'\',\''+ priceForAndroid +'\',\''+ userId +'\',\''+ productName +'\')"';
-    }
-
-    return buyCode;
 }
 
 // MARK: - Test paywall for Android
@@ -311,7 +320,7 @@ function postPayState(productId, productPrice, userId, orderNum, actionType){
     if (!!userId){
         var xhrpw = new XMLHttpRequest();
         xhrpw.open('post', 'http://www.ftacademy.cn/index.php/pay/app');
-        xhrpw.setRequestHeader('Content-Type', 'application/text');
+        // xhrpw.setRequestHeader('Content-Type', 'application/text');
         var payInfo = {
             productId:productId,
             productPrice:productPrice,
