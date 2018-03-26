@@ -2244,7 +2244,9 @@ function displaystory(theid, language, forceTitle) {
 //     });
 //     updateAds();
 // }
-var paywallHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">使用FT中文网 iOS应用</div><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="subscribe-btn iap-channel" iap-action="membership" iap-title="会员"><span style="color:white">立即订阅▶︎</span></div></div></div>';
+var paywallHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="lock-content">已经是会员，请<a href="http://user.ftchinese.com/login">点击这里</a>登录</div><div class="subscribe-btn iap-channel" iap-action="membership" iap-title="会员"><span style="color:white">立即订阅▶︎</span></div></div></div>';
+
+var downloadHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">使用FT中文网 iOS应用</div><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="subscribe-btn iap-channel" iap-action="membership" iap-title="会员"><span style="color:white">下载应用▶︎</span></div></div></div>';
 
 function displaystoryNormal(theid, language, forceTitle) {
     console.log('Display story normal');
@@ -2345,6 +2347,8 @@ function displaystoryNormal(theid, language, forceTitle) {
 
         if (allId.paywall === 1){
             $('#storyview .storybody').html(storyimage).append(paywallHintHtml);
+        }else if (allId.paywall === 2){
+            $('#storyview .storybody').html(storyimage).append(downloadHintHtml);
         }else{
             $('#storyview .storybody').html(storyimage).append(allId.ebody);
         }
@@ -2398,6 +2402,8 @@ function displaystoryNormal(theid, language, forceTitle) {
         
         if (allId.paywall === 1){
             $('#storyview .storybody').html(paywallHintHtml);
+        }else if (allId.paywall === 2){
+            $('#storyview .storybody').html(downloadHintHtml);
         }else{
             $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
         }
@@ -2420,6 +2426,8 @@ function displaystoryNormal(theid, language, forceTitle) {
         //alert (allId.cbody);
         if (allId.paywall === 1){
             $('#storyview .storybody').html(storyimage).append(paywallHintHtml);
+        }else if (allId.paywall === 2){
+            $('#storyview .storybody').html(storyimage).append(downloadHintHtml);
         }else{
             $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));
         }
@@ -2497,7 +2505,7 @@ function displaystoryNormal(theid, language, forceTitle) {
 
 
 
-    if (allId.paywall === 1){
+    if (allId.paywall === 1 || allId.paywall === 2 ){
         var adInPaywall = $('.subscribe-lock-container');
         $('<div class="adiframe mpu-phone for-phone" type="250" frame="ad300x250-story"></div>').insertAfter(adInPaywall);
     }else{
@@ -4565,7 +4573,7 @@ window.onload = function(){
             if (xhrpw.status === 200) {
                 var data = xhrpw.responseText;
                 var dataObj = JSON.parse(data); 
-                if (dataObj.paywall === 1) {
+                if (dataObj.paywall === 2) {
                     console.log('get paywall:'+data);
                     updateLockClass();
                 }

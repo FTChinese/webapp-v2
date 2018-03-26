@@ -237,13 +237,14 @@ function iapActions(productID, actionType, expireDate) {
         memberNum = '100';
     }
     var orderNum = getOrderNum(memberNum);
+    postPayState(productID, productPrice, gUserId, orderNum, actionType);
     // MARK: - iapHTMLCode is used for home and channel page, iapRailHTML is used for product detail page
     switch (actionType) { 
         case 'success':
             if (productType === 'membership') {
                 productExpire = expireDate || '未知';
                 iapHTMLCode = '<a><button class="iap-move-left">已订阅</button></a><p class="iap-teaser">'+ productPrice + '/年' + '</p>';
-                postPayState(productID, productPrice, gUserId, orderNum);
+                
             } 
             updateProductStatus(productIndex, true, true);
             break;
@@ -306,7 +307,7 @@ function getBuyCode(productId, productPrice, userId, productName) {
 }
 
 // MARK: - Test paywall for Android
-function postPayState(productId, productPrice, userId, orderNum){
+function postPayState(productId, productPrice, userId, orderNum, actionType){
     if (!!userId){
         var xhrpw = new XMLHttpRequest();
         xhrpw.open('post', 'http://www.ftacademy.cn/index.php/pay/app');
@@ -315,7 +316,8 @@ function postPayState(productId, productPrice, userId, orderNum){
             productId:productId,
             productPrice:productPrice,
             userId:userId,
-            orderNum:orderNum
+            orderNum:orderNum,
+            actionType:actionType
         }
         xhrpw.onload = function() {
             if (xhrpw.status === 200) {
