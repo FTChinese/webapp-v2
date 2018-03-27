@@ -346,11 +346,16 @@ function startpage() {
         ga('send','event','Outbound Link in App', 'click', $(this).attr('href') + '/' + window.location.href);
     });
     $('body').on('click', '.iap-channel', function(){
-        var iapAction = $(this).attr('iap-action');
-        var iapTitle = $(this).attr('iap-title') || $(this).html() || 'FT中文网';
-        if (iapAction) {
-            displayProducts(window.iapProducts, iapAction, iapTitle);
-        }
+        if(!gUserId){
+            // alert('您需要先登录才能订阅');
+            turnonOverlay('loginBox');
+        }else{
+            var iapAction = $(this).attr('iap-action');
+            var iapTitle = $(this).attr('iap-title') || $(this).html() || 'FT中文网';
+            if (iapAction) {
+                displayProducts(window.iapProducts, iapAction, iapTitle);
+            }
+        } 
     });
     // $('body').on('click', '.paywall-channel', function(){
     //     var iapAction = $(this).attr('iap-action');
@@ -2244,9 +2249,11 @@ function displaystory(theid, language, forceTitle) {
 //     });
 //     updateAds();
 // }
-var paywallHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="lock-content">已经是会员，请<a href="http://user.ftchinese.com/login">点击这里</a>登录</div><div class="subscribe-btn iap-channel" iap-action="membership" iap-title="会员"><span style="color:white">立即订阅▶︎</span></div></div></div>';
+var paywallHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="lock-content">已经是会员，请<a href="http://user.ftchinese.com/login">点击这里</a>登录</div><div class="subscribe-btn iap-channel" iap-action="membership" iap-title="会员"><span style="color:white">立即订阅&#x25BA;</span></div></div></div>';
 
-var downloadHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">使用FT中文网 iOS应用</div><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="subscribe-btn iap-channel" iap-action="membership" iap-title="会员"><span style="color:white">下载应用▶︎</span></div></div></div>';
+var downloadHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">使用FT中文网 iOS应用</div><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="subscribe-btn"><span><a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.ft#" target="_blank" style="color:white">下载应用&#x25BA;︎</a></span></div></div></div>';
+
+
 
 function displaystoryNormal(theid, language, forceTitle) {
     console.log('Display story normal');
@@ -2400,9 +2407,9 @@ function displaystoryNormal(theid, language, forceTitle) {
         }
         ceDiff = cbodyTotal - ebodyTotal;
         
-        if (allId.paywall === 1){
+        if (allId.paywall === 2){
             $('#storyview .storybody').html(paywallHintHtml);
-        }else if (allId.paywall === 2){
+        }else if (allId.paywall === 1){
             $('#storyview .storybody').html(downloadHintHtml);
         }else{
             $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
@@ -2424,9 +2431,9 @@ function displaystoryNormal(theid, language, forceTitle) {
         actualLanguage = 'ch';
         byline = (allId.cbyline_description||'').replace(/作者[：:]/g, '') + ' ' + (allId.cauthor||'').replace(/,/g, '、') + ' ' + (allId.cbyline_status || '');
         //alert (allId.cbody);
-        if (allId.paywall === 1){
+        if (allId.paywall === 2){
             $('#storyview .storybody').html(storyimage).append(paywallHintHtml);
-        }else if (allId.paywall === 2){
+        }else if (allId.paywall === 1){
             $('#storyview .storybody').html(storyimage).append(downloadHintHtml);
         }else{
             $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));

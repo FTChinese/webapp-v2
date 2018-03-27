@@ -290,12 +290,7 @@ function getproductIndex(productID){
 
 // MARK: - Get url scheme for iOS buy and JS onclick code for Android
 function getBuyCode(productId, productPrice, userId, productName) {
-    // turnonOverlay('iap-hint');
-    // alert('请登录')
-    if (!userId){
-        turnonOverlay('loginBox');
-        return '';
-    }else{
+    if (!!userId){
         var buyCode = ''; 
         var priceForAndroid = '';
         if (productId==='com.ft.ftchinese.mobile.subscription.premium'){
