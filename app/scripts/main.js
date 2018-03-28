@@ -347,7 +347,6 @@ function startpage() {
     });
     $('body').on('click', '.iap-channel', function(){
         if(!gUserId){
-            // alert('您需要先登录才能订阅');
             turnonOverlay('loginBox');
         }else{
             var iapAction = $(this).attr('iap-action');
@@ -2249,7 +2248,7 @@ function displaystory(theid, language, forceTitle) {
 //     });
 //     updateAds();
 // }
-var paywallHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="lock-content">已经是会员，请<a href="http://user.ftchinese.com/login">点击这里</a>登录</div><div class="subscribe-btn iap-channel" iap-action="membership" iap-title="会员"><span style="color:white">立即订阅&#x25BA;</span></div></div></div>';
+var paywallHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="lock-content">如果已经是会员，请<a href="http://user.ftchinese.com/login">点击这里</a>登录</div><div class="subscribe-btn iap-channel" iap-action="membership" iap-title="会员"><span style="color:white">成为会员&#x25BA;</span></div></div></div>';
 
 var downloadHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">使用FT中文网 iOS应用</div><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="subscribe-btn"><span><a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.ft#" target="_blank" style="color:white">下载应用&#x25BA;︎</a></span></div></div></div>';
 
