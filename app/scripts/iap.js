@@ -327,8 +327,6 @@ function postPayState(productId, productPrice, userId, orderNum, actionType){
             if (xhrpw.status === 200) {
                 var data = xhrpw.responseText;
                 var dataObj = JSON.parse(data); 
-                // console.log('get data:'+data);
-    
             } else {
                 console.log('fail to get st');
             }

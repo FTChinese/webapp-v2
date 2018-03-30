@@ -325,6 +325,21 @@ $pink-dark: #eadecd;
     
 }
 
+
+.iap-vip-container {
+    margin: 10px 10px;
+    .headline {
+        font-size: 1.3em;
+        font-weight: 700;
+        margin-bottom: 5px;   
+    }
+    .info-container label {
+        font-weight: 700;
+    }
+
+}
+
+
 .subscribe-lock-container{
 	position: relative;
 	background: #faeadd;	  

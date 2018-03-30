@@ -345,7 +345,7 @@ function commonProblem() {
 <strong>字号大小</strong>                   
 </div>
 <div class="standalonebutton"><button class="ui-light-btn" onclick="turnonOverlay('loginBox')">登录</button></div>
-<!--<div class="standalonebutton iap-channel hide" iap-action="membership" iap-title="会员"><button class="ui-light-btn">成为会员</button></div>-->
+<div class="standalonebutton"><button class="ui-light-btn" onclick="turnonOverlay('vip-center')">会员中心</button></div>
 <div class="standalonebutton"><button class="ui-light-btn channel" url="/index.php/ft/channel/phonetemplate.html?channel=myftsetup">设置我的<font class=english>FT</font></button></div>                                
 <div class="standalonebutton nativeButton"><a href="https://itunes.apple.com/cn/app/ft-zhong-wen-wang-zhi-neng/id443870811?mt=8" target=_blank><button class="ui-light-btn">到<span class=english>App Store</span>上推荐这个应用</button></a></div>
 <div class="standalonebutton"><button class="ui-light-btn channel" url="/index.php/ft/channel/phonetemplate.html?channel=help">帮助与反馈</button></div>
@@ -376,6 +376,30 @@ function commonProblem() {
 </div>
 </div>
 </div>
+
+
+<div id=vip-center class="overlay">
+    <div class="overlayBG"></div>
+    <div class=inner>
+        <div class=cell>
+            <div class=settingbox>
+                <div class=overlay-header>
+                    <div class="nutmeg-content_right rightmargin"><button onclick="closeOverlay()" class="overlay_close-btn" aria-label="Settings"></button>
+                    </div>
+                    会员中心
+                </div>
+                <div class="iap-vip-container">
+                    <div class="headline">会员信息</div>  
+                    <div class="info-container"><label>类型：</label><span id="vip-type">标准会员</span></div>
+                    <div class="info-container"><label>提示：</label><span id="warm-prompt">您的会员截止日期<span style="color:#26747a">2019-03-29</span></span>
+                    </div>
+                </div>
+    
+            </div>
+         </div>
+      </div>
+ </div>
+
 
 <div id=introOverlay class=overlay>
 <div class=overlayBG></div>
