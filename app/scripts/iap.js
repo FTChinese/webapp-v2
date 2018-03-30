@@ -1,4 +1,4 @@
-window.iapProducts = [{title: '普通会员',description: '<p>All the benefits of a Standard FT Subscription, plus exclusive news and analysis</p><p>Mobile and tablet access via our award-winning apps</p><p>Exclusive access to the Lex Column, and Instant Insight for comment and analysis as news unfolds</p>',price: '¥198.00',id: 'com.ft.ftchinese.mobile.subscription.premium',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为普通会员', isPurchased: false, isDownloaded: false, group: 'membership', groupTitle: '会员',benefits:['- 阅读FT中文网所有独家内容','- 收听英文文章音频'],period:'year'},{title: '高端会员',description: '<p>Unlimited access to all Standard-access articles and blogs</p><p>Mobile and tablet access via our award-winning apps</p><p>Personalised email briefings and alerts</p><p>Portfolio tools to track your investments</p>',price: '¥1,998.00',id: 'com.ft.ftchinese.mobile.subscription.standard',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为高端会员', isPurchased: false, isDownloaded: false, group: 'membership', groupTitle: '会员',benefits:['- 《FT编辑精选》，每周不可错过的独家必读内容','- 获得两张价值3999元的FT中文网年会门票','- 阅读FT中文网所有独家内容','- 收听英文文章音频'],period:'year'}];
+window.iapProducts = [{title: '普通会员',description: '<p>All the benefits of a Standard FT Subscription, plus exclusive news and analysis</p><p>Mobile and tablet access via our award-winning apps</p><p>Exclusive access to the Lex Column, and Instant Insight for comment and analysis as news unfolds</p>',price: '¥198.00',id: 'com.ft.ftchinese.mobile.subscription.premium',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为普通会员', isPurchased: false, isDownloaded: false, group: 'membership', groupTitle: '会员',benefits:['- 精选深度分析','- 中英双语内容','- 金融英语速读训练','- 英语原声电台','- 无限浏览7日前所有历史文章（近8万篇）'],period:'year'},{title: '高端会员',description: '<p>Unlimited access to all Standard-access articles and blogs</p><p>Mobile and tablet access via our award-winning apps</p><p>Personalised email briefings and alerts</p><p>Portfolio tools to track your investments</p>',price: '¥1,998.00',id: 'com.ft.ftchinese.mobile.subscription.standard',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为高端会员', isPurchased: false, isDownloaded: false, group: 'membership', groupTitle: '会员',benefits:['- 享受“标准会员”所有权益','- 编辑精选，总编/各版块主编每周五为您推荐本周必读资讯，分享他们的思考与观点','- FT中文网2018年度论坛门票2张，价值3999元/张 （不含差旅与食宿）'],period:'year'}];
 
 var subscribeIntruction = {
     title: '订阅说明与注意事项',
@@ -326,7 +326,9 @@ function postPayState(productId, productPrice, userId, orderNum, actionType){
         xhrpw.onload = function() {
             if (xhrpw.status === 200) {
                 var data = xhrpw.responseText;
-                var dataObj = JSON.parse(data); 
+                if(data==='ok'){
+                    alert('成功');
+                }
             } else {
                 console.log('fail to get st');
             }
