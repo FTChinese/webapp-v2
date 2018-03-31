@@ -78,35 +78,30 @@ function displayProductsOnHome(products) {
 
 // MARK: - Create the HTML Code for iap Products to be displayed on home and channel pages
 // MARK: - forGroup is used as filter to get only the specified iap type for channel page
+function isEmptyObj(dataObj){
+     var arr = Object.keys(dataObj);    
+     if (arr.length > 0){
+        return false;
+     }else{
+        return true;
+     }
+}
 function getProductHTMLCode(products, forGroup) {
     var productsHTML = '';
     var currentGroup = '';
     var productLen = products.length
     if (typeof products === 'object' && productLen > 0) {
         for (var i = 0; i < productLen; i++) {
-            if (forGroup === 'all' || forGroup === products[i].group) {
+            if (forGroup === products[i].group) {
                 var firstChildClass = '';
                 var productActionButton = '';
                 var productPrice = products[i].price || '购买';
                 var productBenefits = '';
                 var benefitsArray = [];
                 var productName = products[i].title || '';
-                // MARK: If the forGroup is set to all, display all products in groups
-                // if (forGroup === 'all' && currentGroup !== products[i].group) {
-                //     currentGroup = products[i].group;
-                //     productsHTML += '<div class="section"><a class="iap-channel" iap-action="' + currentGroup + '" iap-title="' + products[i].groupTitle + '"><span>' + products[i].groupTitle + '</span></a><a><button class="floatright">恢复</button></a></div>';
-                //     firstChildClass = ' first-child';
-                // }
-                // if (products[i].expire) {
-                    // MARK: There is expire
-                    // if (products[i].group === 'membership') {
-                    //     // MARK: - Button HTML for membership
-                    //     productActionButton = '<div class="iap-button" product-id="' + products[i].id + '" product-price="' + productPrice + '" product-title="' + productName + '"><a><button class="iap-move-left">续订</button></a><p class="iap-teaser">您已订阅'+ productName +'，到期日为' + products[i].expire + '</p></div>';
-                    // } else if (products[i].group === 'subscription') {
-                    //     productActionButton = '';
-                    // }
-                // }else
-                if (products[i].isPurchased === true) {
+                if(!isEmptyObj(getAjaxDataObj)){
+                    
+                // if (products[i].isPurchased === true) {
                     if (products[i].group === 'membership') {
                         // MARK: - Button HTML for membership
                         productActionButton = '<div class="iap-button" product-id="' + products[i].id + '" product-price="' + productPrice + '" product-title="' + productName + '"><a><button class="iap-move-left">已订阅</button></a><p class="iap-teaser">' + products[i].price + '/年' + '</p></div>';
@@ -244,8 +239,7 @@ function iapActions(productID, actionType, expireDate) {
         case 'success':
             if (productType === 'membership') {
                 productExpire = expireDate || '未知';
-                iapHTMLCode = '<a><button class="iap-move-left">已订阅</button></a><p class="iap-teaser">'+ productPrice + '/年' + '</p>';
-                
+                iapHTMLCode = '<a><button class="iap-move-left">已订阅</button></a><p class="iap-teaser">'+ productPrice + '/年' + '</p>'; 
             } 
             updateProductStatus(productIndex, true, true);
             break;
@@ -338,11 +332,174 @@ function postPayState(productId, productPrice, userId, orderNum, actionType){
 
 }
 
-
+// Mark:update class 
+var isReqSuccess = false;
+var i = 0;
 $('body').on('click', '#iap-know', function(){
     $('#iap-hint').removeClass('on');
 });
+//MARK: - refresh page to update lock class
+// window.onload = function(){
+var dataObj = {};
+if (window.location.hostname === 'localhost' || window.location.hostname.indexOf('192.168') === 0 || window.location.hostname.indexOf('10.113') === 0 || window.location.hostname.indexOf('127.0') === 0) {
+    var dataObj = parseUrlSearch();//(2) ["premium=0", "standard=1"]
+    vipCenter(dataObj);
+    payWall();
+}else{
+    var userId1 = getCookie('USER_ID') || ''
+    if (userId1 !== null) {
+        payWall();   
+    }
+}
 
+
+var getAjaxDataObj = {}    
+
+function payWall(){
+    if(!isReqSuccess && i<3){  
+    var xhrpw = new XMLHttpRequest();
+    xhrpw.open('get', '/index.php/jsapi/paywall');
+    xhrpw.setRequestHeader('Content-Type', 'application/text');
+    xhrpw.onload = function() {
+        if (xhrpw.status === 200) {
+            isReqSuccess = true;
+            var data = xhrpw.responseText;
+            var parsedData = JSON.parse(data); 
+            getAjaxDataObj = Object.assign({}, parsedData);
+            vipCenter(parsedData)
+            if (parsedData.paywall >= 1) {      
+                updateunlockClass();
+            }else{
+                updateLockClass();
+            }
+        } else {
+            isReqSuccess = false;
+            i++;
+            setTimeout(function() {
+                payWall(); 
+            }, 500); 
+            console.log('fail to request:'+i);
+        }
+    };
+    xhrpw.send(null);
+    }
+}
+/**
+ * 获取url参数转化成对象
+ */
+function parseUrlSearch(){
+    var dataObj={};
+    var para = location.search.substring(1);
+    if (!!para){
+        var paraArr = para.split('&');
+        for(let j=0;j<paraArr.length;j++){
+            var arr = paraArr[j].split('=');
+            dataObj[arr[0]]=Number(arr[1]);
+        }
+        return dataObj;
+    }
+    return dataObj;
+}
+
+/**
+ * 更新会员中心，订阅信息
+ */
+function timestampToTime(timestamp) {
+    var date = new Date(timestamp * 1000);
+    var Y = date.getFullYear() + '-';
+    var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+    var D = date.getDate() <10 ? '0' + (date.getDate()): date.getDate()+'';
+    return Y+M+D;
+}
+
+function vipCenter(dataObj){
+    var time = dataObj.expire;
+    var formatTime = timestampToTime(time);
+    var vipTypeId = document.getElementById('vip-type');
+    var warmPrompt = document.getElementById('warm-prompt');
+    if (dataObj.premium === 1){   
+        vipTypeId.innerHTML = '高端会员';
+        warmPrompt.innerHTML = '您的会员截止至<span style="color:#26747a">'+formatTime+'</span>';
+    }else if (dataObj.standard === 1){
+        vipTypeId.innerHTML = '标准会员';
+        warmPrompt.innerHTML = '您的会员截止至<span style="color:#26747a">'+formatTime+'</span>';
+    }else{
+        vipTypeId.innerHTML = '未付费注册用户';
+        warmPrompt.innerHTML = '成为付费会员，阅读FT独家内容，请<a href="#" style="color:#26747a">成为会员</a>';
+    }
+}
+
+ var headlineDiv = document.querySelectorAll('.headline');
+    // 过滤出包含locked的headline类数组
+ function getPayStory(narrowClass,wideClass){
+    var toPayHeadline = [];
+    var len = headlineDiv.length;
+    if (len>0){
+        for (var i = 0; i < len; i++) {
+            if (hasClass(headlineDiv[i],narrowClass)||hasClass(headlineDiv[i],wideClass)){
+                toPayHeadline.push(headlineDiv[i]);
+            }
+        }
+    }
+    return toPayHeadline;
+ }
+    
+
+    function updateLockClass(){
+      var toPayHeadline =  getPayStory('narrow-locked','wide-locked');
+      if (toPayHeadline.length>0){
+        for (var k = 0, len=toPayHeadline.length; k < len; k++) {
+            if (hasClass(toPayHeadline[k],'narrow-locked')){
+                removeClass(toPayHeadline[k], 'narrow-locked');
+                addClass(toPayHeadline[k], 'narrow-unlocked');
+            } else if(hasClass(toPayHeadline[k],'wide-locked')){
+                removeClass(toPayHeadline[k], 'wide-locked');
+                addClass(toPayHeadline[k], 'wide-unlocked');
+            }
+        }
+      }
+    }
+    function updateunlockClass(){
+      var toPayHeadline =  getPayStory('narrow-unlocked','wide-unlocked');
+      if (toPayHeadline.length>0){
+        for (var k = 0, len=toPayHeadline.length; k < len; k++) {
+            if (hasClass(toPayHeadline[k],'narrow-unlocked')){
+                removeClass(toPayHeadline[k], 'narrow-unlocked');
+                addClass(toPayHeadline[k], 'narrow-locked');
+            } else if(hasClass(toPayHeadline[k],'wide-unlocked')){
+                removeClass(toPayHeadline[k], 'wide-unlocked');
+                addClass(toPayHeadline[k], 'wide-locked');
+            } 
+        }
+      }
+    }
+    function hasClass(ele, cls) {
+        cls = cls || '';
+        if (cls.replace(/\s/g, '').length === 0) {
+            return false; 
+        }else{
+            return new RegExp(' ' + cls + ' ').test(' ' + ele.className + ' ');
+        }
+
+    }
+    
+    function addClass(ele, cls) {
+        if (!hasClass(ele, cls)) {
+            ele.className = ele.className === '' ? cls : ele.className + ' ' + cls;
+        }
+    }
+    
+    function removeClass(ele, cls) {
+        if (hasClass(ele, cls)) {
+            var newClass = ' ' + ele.className.replace(/[\t\r\n]/g, '') + ' ';
+            while (newClass.indexOf(' ' + cls + ' ') >= 0) {
+            newClass = newClass.replace(' ' + cls + ' ', ' ');
+            }
+            ele.className = newClass.replace(/^\s+|\s+$/g, '');
+        }
+    }
+
+// }
 // MARK: - Open the product detail page so that user can buy, download and use the product
 // Not for membership
 // function showProductDetail(productId) {

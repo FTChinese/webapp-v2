@@ -345,16 +345,27 @@ function startpage() {
     $('body').on('click', '.outbound-link', function(){
         ga('send','event','Outbound Link in App', 'click', $(this).attr('href') + '/' + window.location.href);
     });
+
     $('body').on('click', '.iap-channel', function(){
-        if(!gUserId){
-            turnonOverlay('loginBox');
-        }else{
+         if (window.location.hostname === 'localhost' || window.location.hostname.indexOf('192.168') === 0 || window.location.hostname.indexOf('127.0') === 0) {
             var iapAction = $(this).attr('iap-action');
             var iapTitle = $(this).attr('iap-title') || $(this).html() || 'FT中文网';
             if (iapAction) {
                 displayProducts(window.iapProducts, iapAction, iapTitle);
             }
-        } 
+         }else{
+            var getUserId = getCookie('USER_ID');
+            if(!getUserId){
+                turnonOverlay('loginBox');
+            }else{
+                var iapAction = $(this).attr('iap-action');
+                var iapTitle = $(this).attr('iap-title') || $(this).html() || 'FT中文网';
+                if (iapAction) {
+                    displayProducts(window.iapProducts, iapAction, iapTitle);
+                }
+            } 
+         }
+
     });
     // $('body').on('click', '.paywall-channel', function(){
     //     var iapAction = $(this).attr('iap-action');
@@ -4566,162 +4577,3 @@ try {
     trackErr(err + ', where: ' + gStartStatus, 'startpage');
 }
 
-//MARK: - refresh page to update lock class
-window.onload = function(){
-     var dataObj = {};
-     if (window.location.hostname === 'localhost' || window.location.hostname.indexOf('192.168') === 0 || window.location.hostname.indexOf('10.113') === 0 || window.location.hostname.indexOf('127.0') === 0) {
-        var dataObj = parseUrlSearch();//(2) ["premium=0", "standard=1"]
-        vipCenter(dataObj);
-        console.log(dataObj)
-   
-    }else{
-        var userId1 = getCookie('USER_ID') || ''
-        if (userId1 !== null) {
-            payWall();   
-            var interval = setInterval(function(){
-                payWall();
-            },5000);
-            setTimeout(function( ) {
-                clearInterval(interval); 
-            }, 10000); 
-        }
-    }
-
-    var headlineDiv = document.querySelectorAll('.headline');
-    var toPayHeadline = [];
-
-    function payWall(){  
-        var xhrpw = new XMLHttpRequest();
-        xhrpw.open('get', '/index.php/jsapi/paywall');
-        xhrpw.setRequestHeader('Content-Type', 'application/text');
-        xhrpw.onload = function() {
-            if (xhrpw.status === 200) {
-                var data = xhrpw.responseText;
-                var dataObj = JSON.parse(data); 
-                vipCenter(dataObj)
-                if (dataObj.paywall >= 1) {      
-                    updateunlockClass();
-                }else{
-                    updateLockClass();
-                }
-            } else {
-                console.log('fali to request');
-            }
-        };
-        xhrpw.send(null);
-    }
-/**
- * 获取url参数转化成对象
- */
-function parseUrlSearch(){
-    var dataObj={};
-    var para = location.search.substring(1);
-    if (!!para){
-        var paraArr = para.split('&');
-        for(let j=0;j<paraArr.length;j++){
-            var arr = paraArr[j].split('=');
-            dataObj[arr[0]]=Number(arr[1]);
-        }
-        return dataObj;
-    }
-    return dataObj;
-}
-
-/**
- * 更新会员中心，订阅信息
- */
-function timestampToTime(timestamp) {
-    var date = new Date(timestamp * 1000);
-    var Y = date.getFullYear() + '-';
-    var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
-    var D = date.getDate() <10 ? '0' + (date.getDate()): date.getDate()+'';
-    return Y+M+D;
-}
-
-function vipCenter(dataObj){
-    var time = dataObj.expire;
-    var formatTime = timestampToTime(time);
-    var vipTypeId = document.getElementById('vip-type');
-    var warmPrompt = document.getElementById('warm-prompt');
-    if (dataObj.premium === 1){   
-        vipTypeId.innerHTML = '高端会员';
-        warmPrompt.innerHTML = '您的会员截止至<span style="color:#26747a">'+formatTime+'</span>';
-    }else if (dataObj.standard === 1){
-        vipTypeId.innerHTML = '标准会员';
-        warmPrompt.innerHTML = '您的会员截止至<span style="color:#26747a">'+formatTime+'</span>';
-    }else{
-        vipTypeId.innerHTML = '未付费注册用户';
-        warmPrompt.innerHTML = '成为付费会员，阅读FT独家内容，请<a href="#" style="color:#26747a">成为会员</a>';
-    }
-}
-
-
-    // 过滤出包含locked的headline类数组
- function getPayStory(){
-    var len = headlineDiv.length;
-    
-    if (len>0){
-        for (var i = 0; i < len; i++) {
-            if (hasClass(headlineDiv[i],'narrow-locked')||hasClass(headlineDiv[i],'wide-locked')){
-                toPayHeadline.push(headlineDiv[i]);
-            }
-            
-        }
-    }
-   
- }
-    getPayStory();
-
-    function updateLockClass(){
-      if (toPayHeadline.length>0){
-        for (var k = 0, len=toPayHeadline.length; k < len; k++) {
-            if (hasClass(toPayHeadline[k],'narrow-locked')){
-                removeClass(toPayHeadline[k], 'narrow-locked');
-                addClass(toPayHeadline[k], 'narrow-unlocked');
-            } else if(hasClass(toPayHeadline[k],'wide-locked')){
-                removeClass(toPayHeadline[k], 'wide-locked');
-                addClass(toPayHeadline[k], 'wide-unlocked');
-            }
-        }
-      }
-    }
-    function updateunlockClass(){
-      if (toPayHeadline.length>0){
-        for (var k = 0, len=toPayHeadline.length; k < len; k++) {
-            if (hasClass(toPayHeadline[k],'narrow-locked')){
-                removeClass(toPayHeadline[k], 'narrow-unlocked');
-                addClass(toPayHeadline[k], 'narrow-locked');
-            } else if(hasClass(toPayHeadline[k],'wide-locked')){
-                removeClass(toPayHeadline[k], 'wide-unlocked');
-                addClass(toPayHeadline[k], 'wide-locked');
-            } 
-        }
-      }
-    }
-    function hasClass(ele, cls) {
-        cls = cls || '';
-        if (cls.replace(/\s/g, '').length === 0) {
-            return false; 
-        }else{
-            return new RegExp(' ' + cls + ' ').test(' ' + ele.className + ' ');
-        }
-
-    }
-    
-    function addClass(ele, cls) {
-        if (!hasClass(ele, cls)) {
-            ele.className = ele.className === '' ? cls : ele.className + ' ' + cls;
-        }
-    }
-    
-    function removeClass(ele, cls) {
-        if (hasClass(ele, cls)) {
-            var newClass = ' ' + ele.className.replace(/[\t\r\n]/g, '') + ' ';
-            while (newClass.indexOf(' ' + cls + ' ') >= 0) {
-            newClass = newClass.replace(' ' + cls + ' ', ' ');
-            }
-            ele.className = newClass.replace(/^\s+|\s+$/g, '');
-        }
-    }
-
-}
