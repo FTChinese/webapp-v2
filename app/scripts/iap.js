@@ -58,7 +58,7 @@ var gUserId = getCookie('USER_ID') || '';
 function displayProductsOnHome(products) {
     // TODO: When displaying iap products on home, it should be grouped by type
     if (typeof products === 'object' && products.length > 0) {
-        var productsHTML = getProductHTMLCode(products, 'all');
+        var productsHTML = getProductHTMLCode(products, 'all',{});
         if (document.getElementById('iap')) {
             document.getElementById('iap').innerHTML = productsHTML;
         }
@@ -86,7 +86,7 @@ function isEmptyObj(dataObj){
         return true;
      }
 }
-function getProductHTMLCode(products, forGroup) {
+function getProductHTMLCode(products, forGroup, dataObj) {
     var productsHTML = '';
     var currentGroup = '';
     var productLen = products.length;
@@ -100,19 +100,19 @@ function getProductHTMLCode(products, forGroup) {
                 var benefitsArray = [];
                 var productName = products[i].title || '';
                 
-                if(getAjaxDataObj.standard==='1' && getAjaxDataObj.premium==='0'){
+                if(dataObj.standard===1 && dataObj.premium===0){
                     products[0].isPurchased = true;
                     products[0].state = '<button class="iap-move-left">已订阅</button>';
                     products[1].state = '<a'+getBuyCode(products[i].id, productPrice, gUserId, productName)+'><button class="iap-move-left">现在升级</button></a>';
-                }else if(getAjaxDataObj.premium==='1'){
+                }else if(dataObj.premium===1){
                     products[i].isPurchased = true;
                     products[i].state = '<button class="iap-move-left">已订阅</button>';
                 }else{
                     products[i].isPurchased = false;
                     products[i].state = '<a'+getBuyCode(products[i].id, productPrice, gUserId, productName)+'><button class="iap-move-left">订阅</button></a>';
                 }
-                if(!isEmptyObj(getAjaxDataObj)){
-
+                if(!isEmptyObj(dataObj)){
+                    console.log(products[i].state);
                     productActionButton = '<div class="iap-button" product-id="' + products[i].id + '" product-price="' + productPrice + '" product-title="' + productName + '">' + products[i].state + '<p class="iap-teaser">' + products[i].price + '/年' + '</p></div>';    
                 // if (products[i].isPurchased === true) {
                 //     if (products[i].group === 'membership') {
@@ -160,11 +160,12 @@ function getProductHTMLCode(products, forGroup) {
 }
 
 // MARK: - extract product information and display it to home or channel page
-function displayProducts(products, page, pageTitle) {
+function displayProducts(products, page, pageTitle,dataObj) {
     if (typeof products === 'object' && products.length > 0) {
+        console.log(dataObj)
         // TODO: Page should be used as a filter, for example, "ebook" should be used to extra only the eBooks from the iapProducts
         // page:products group; products: products
-        var productsHTML = getProductHTMLCode(products, page);
+        var productsHTML = getProductHTMLCode(products, page, dataObj);
         // MARK: - if page is not 'home', then we should open channel view
         if (page !== '') {
             var channelHTML = channelPageTemplate
@@ -365,40 +366,39 @@ $('body').on('click', '#iap-know', function(){
     $('#iap-hint').removeClass('on');
 });
 //MARK: - refresh page to update lock class
-// window.onload = function(){
+window.onload = function(){
 var dataObj = {};
 if (window.location.hostname === 'localhost' || window.location.hostname.indexOf('192.168') === 0 || window.location.hostname.indexOf('10.113') === 0 || window.location.hostname.indexOf('127.0') === 0) {
     var dataObj = parseUrlSearch();//(2) ["premium=0", "standard=1"]
     vipCenter(dataObj);
-    payWall();
+    payWall('api/paywall.json');
 }else{
     var userId1 = getCookie('USER_ID') || ''
     if (userId1 !== null) {
-        payWall();   
+        payWall('/index.php/jsapi/paywall');   
     }
 }
 
 
-var getAjaxDataObj = {}    
-console.log(getAjaxDataObj);
+// var getAjaxDataObj = {}    
 
-function payWall(){
+function payWall(url){
     if(!isReqSuccess && i<3){  
     var xhrpw = new XMLHttpRequest();
-    xhrpw.open('get', '/index.php/jsapi/paywall');
+    xhrpw.open('get', url);
     xhrpw.setRequestHeader('Content-Type', 'application/text');
     xhrpw.onload = function() {
         if (xhrpw.status === 200) {  
             var data = xhrpw.responseText;
             var parsedData = JSON.parse(data); 
-            getAjaxDataObj = Object.assign({}, parsedData);
+            // getAjaxDataObj = Object.assign({}, parsedData);
             vipCenter(parsedData)
             isReqSuccess = true;
             if (parsedData.paywall >= 1) {      
                 updateUnlockClass();
             }else{
-                console.log('updateLockClass');
                 updateLockClass();
+                console.log('update lock')
             }
         } else {
             isReqSuccess = false;
@@ -475,6 +475,7 @@ function vipCenter(dataObj){
 
     function updateLockClass(){
       var toPayHeadline =  getPayStory('narrow-locked','wide-locked');
+    //   console.log('updateLockClass:'+toPayHeadline.length);
       if (toPayHeadline.length>0){
         for (var k = 0, len=toPayHeadline.length; k < len; k++) {
             if (hasClass(toPayHeadline[k],'narrow-locked')){
@@ -527,7 +528,7 @@ function vipCenter(dataObj){
         }
     }
 
-// }
+}
 // MARK: - Open the product detail page so that user can buy, download and use the product
 // Not for membership
 // function showProductDetail(productId) {

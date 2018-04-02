@@ -350,9 +350,7 @@ function startpage() {
          if (window.location.hostname === 'localhost' || window.location.hostname.indexOf('192.168') === 0 || window.location.hostname.indexOf('127.0') === 0) {
             var iapAction = $(this).attr('iap-action');
             var iapTitle = $(this).attr('iap-title') || $(this).html() || 'FT中文网';
-            if (iapAction) {
-                displayProducts(window.iapProducts, iapAction, iapTitle);
-            }
+            payWallUpdateSub('api/paywall.json',iapAction,iapTitle);   
          }else{
             var getUserId = getCookie('USER_ID');
             if(!getUserId){
@@ -360,17 +358,30 @@ function startpage() {
             }else{
                 var iapAction = $(this).attr('iap-action');
                 var iapTitle = $(this).attr('iap-title') || $(this).html() || 'FT中文网';
-                if (iapAction) {
-                    displayProducts(window.iapProducts, iapAction, iapTitle);
-                }
-                payWall();
+                var dataObj = payWallUpdateSub('/index.php/jsapi/paywall',iapAction,iapTitle);
             } 
          }
  
 
     });
 
-    
+function payWallUpdateSub(url,iapAction,iapTitle){
+    var xhrpw = new XMLHttpRequest();
+    xhrpw.open('get', url);
+    xhrpw.setRequestHeader('Content-Type', 'application/text');
+    xhrpw.onload = function() {
+        if (xhrpw.status === 200) {  
+            var data = xhrpw.responseText;
+            var parsedData = JSON.parse(data); 
+            if (iapAction) {
+                displayProducts(window.iapProducts, iapAction, iapTitle, parsedData);
+            }
+        } else{
+            alert('请求失败！');
+        }
+    };
+    xhrpw.send(null);
+}
     // $('body').on('click', '.paywall-channel', function(){
     //     var iapAction = $(this).attr('iap-action');
     //     var iapTitle = $(this).attr('iap-title') || $(this).html() || 'FT中文网';
@@ -379,22 +390,7 @@ function startpage() {
     //     }
     // });
     
-    /*
-    $('body').on('click', '.iap-item', function(){
-        var productId = this.getAttribute('product-id') || '';
-        showProductDetail(productId);
 
-
-
-        // var targetTag = e.target.tagName.toLowerCase();
-        // var targetClassName = e.target.className;
-        // if (targetTag !== 'button' || targetClassName.indexOf('iap-detail')>=0) {
-        //     // MARK: - open detail for iap
-        //     //var productId = this.getAttribute('product-id') || '';
-        //     //showProductDetail(productId);
-        // }
-    });
-    */
     //openning a page in an iframe is not viable for now in iPhone native app
     /*
     $('body').on('click', '#special-container a, .open-in-iframe', function(){
@@ -2366,9 +2362,9 @@ function displaystoryNormal(theid, language, forceTitle) {
         actualLanguage = 'en';
         byline = (allstories[theid].ebyline_description || 'By') + ' ' + eauthor;
 
-        if (allId.paywall === 2){
+        if (allId.paywall === 1){
             $('#storyview .storybody').html(storyimage).append(paywallHintHtml);
-        }else if (allId.paywall === 1){
+        }else if (allId.paywall === 2){
             $('#storyview .storybody').html(storyimage).append(downloadHintHtml);
         }else{
             $('#storyview .storybody').html(storyimage).append(allId.ebody);
