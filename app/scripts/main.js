@@ -2417,9 +2417,9 @@ function displaystoryNormal(theid, language, forceTitle) {
         }
         ceDiff = cbodyTotal - ebodyTotal;
         
-        if (allId.paywall === 2){
+        if (allId.paywall === 1){
             $('#storyview .storybody').html(paywallHintHtml);
-        }else if (allId.paywall === 1){
+        }else if (allId.paywall === 2){
             $('#storyview .storybody').html(downloadHintHtml);
         }else{
             $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
@@ -2441,9 +2441,9 @@ function displaystoryNormal(theid, language, forceTitle) {
         actualLanguage = 'ch';
         byline = (allId.cbyline_description||'').replace(/作者[：:]/g, '') + ' ' + (allId.cauthor||'').replace(/,/g, '、') + ' ' + (allId.cbyline_status || '');
         //alert (allId.cbody);
-        if (allId.paywall === 2){
+        if (allId.paywall === 1){
             $('#storyview .storybody').html(storyimage).append(paywallHintHtml);
-        }else if (allId.paywall === 1){
+        }else if (allId.paywall === 2){
             $('#storyview .storybody').html(storyimage).append(downloadHintHtml);
         }else{
             $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));
