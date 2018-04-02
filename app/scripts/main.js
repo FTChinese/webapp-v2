@@ -2362,9 +2362,9 @@ function displaystoryNormal(theid, language, forceTitle) {
         actualLanguage = 'en';
         byline = (allstories[theid].ebyline_description || 'By') + ' ' + eauthor;
 
-        if (allId.paywall === 1){
+        if (allId.paywall === 2){
             $('#storyview .storybody').html(storyimage).append(paywallHintHtml);
-        }else if (allId.paywall === 2){
+        }else if (allId.paywall === 1){
             $('#storyview .storybody').html(storyimage).append(downloadHintHtml);
         }else{
             $('#storyview .storybody').html(storyimage).append(allId.ebody);

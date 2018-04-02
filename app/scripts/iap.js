@@ -1,4 +1,4 @@
-window.iapProducts = [{title: '普通会员',description: '<p>All the benefits of a Standard FT Subscription, plus exclusive news and analysis</p><p>Mobile and tablet access via our award-winning apps</p><p>Exclusive access to the Lex Column, and Instant Insight for comment and analysis as news unfolds</p>',price: '¥198.00',id: 'com.ft.ftchinese.mobile.subscription.premium',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为普通会员', isPurchased: false, isDownloaded: false, group: 'membership', groupTitle: '会员',benefits:['- 精选深度分析','- 中英双语内容','- 金融英语速读训练','- 英语原声电台','- 无限浏览7日前所有历史文章（近8万篇）'],period:'year'},{title: '高端会员',description: '<p>Unlimited access to all Standard-access articles and blogs</p><p>Mobile and tablet access via our award-winning apps</p><p>Personalised email briefings and alerts</p><p>Portfolio tools to track your investments</p>',price: '¥1,998.00',id: 'com.ft.ftchinese.mobile.subscription.standard',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为高端会员', isPurchased: false, isDownloaded: false, group: 'membership', groupTitle: '会员',benefits:['- 享受“标准会员”所有权益','- 编辑精选，总编/各版块主编每周五为您推荐本周必读资讯，分享他们的思考与观点','- FT中文网2018年度论坛门票2张，价值3999元/张 （不含差旅与食宿）'],period:'year'}];
+window.iapProducts = [{title: '普通会员',price: '¥198.00',id: 'com.ft.ftchinese.mobile.subscription.premium',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为普通会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 精选深度分析','- 中英双语内容','- 金融英语速读训练','- 英语原声电台','- 无限浏览7日前所有历史文章（近8万篇）'],period:'year'},{title: '高端会员',price: '¥1,998.00',id: 'com.ft.ftchinese.mobile.subscription.standard',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为高端会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 享受“标准会员”所有权益','- 编辑精选，总编/各版块主编每周五为您推荐本周必读资讯，分享他们的思考与观点','- FT中文网2018年度论坛门票2张，价值3999元/张 （不含差旅与食宿）'],period:'year'}];
 
 var subscribeIntruction = {
     title: '订阅说明与注意事项',
@@ -89,7 +89,7 @@ function isEmptyObj(dataObj){
 function getProductHTMLCode(products, forGroup) {
     var productsHTML = '';
     var currentGroup = '';
-    var productLen = products.length
+    var productLen = products.length;
     if (typeof products === 'object' && productLen > 0) {
         for (var i = 0; i < productLen; i++) {
             if (forGroup === products[i].group) {
@@ -99,20 +99,33 @@ function getProductHTMLCode(products, forGroup) {
                 var productBenefits = '';
                 var benefitsArray = [];
                 var productName = products[i].title || '';
+                
+                if(getAjaxDataObj.standard==='1' && getAjaxDataObj.premium==='0'){
+                    products[0].isPurchased = true;
+                    products[0].state = '<button class="iap-move-left">已订阅</button>';
+                    products[1].state = '<a'+getBuyCode(products[i].id, productPrice, gUserId, productName)+'><button class="iap-move-left">现在升级</button></a>';
+                }else if(getAjaxDataObj.premium==='1'){
+                    products[i].isPurchased = true;
+                    products[i].state = '<button class="iap-move-left">已订阅</button>';
+                }else{
+                    products[i].isPurchased = false;
+                    products[i].state = '<a'+getBuyCode(products[i].id, productPrice, gUserId, productName)+'><button class="iap-move-left">订阅</button></a>';
+                }
                 if(!isEmptyObj(getAjaxDataObj)){
-                    
+
+                    productActionButton = '<div class="iap-button" product-id="' + products[i].id + '" product-price="' + productPrice + '" product-title="' + productName + '">' + products[i].state + '<p class="iap-teaser">' + products[i].price + '/年' + '</p></div>';    
                 // if (products[i].isPurchased === true) {
-                    if (products[i].group === 'membership') {
-                        // MARK: - Button HTML for membership
-                        productActionButton = '<div class="iap-button" product-id="' + products[i].id + '" product-price="' + productPrice + '" product-title="' + productName + '"><a><button class="iap-move-left">已订阅</button></a><p class="iap-teaser">' + products[i].price + '/年' + '</p></div>';
-                    } else if (products[i].group === 'subscription') {
-                        productActionButton = '';
-                    }
-                } else {
-                    if (products[i].group === 'membership') {
-                        // MARK: - Button HTML for membership
-                        productActionButton = '<div class="iap-button" product-id="' + products[i].id + '" product-price="' + productPrice + '" product-title="' + productName + '"><a'+getBuyCode(products[i].id, productPrice, gUserId, productName)+'><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + products[i].price + '/年' + '</p></div>';
-                    }
+                //     if (products[i].group === 'membership') {
+                //         // MARK: - Button HTML for membership
+                //         productActionButton = '<div class="iap-button" product-id="' + products[i].id + '" product-price="' + productPrice + '" product-title="' + productName + '"><a><button class="iap-move-left">' + products[i].state + '</button></a><p class="iap-teaser">' + products[i].price + '/年' + '</p></div>';
+                //     } else if (products[i].group === 'subscription') {
+                //         productActionButton = '';
+                //     }
+                // } else {
+                //     if (products[i].group === 'membership') {
+                //         // MARK: - Button HTML for membership
+                //         productActionButton = '<div class="iap-button" product-id="' + products[i].id + '" product-price="' + productPrice + '" product-title="' + productName + '"><a'+getBuyCode(products[i].id, productPrice, gUserId, productName)+'><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + products[i].price + '/年' + '</p></div>';
+                //     }
                 }
                 // MARK: - use onclick to capture click rather than jQuery's body.on, which is buggy on iPhone
                 // MARK: render UI
@@ -136,10 +149,9 @@ function getProductHTMLCode(products, forGroup) {
                         .replace('{{image}}', products[i].image)
                         .replace('{{benefits}}', productBenefits)
                         .replace('{{button}}', productActionButton);
-
                 } else {
                     productsHTML = '';
-                    // productsHTML += '<div product-id="' + products[i].id + '" product-price="' + productPrice + '" product-title="' + productName + '" class="iap-item oneStory' + firstChildClass + ' track-click" eventLabel="iap-detail: ' + i + '"><div onclick="showProductDetail(\'' + products[i].id + '\');"><img src="https://www.ft.com/__origami/service/image/v2/images/raw/' + products[i].image + '?source=ftchinese&width=160" class=leftimage width="80"><div class="headline">' + products[i].title + '</div><div class=lead>' + products[i].teaser + '</div></div>' + productActionButton + '<div class=clearfloat></div></div>';
+
                 }
             }
         }
@@ -231,8 +243,9 @@ function iapActions(productID, actionType, expireDate) {
         memberNum = '010';
     }else if (/standard$/.test(productID)){
         memberNum = '100';
-    }
+    } 
     var orderNum = getOrderNum(memberNum);
+    alert(productID);
     postPayState(productID, productPrice, gUserId, orderNum, actionType);
     // MARK: - iapHTMLCode is used for home and channel page, iapRailHTML is used for product detail page
     switch (actionType) { 
@@ -292,10 +305,19 @@ function getBuyCode(productId, productPrice, userId, productName) {
         }else{
             priceForAndroid = '0.02';
         }
+
+        if (/premium$/.test(productId)) {
+            memberNum = '010';
+        }else if (/standard$/.test(productId)){
+            memberNum = '100';
+        }
+        var orderNum = getOrderNum(memberNum);
         
         if(osVersion.indexOf('Android')<0){
             buyCode = ' href="buy://' + productId + '"';
         } else {
+            // postPayState(productId, productPrice, userId, orderNum, '');
+            
             buyCode = ' onclick="ftjavacriptapp.payzfb(\''+ productId +'\',\''+ priceForAndroid +'\',\''+ userId +'\',\''+ productName +'\')"';
         }
 
@@ -308,8 +330,8 @@ function getBuyCode(productId, productPrice, userId, productName) {
 function postPayState(productId, productPrice, userId, orderNum, actionType){
     if (!!userId){
         var xhrpw = new XMLHttpRequest();
-        xhrpw.open('post', 'http://www.ftacademy.cn/index.php/pay/app');
-        // xhrpw.setRequestHeader('Content-Type', 'application/text');
+        xhrpw.open('post', 'http://www.ftacademy.cn/index.php/pay/app?test=123');
+        xhrpw.setRequestHeader('Content-Type', 'application/text');
         var payInfo = {
             productId:productId,
             productPrice:productPrice,
@@ -320,14 +342,18 @@ function postPayState(productId, productPrice, userId, orderNum, actionType){
         xhrpw.onload = function() {
             if (xhrpw.status === 200) {
                 var data = xhrpw.responseText;
+                alert('成功'+data);
                 if(data==='ok'){
-                    alert('成功');
+                   
                 }
             } else {
+                alert('fail to get st');
                 console.log('fail to get st');
             }
         };
-        xhrpw.send(payInfo);
+        
+        // xhrpw.send(JSON.stringify(payInfo));
+        xhrpw.send('{"a":"1","b":2}');
     }
 
 }
@@ -368,7 +394,7 @@ function payWall(){
             getAjaxDataObj = Object.assign({}, parsedData);
             vipCenter(parsedData)
             if (parsedData.paywall >= 1) {      
-                updateunlockClass();
+                updateUnlockClass();
             }else{
                 updateLockClass();
             }
@@ -378,7 +404,7 @@ function payWall(){
             setTimeout(function() {
                 payWall(); 
             }, 500); 
-            console.log('fail to request:'+i);
+            // console.log('fail to request:'+i);
         }
     };
     xhrpw.send(null);
@@ -459,7 +485,7 @@ function vipCenter(dataObj){
         }
       }
     }
-    function updateunlockClass(){
+    function updateUnlockClass(){
       var toPayHeadline =  getPayStory('narrow-unlocked','wide-unlocked');
       if (toPayHeadline.length>0){
         for (var k = 0, len=toPayHeadline.length; k < len; k++) {
