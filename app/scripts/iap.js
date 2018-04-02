@@ -398,7 +398,7 @@ function payWall(url){
                 updateUnlockClass();
             }else{
                 updateLockClass();
-                console.log('update lock')
+                // console.log('update lock')
             }
         } else {
             isReqSuccess = false;

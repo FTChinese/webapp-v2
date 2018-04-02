@@ -1807,6 +1807,7 @@ function addstoryclick() {
             storyHeadline = $(this).find('.headline, .hl').html() || '';
         pageStarted=1;
         _popstate=0;
+        console.log('storyid---'+storyid);
         readstory(storyid, storyHeadline);
     });     
 
