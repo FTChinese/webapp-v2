@@ -1,4 +1,4 @@
-window.iapProducts = [{title: '普通会员',price: '¥198.00',id: 'com.ft.ftchinese.mobile.subscription.premium',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为普通会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 精选深度分析','- 中英双语内容','- 金融英语速读训练','- 英语原声电台','- 无限浏览7日前所有历史文章（近8万篇）'],period:'year'},{title: '高端会员',price: '¥1,998.00',id: 'com.ft.ftchinese.mobile.subscription.standard',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为高端会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 享受“标准会员”所有权益','- 编辑精选，总编/各版块主编每周五为您推荐本周必读资讯，分享他们的思考与观点','- FT中文网2018年度论坛门票2张，价值3999元/张 （不含差旅与食宿）'],period:'year'}];
+window.iapProducts = [{title: '标准会员',price: '¥198.00',id: 'com.ft.ftchinese.mobile.subscription.premium',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为标准会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 精选深度分析','- 中英双语内容','- 金融英语速读训练','- 英语原声电台','- 无限浏览7日前所有历史文章（近8万篇）'],period:'year'},{title: '高端会员',price: '¥1,998.00',id: 'com.ft.ftchinese.mobile.subscription.standard',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为高端会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 享受“标准会员”所有权益','- 编辑精选，总编/各版块主编每周五为您推荐本周必读资讯，分享他们的思考与观点','- FT中文网2018年度论坛门票2张，价值3999元/张 （不含差旅与食宿）'],period:'year'}];
 
 var subscribeIntruction = {
     title: '订阅说明与注意事项',
@@ -8,7 +8,7 @@ var subscribeIntruction = {
     moreService: ['隐私申明','用户协议','反馈']
 }
 // FT010 123 1522033086
-// （普通会员——FT + 010 + 000~999随机数 + 时间戳）
+// （标准会员——FT + 010 + 000~999随机数 + 时间戳）
 // （高级会员——FT + 100 + 000~999随机数 + 时间戳）
 
 function getOrderNum(memberNum){
@@ -330,7 +330,7 @@ function getBuyCode(productId, productPrice, userId, productName) {
 function postPayState(productId, productPrice, userId, orderNum, actionType){
     if (!!userId){
         var xhrpw = new XMLHttpRequest();
-        xhrpw.open('post', 'http://www.ftacademy.cn/index.php/pay/app?test=123');
+        xhrpw.open('post', './index.php/pay/app');
         xhrpw.setRequestHeader('Content-Type', 'application/text');
         var payInfo = {
             productId:productId,
@@ -352,8 +352,8 @@ function postPayState(productId, productPrice, userId, orderNum, actionType){
             }
         };
         
-        // xhrpw.send(JSON.stringify(payInfo));
-        xhrpw.send('{"a":"1","b":2}');
+        xhrpw.send(JSON.stringify(payInfo));
+        // xhrpw.send('{"a":"1","b":2}');
     }
 
 }
@@ -380,6 +380,7 @@ if (window.location.hostname === 'localhost' || window.location.hostname.indexOf
 
 
 var getAjaxDataObj = {}    
+console.log(getAjaxDataObj);
 
 function payWall(){
     if(!isReqSuccess && i<3){  
@@ -387,15 +388,16 @@ function payWall(){
     xhrpw.open('get', '/index.php/jsapi/paywall');
     xhrpw.setRequestHeader('Content-Type', 'application/text');
     xhrpw.onload = function() {
-        if (xhrpw.status === 200) {
-            isReqSuccess = true;
+        if (xhrpw.status === 200) {  
             var data = xhrpw.responseText;
             var parsedData = JSON.parse(data); 
             getAjaxDataObj = Object.assign({}, parsedData);
             vipCenter(parsedData)
+            isReqSuccess = true;
             if (parsedData.paywall >= 1) {      
                 updateUnlockClass();
             }else{
+                console.log('updateLockClass');
                 updateLockClass();
             }
         } else {
