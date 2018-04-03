@@ -162,7 +162,7 @@ function getProductHTMLCode(products, forGroup, dataObj) {
 // MARK: - extract product information and display it to home or channel page
 function displayProducts(products, page, pageTitle,dataObj) {
     if (typeof products === 'object' && products.length > 0) {
-        console.log(dataObj)
+        // console.log(dataObj)
         // TODO: Page should be used as a filter, for example, "ebook" should be used to extra only the eBooks from the iapProducts
         // page:products group; products: products
         var productsHTML = getProductHTMLCode(products, page, dataObj);
@@ -356,58 +356,54 @@ function postPayState(productId, productPrice, userId, orderNum, actionType){
 
 }
 
-// Mark:update class 
-var isReqSuccess = false;
-var i = 0;
-$('body').on('click', '#iap-know', function(){
-    $('#iap-hint').removeClass('on');
-});
-//MARK: - refresh page to update lock class
-window.onload = function(){
-var dataObj = {};
-if (window.location.hostname === 'localhost' || window.location.hostname.indexOf('192.168') === 0 || window.location.hostname.indexOf('10.113') === 0 || window.location.hostname.indexOf('127.0') === 0) {
-    var dataObj = parseUrlSearch();//(2) ["premium=0", "standard=1"]
-    vipCenter(dataObj);
-    payWall('api/paywall.json');
-}else{
-    var userId1 = getCookie('USER_ID') || ''
-    if (userId1 !== null) {
-        payWall('/index.php/jsapi/paywall');   
+// Mark:检查是否登录，没有登录不显示vip-center 
+function isShowVipCenter(){
+    var userId = getCookie('USER_ID') || ''
+    var vipCenterBtn = document.getElementById('vip-center-btn');
+    if(!userId){
+        vipCenterBtn.style.display = 'none';
+    }else{
+        vipCenterBtn.style.display = 'block';
     }
 }
 
+//MARK: - 交易失败时，显示的页面
+$('body').on('click', '#iap-know', function(){
+    $('#iap-hint').removeClass('on');
+});
 
-// var getAjaxDataObj = {}    
-
+//MARK: - refresh page to update lock class
+var isReqSuccess = false;
+var i = 0;
 function payWall(url){
     if(!isReqSuccess && i<3){  
-    var xhrpw = new XMLHttpRequest();
-    xhrpw.open('get', url);
-    xhrpw.setRequestHeader('Content-Type', 'application/text');
-    xhrpw.onload = function() {
-        if (xhrpw.status === 200) {  
-            var data = xhrpw.responseText;
-            var parsedData = JSON.parse(data); 
-            // getAjaxDataObj = Object.assign({}, parsedData);
-            vipCenter(parsedData)
-            isReqSuccess = true;
-            
-            setCookie('isFTCw', parsedData.paywall, '', '/');
-            if (parsedData.paywall >= 1) {      
-                updateUnlockClass();  
-            }else{
-                updateLockClass();
+        var xhrpw = new XMLHttpRequest();
+        xhrpw.open('get', url);
+        xhrpw.setRequestHeader('Content-Type', 'application/text');
+        xhrpw.onload = function() {
+            if (xhrpw.status === 200) {  
+                var data = xhrpw.responseText;
+                var parsedData = JSON.parse(data); 
+                vipCenter(parsedData)
+                isReqSuccess = true;
+                
+                setCookie('isFTCw', parsedData.paywall, '', '/');
+                if (parsedData.paywall >= 1) {      
+                    updateUnlockClass();  
+                    // console.log('updateUnlockClass:'+parsedData.paywall);
+                }else{
+                    updateLockClass();
+                }
+            } else {
+                isReqSuccess = false;
+                i++;
+                setTimeout(function() {
+                    payWall(); 
+                }, 500); 
+                // console.log('fail to request:'+i);
             }
-        } else {
-            isReqSuccess = false;
-            i++;
-            setTimeout(function() {
-                payWall(); 
-            }, 500); 
-            // console.log('fail to request:'+i);
-        }
-    };
-    xhrpw.send(null);
+        };
+        xhrpw.send(null);
     }
 }
 /**
@@ -455,9 +451,10 @@ function vipCenter(dataObj){
     }
 }
 
- var headlineDiv = document.querySelectorAll('.headline');
-    // 过滤出包含locked的headline类数组
+ 
+// 过滤出包含locked的headline类数组
  function getPayStory(narrowClass,wideClass){
+    var headlineDiv = document.querySelectorAll('.headline');
     var toPayHeadline = [];
     var len = headlineDiv.length;
     if (len>0){
@@ -471,62 +468,80 @@ function vipCenter(dataObj){
  }
     
 
-    function updateLockClass(){
-      var toPayHeadline =  getPayStory('narrow-locked','wide-locked');
-      console.log('updateLockClass:'+toPayHeadline.length);
-      if (toPayHeadline.length>0){
-        for (var k = 0, len=toPayHeadline.length; k < len; k++) {
-            if (hasClass(toPayHeadline[k],'narrow-locked')){
-                removeClass(toPayHeadline[k], 'narrow-locked');
-                addClass(toPayHeadline[k], 'narrow-unlocked');
-            } else if(hasClass(toPayHeadline[k],'wide-locked')){
-                removeClass(toPayHeadline[k], 'wide-locked');
-                addClass(toPayHeadline[k], 'wide-unlocked');
-            }
-        }
-      }
-    }
-    function updateUnlockClass(){
-      var toPayHeadline =  getPayStory('narrow-unlocked','wide-unlocked');
-      if (toPayHeadline.length>0){
-        for (var k = 0, len=toPayHeadline.length; k < len; k++) {
-            if (hasClass(toPayHeadline[k],'narrow-unlocked')){
-                removeClass(toPayHeadline[k], 'narrow-unlocked');
-                addClass(toPayHeadline[k], 'narrow-locked');
-            } else if(hasClass(toPayHeadline[k],'wide-unlocked')){
-                removeClass(toPayHeadline[k], 'wide-unlocked');
-                addClass(toPayHeadline[k], 'wide-locked');
-            } 
-        }
-      }
-    }
-    function hasClass(ele, cls) {
-        cls = cls || '';
-        if (cls.replace(/\s/g, '').length === 0) {
-            return false; 
-        }else{
-            return new RegExp(' ' + cls + ' ').test(' ' + ele.className + ' ');
-        }
-
-    }
-    
-    function addClass(ele, cls) {
-        if (!hasClass(ele, cls)) {
-            ele.className = ele.className === '' ? cls : ele.className + ' ' + cls;
+function updateLockClass(){
+    var toPayHeadline =  getPayStory('narrow-locked','wide-locked');
+    // console.log('updateLockClass:'+toPayHeadline.length);
+    if (toPayHeadline.length>0){
+    for (var k = 0, len=toPayHeadline.length; k < len; k++) {
+        if (hasClass(toPayHeadline[k],'narrow-locked')){
+            removeClass(toPayHeadline[k], 'narrow-locked');
+            addClass(toPayHeadline[k], 'narrow-unlocked');
+        } else if(hasClass(toPayHeadline[k],'wide-locked')){
+            removeClass(toPayHeadline[k], 'wide-locked');
+            addClass(toPayHeadline[k], 'wide-unlocked');
         }
     }
-    
-    function removeClass(ele, cls) {
-        if (hasClass(ele, cls)) {
-            var newClass = ' ' + ele.className.replace(/[\t\r\n]/g, '') + ' ';
-            while (newClass.indexOf(' ' + cls + ' ') >= 0) {
-            newClass = newClass.replace(' ' + cls + ' ', ' ');
-            }
-            ele.className = newClass.replace(/^\s+|\s+$/g, '');
-        }
+    }
+}
+function updateUnlockClass(){
+    var toPayHeadline =  getPayStory('narrow-unlocked','wide-unlocked');
+    if (toPayHeadline.length>0){
+    for (var k = 0, len=toPayHeadline.length; k < len; k++) {
+        if (hasClass(toPayHeadline[k],'narrow-unlocked')){
+            removeClass(toPayHeadline[k], 'narrow-unlocked');
+            addClass(toPayHeadline[k], 'narrow-locked');
+        } else if(hasClass(toPayHeadline[k],'wide-unlocked')){
+            removeClass(toPayHeadline[k], 'wide-unlocked');
+            addClass(toPayHeadline[k], 'wide-locked');
+        } 
+    }
+    }
+}
+function hasClass(ele, cls) {
+    cls = cls || '';
+    if (cls.replace(/\s/g, '').length === 0) {
+        return false; 
+    }else{
+        return new RegExp(' ' + cls + ' ').test(' ' + ele.className + ' ');
     }
 
 }
+
+function addClass(ele, cls) {
+    if (!hasClass(ele, cls)) {
+        ele.className = ele.className === '' ? cls : ele.className + ' ' + cls;
+    }
+}
+
+function removeClass(ele, cls) {
+    if (hasClass(ele, cls)) {
+        var newClass = ' ' + ele.className.replace(/[\t\r\n]/g, '') + ' ';
+        while (newClass.indexOf(' ' + cls + ' ') >= 0) {
+        newClass = newClass.replace(' ' + cls + ' ', ' ');
+        }
+        ele.className = newClass.replace(/^\s+|\s+$/g, '');
+    }
+}
+function updatePageAction(){
+    if (window.location.hostname === 'localhost' || window.location.hostname.indexOf('192.168') === 0 || window.location.hostname.indexOf('127.0') === 0) {
+        var dataObj = parseUrlSearch();//(2) ["premium=0", "standard=1"]
+        vipCenter(dataObj);
+        payWall('api/paywall.json');
+    }else{
+        var userId1 = getCookie('USER_ID') || ''
+        if (userId1 !== null) {
+            payWall('/index.php/jsapi/paywall');   
+        }
+    }
+}
+
+window.onload = function(){
+    updatePageAction();
+}
+
+
+
+
 // MARK: - Open the product detail page so that user can buy, download and use the product
 // Not for membership
 // function showProductDetail(productId) {
