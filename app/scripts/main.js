@@ -2400,9 +2400,9 @@ function displaystoryNormal(theid, language, forceTitle) {
         if (!isFTCw){
             $('#storyview .storybody').html(storyimage).append(allId.ebody);
         }else{
-            if (allId.paywall === 2){
+            if (allId.paywall === 1){
                 $('#storyview .storybody').html(storyimage).append(paywallHintHtml);
-            }else if (allId.paywall === 1){
+            }else if (allId.paywall === 2){
                 $('#storyview .storybody').html(storyimage).append(downloadHintHtml);
             }else{
                 $('#storyview .storybody').html(storyimage).append(allId.ebody);
@@ -3920,6 +3920,7 @@ function login(fromwhere) {
             username = u;
             closeOverlay();
             $('.statusmsg').empty();
+            updatePageAction();
         }
         else if (l.msg && l.status && l.status == 'error') {
             $('.statusmsg').html('<div class="highlight">'+ l.msg + '</div>');
@@ -3933,6 +3934,7 @@ function login(fromwhere) {
 function logout() {
     $('.logged .statusmsg').html('正在登出...');
     $.get('/index.php/users/logout?' + thed, function() {
+        updatePageAction();
         $('#logincomment,#nologincomment, .logged, .notLogged').hide();
         $('#nologincomment,.notLogged').show();
         username = '';
