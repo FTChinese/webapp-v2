@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1244; //当前的版本号
+var _currentVersion = 1245; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -1468,7 +1468,7 @@ function loadStoryData(data) {
             jsondata = jsondata.body.odatalist;
         } else {   
             ga('send','event', 'CatchError', 'API Error', '{errorcode: "' + jsondata.body.oelement.errorcode + '", host: "' + location.host + '"}');
-            fa('send','event', 'CatchError', 'API Error', '{errorcode: "' + jsondata.body.oelement.errorcode + '", host: "' + location.host + '"}');
+            //fa('send','event', 'CatchError', 'API Error', '{errorcode: "' + jsondata.body.oelement.errorcode + '", host: "' + location.host + '"}');
         }
     } catch (ignore) {
         //alert (ignore.toString());
@@ -3011,7 +3011,7 @@ function trackErr(err, err_location) {
     var k=err.toString() + '. ua string: ' + uaString + '. url: ' + location.href + '. version: ' + _currentVersion;
     if (_localStorage===1) {
         ga('send','event', 'CatchError', err_location, k);
-        fa('send','event', 'CatchError', err_location, k);
+        //fa('send','event', 'CatchError', err_location, k);
     } else {
         new Image().src = 'http://m.ftchinese.com/track/ga.php?utmac=MO-1608715-1&utmn=2013101610&utmr=-&utmp=%2Fphone%2Ferror%2FlocalStorage&guid=ON';
     }
@@ -3022,7 +3022,7 @@ function trackFail(err, err_location) {
     var k=err.toString() + '. url: ' + location.href + '. version: ' + _currentVersion;
     if (_localStorage===1) {
         ga('send','event', 'CatchError', err_location, k);
-        fa('send','event', 'CatchError', err_location, k);
+        //fa('send','event', 'CatchError', err_location, k);
     } else {
         new Image().src = 'http://m.ftchinese.com/track/ga.php?utmac=MO-1608715-1&utmn=2013101610&utmr=-&utmp=%2Fphone%2Ferror%2FlocalStorage&guid=ON';
     }
@@ -3130,7 +3130,7 @@ function httpspv(theurl) {
         }catch(err){
             ga('require', 'displayfeatures');
             ga('send', 'pageview',  '/missed'+theurl);
-            fa('send', 'pageview',  '/missed'+theurl);
+            //fa('send', 'pageview',  '/missed'+theurl);
             trackErr(err, 'trackerpush');
         }
     } else {
