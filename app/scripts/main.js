@@ -1798,7 +1798,7 @@ function checkbreakingnews() {
     });
 }
 */
-var isPay = false; 
+
 function payWallUpdateHint(url){
     return new Promise((resolve, reject) => {
     var xhrpw = new XMLHttpRequest();
@@ -1808,15 +1808,8 @@ function payWallUpdateHint(url){
         if (xhrpw.status === 200) {  
             var data = xhrpw.responseText;
             var parsedData = JSON.parse(data);
-            if(parsedData.paywall <1){
-                isPay = true;  
-            }else{
-                isPay = true;
-            }
-            resolve(isPay);
-             
+            resolve();
         } else{
-            isPay = false;
             alert('请求失败！');
         }
     };
@@ -3920,7 +3913,8 @@ function login(fromwhere) {
             username = u;
             closeOverlay();
             $('.statusmsg').empty();
-            updatePageAction();
+            isReqSuccess = false;
+            payWall('/index.php/jsapi/paywall'); 
         }
         else if (l.msg && l.status && l.status == 'error') {
             $('.statusmsg').html('<div class="highlight">'+ l.msg + '</div>');
@@ -3934,7 +3928,8 @@ function login(fromwhere) {
 function logout() {
     $('.logged .statusmsg').html('正在登出...');
     $.get('/index.php/users/logout?' + thed, function() {
-        updatePageAction();
+        isReqSuccess = false;
+        payWall('/index.php/jsapi/paywall'); 
         $('#logincomment,#nologincomment, .logged, .notLogged').hide();
         $('#nologincomment,.notLogged').show();
         username = '';

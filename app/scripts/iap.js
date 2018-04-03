@@ -386,7 +386,6 @@ function payWall(url){
                 var parsedData = JSON.parse(data); 
                 vipCenter(parsedData)
                 isReqSuccess = true;
-                
                 setCookie('isFTCw', parsedData.paywall, '', '/');
                 if (parsedData.paywall >= 1) {      
                     updateUnlockClass();  
