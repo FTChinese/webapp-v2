@@ -224,6 +224,7 @@ function iapActions(productID, actionType, expireDate) {
         currentView = 'channelview';
     }
     productID = (productID.split('_'))[0];
+    // alert('productID'+productID);
     
     iapButtons = document.getElementById(currentView).querySelectorAll('.iap-button');
 
@@ -315,7 +316,7 @@ function getBuyCode(productId, productPrice, userId, productName) {
         }
         var orderNum = getOrderNum(memberNum);
 
-        productId = productId + '_'+orderNum;
+        productId = productId + '_' + orderNum;
 
         if(osVersion.indexOf('Android')<0){
             buyCode = ' href="buy://' + productId + '"';
@@ -349,10 +350,8 @@ function postPayState(productId, productPrice, userId, orderNum, actionType){
             } else {
                 console.log('fail to get st');
             }
-        };
-        
+        };     
         xhrpw.send(JSON.stringify(payInfo));
-        // xhrpw.send('{"a":"1","b":2}');
     }
 
 }
@@ -398,7 +397,6 @@ function payWall(url){
                 updateUnlockClass();  
             }else{
                 updateLockClass();
-                // console.log('update lock')
             }
         } else {
             isReqSuccess = false;

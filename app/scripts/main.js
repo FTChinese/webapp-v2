@@ -74,7 +74,7 @@ if (screenWidth >= 700) {
 } else {
     gStartPageTemplate = '/index.php/ft/channel/phonetemplate.html?channel='+homeFileName+fullScreenAdPara+'&';
 }
-// console.log (gStartPageTemplate);
+
 
 var gApiUrl = {
     //'a10001':'',
@@ -1832,13 +1832,7 @@ function addstoryclick() {
         pageStarted=1;
         _popstate=0;
         if (window.location.hostname === 'localhost' || window.location.hostname.indexOf('192.168') === 0 || window.location.hostname.indexOf('127.0') === 0) {
-
-            
-            // payWallUpdateHint('api/paywall.json').then(function(){
-                readstory(storyid, storyHeadline); 
-            // });
-            // payWallUpdateHint('api/paywall.json');
-            // readstory(storyid, storyHeadline);  
+            readstory(storyid, storyHeadline); 
          }else{
             //  payWallUpdateHint('/index.php/jsapi/paywall').then(function(){
             //     readstory(storyid, storyHeadline); 
@@ -2355,10 +2349,8 @@ function displaystoryNormal(theid, language, forceTitle) {
     var actualLanguage;
     langmode = language;
 
-    // var isFTCw = Boolean(0);
-    var isFTCw = getCookie('isFTCw');
-    // console.log('isFTCw');
-
+    var isFTCw = Boolean(Number(getCookie('isFTCw')));
+   
     //文章的scroller
     addStoryScroller();
     setCookie('langmode', language, '', '/');
