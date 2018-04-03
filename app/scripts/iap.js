@@ -223,6 +223,7 @@ function iapActions(productID, actionType, expireDate) {
     } else if (gNowView.indexOf('channelview') >= 0) {
         currentView = 'channelview';
     }
+    productID = (productID.split('_'))[0];
     
     iapButtons = document.getElementById(currentView).querySelectorAll('.iap-button');
 
@@ -313,7 +314,9 @@ function getBuyCode(productId, productPrice, userId, productName) {
             memberNum = '100';
         }
         var orderNum = getOrderNum(memberNum);
-        
+
+        productId = productId + '_'+orderNum;
+
         if(osVersion.indexOf('Android')<0){
             buyCode = ' href="buy://' + productId + '"';
         } else {
@@ -475,7 +478,7 @@ function vipCenter(dataObj){
 
     function updateLockClass(){
       var toPayHeadline =  getPayStory('narrow-locked','wide-locked');
-    //   console.log('updateLockClass:'+toPayHeadline.length);
+      console.log('updateLockClass:'+toPayHeadline.length);
       if (toPayHeadline.length>0){
         for (var k = 0, len=toPayHeadline.length; k < len; k++) {
             if (hasClass(toPayHeadline[k],'narrow-locked')){
