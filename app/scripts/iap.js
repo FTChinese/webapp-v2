@@ -346,12 +346,7 @@ function postPayState(productId, productPrice, userId, orderNum, actionType){
         xhrpw.onload = function() {
             if (xhrpw.status === 200) {
                 var data = xhrpw.responseText;
-                alert('成功'+data);
-                if(data==='ok'){
-                   
-                }
             } else {
-                alert('fail to get st');
                 console.log('fail to get st');
             }
         };
@@ -397,8 +392,10 @@ function payWall(url){
             // getAjaxDataObj = Object.assign({}, parsedData);
             vipCenter(parsedData)
             isReqSuccess = true;
+            
+            setCookie('isFTCw', parsedData.paywall, '', '/');
             if (parsedData.paywall >= 1) {      
-                updateUnlockClass();
+                updateUnlockClass();  
             }else{
                 updateLockClass();
                 // console.log('update lock')

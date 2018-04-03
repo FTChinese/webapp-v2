@@ -1800,6 +1800,7 @@ function checkbreakingnews() {
 */
 var isPay = false; 
 function payWallUpdateHint(url){
+    return new Promise((resolve, reject) => {
     var xhrpw = new XMLHttpRequest();
     xhrpw.open('get', url, false);
     xhrpw.setRequestHeader('Content-Type', 'application/text');
@@ -1812,6 +1813,7 @@ function payWallUpdateHint(url){
             }else{
                 isPay = true;
             }
+            resolve(isPay);
              
         } else{
             isPay = false;
@@ -1819,6 +1821,7 @@ function payWallUpdateHint(url){
         }
     };
     xhrpw.send(null);
+    });
 }
 
 
@@ -1830,10 +1833,17 @@ function addstoryclick() {
         _popstate=0;
         if (window.location.hostname === 'localhost' || window.location.hostname.indexOf('192.168') === 0 || window.location.hostname.indexOf('127.0') === 0) {
 
-            payWallUpdateHint('api/paywall.json');
-            readstory(storyid, storyHeadline);  
+            
+            // payWallUpdateHint('api/paywall.json').then(function(){
+                readstory(storyid, storyHeadline); 
+            // });
+            // payWallUpdateHint('api/paywall.json');
+            // readstory(storyid, storyHeadline);  
          }else{
-            payWallUpdateHint('/index.php/jsapi/paywall');
+            //  payWallUpdateHint('/index.php/jsapi/paywall').then(function(){
+            //     readstory(storyid, storyHeadline); 
+            // });
+            // payWallUpdateHint('/index.php/jsapi/paywall');
             readstory(storyid, storyHeadline); 
          }
     });     
@@ -2344,6 +2354,11 @@ function displaystoryNormal(theid, language, forceTitle) {
     var regIsImage = /<img/i;
     var actualLanguage;
     langmode = language;
+
+    // var isFTCw = Boolean(0);
+    var isFTCw = getCookie('isFTCw');
+    // console.log('isFTCw');
+
     //文章的scroller
     addStoryScroller();
     setCookie('langmode', language, '', '/');
@@ -2389,8 +2404,8 @@ function displaystoryNormal(theid, language, forceTitle) {
 
         actualLanguage = 'en';
         byline = (allstories[theid].ebyline_description || 'By') + ' ' + eauthor;
-
-        if (isPay){
+        
+        if (!isFTCw){
             $('#storyview .storybody').html(storyimage).append(allId.ebody);
         }else{
             if (allId.paywall === 2){
@@ -2448,7 +2463,7 @@ function displaystoryNormal(theid, language, forceTitle) {
             //console.log ("i: " + i + " ebodyTotal: " + ebodyTotal + ' cbodyTotal: ' + cbodyTotal);
         }
         ceDiff = cbodyTotal - ebodyTotal;
-        if (isPay){
+        if (!isFTCw){
             $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
         }else{
             if (allId.paywall === 2){
@@ -2459,7 +2474,8 @@ function displaystoryNormal(theid, language, forceTitle) {
                 $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
             }
         }
-        console.log('isPay'+isPay);
+
+        
 
         $('#storyview .storybody').prepend('<div id="ceTwoColumn" class=centerButton><button class="ui-light-btn">中英文并排</button></div>');
         $('#ceTwoColumn').unbind().bind('click',function(){
@@ -2478,7 +2494,7 @@ function displaystoryNormal(theid, language, forceTitle) {
         actualLanguage = 'ch';
         byline = (allId.cbyline_description||'').replace(/作者[：:]/g, '') + ' ' + (allId.cauthor||'').replace(/,/g, '、') + ' ' + (allId.cbyline_status || '');
         //alert (allId.cbody);
-        if (isPay){
+        if (!isFTCw){
             $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));
         }else{
             if (allId.paywall === 2){
