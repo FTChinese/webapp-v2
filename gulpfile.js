@@ -225,7 +225,8 @@ gulp.task('copy', ['build'], function () {
   var fs = require('fs');
   var cssbundle = fs.readFileSync('dist/phone/s.css', 'utf8');
   var googleanalytics = fs.readFileSync('dist/log/ga.js', 'utf8');
-  var fa = fs.readFileSync('dist/log/analytics.js', 'utf8');
+  //var fa = fs.readFileSync('dist/log/analytics.js', 'utf8');
+  var fa = '';
 
   // MARK: - use the one m.js file 
   var mainM = fs.readFileSync('dist/phone/m.js', 'utf8');
