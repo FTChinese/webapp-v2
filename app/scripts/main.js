@@ -350,9 +350,7 @@ function startpage() {
          if (window.location.hostname === 'localhost' || window.location.hostname.indexOf('192.168') === 0 || window.location.hostname.indexOf('127.0') === 0) {
             var iapAction = $(this).attr('iap-action');
             var iapTitle = $(this).attr('iap-title') || $(this).html() || 'FT中文网';
-            if (iapAction) {
-                displayProducts(window.iapProducts, iapAction, iapTitle);
-            }
+            payWallUpdateSub('api/paywall.json',iapAction,iapTitle);   
          }else{
             var getUserId = getCookie('USER_ID');
             if(!getUserId){
@@ -360,13 +358,29 @@ function startpage() {
             }else{
                 var iapAction = $(this).attr('iap-action');
                 var iapTitle = $(this).attr('iap-title') || $(this).html() || 'FT中文网';
-                if (iapAction) {
-                    displayProducts(window.iapProducts, iapAction, iapTitle);
-                }
+                var dataObj = payWallUpdateSub('/index.php/jsapi/paywall',iapAction,iapTitle);
             } 
          }
 
     });
+
+function payWallUpdateSub(url,iapAction,iapTitle){
+    var xhrpw = new XMLHttpRequest();
+    xhrpw.open('get', url);
+    xhrpw.setRequestHeader('Content-Type', 'application/text');
+    xhrpw.onload = function() {
+        if (xhrpw.status === 200) {  
+            var data = xhrpw.responseText;
+            var parsedData = JSON.parse(data); 
+            if (iapAction) {
+                displayProducts(window.iapProducts, iapAction, iapTitle, parsedData);
+            }
+        } else{
+            alert('请求失败！');
+        }
+    };
+    xhrpw.send(null);
+}
     // $('body').on('click', '.paywall-channel', function(){
     //     var iapAction = $(this).attr('iap-action');
     //     var iapTitle = $(this).attr('iap-title') || $(this).html() || 'FT中文网';
@@ -375,22 +389,7 @@ function startpage() {
     //     }
     // });
     
-    /*
-    $('body').on('click', '.iap-item', function(){
-        var productId = this.getAttribute('product-id') || '';
-        showProductDetail(productId);
 
-
-
-        // var targetTag = e.target.tagName.toLowerCase();
-        // var targetClassName = e.target.className;
-        // if (targetTag !== 'button' || targetClassName.indexOf('iap-detail')>=0) {
-        //     // MARK: - open detail for iap
-        //     //var productId = this.getAttribute('product-id') || '';
-        //     //showProductDetail(productId);
-        // }
-    });
-    */
     //openning a page in an iframe is not viable for now in iPhone native app
     /*
     $('body').on('click', '#special-container a, .open-in-iframe', function(){
@@ -1799,15 +1798,44 @@ function checkbreakingnews() {
     });
 }
 */
+var isPay = false; 
+function payWallUpdateHint(url){
+    var xhrpw = new XMLHttpRequest();
+    xhrpw.open('get', url, false);
+    xhrpw.setRequestHeader('Content-Type', 'application/text');
+    xhrpw.onload = function() {
+        if (xhrpw.status === 200) {  
+            var data = xhrpw.responseText;
+            var parsedData = JSON.parse(data);
+            if(parsedData.paywall <1){
+                isPay = true;  
+            }else{
+                isPay = true;
+            }
+             
+        } else{
+            isPay = false;
+            alert('请求失败！');
+        }
+    };
+    xhrpw.send(null);
+}
+
 
 function addstoryclick() {
-
     $('.premium').unbind().bind('click', function() {
         var storyid = $(this).attr('storyid'), 
             storyHeadline = $(this).find('.headline, .hl').html() || '';
         pageStarted=1;
         _popstate=0;
-        readstory(storyid, storyHeadline);
+        if (window.location.hostname === 'localhost' || window.location.hostname.indexOf('192.168') === 0 || window.location.hostname.indexOf('127.0') === 0) {
+
+            payWallUpdateHint('api/paywall.json');
+            readstory(storyid, storyHeadline);  
+         }else{
+            payWallUpdateHint('/index.php/jsapi/paywall');
+            readstory(storyid, storyHeadline); 
+         }
     });     
 
     $('.story').unbind().bind('click', function() {
@@ -2362,12 +2390,16 @@ function displaystoryNormal(theid, language, forceTitle) {
         actualLanguage = 'en';
         byline = (allstories[theid].ebyline_description || 'By') + ' ' + eauthor;
 
-        if (allId.paywall === 1){
-            $('#storyview .storybody').html(storyimage).append(paywallHintHtml);
-        }else if (allId.paywall === 2){
-            $('#storyview .storybody').html(storyimage).append(downloadHintHtml);
-        }else{
+        if (isPay){
             $('#storyview .storybody').html(storyimage).append(allId.ebody);
+        }else{
+            if (allId.paywall === 2){
+                $('#storyview .storybody').html(storyimage).append(paywallHintHtml);
+            }else if (allId.paywall === 1){
+                $('#storyview .storybody').html(storyimage).append(downloadHintHtml);
+            }else{
+                $('#storyview .storybody').html(storyimage).append(allId.ebody);
+            }
         }
         
         $('.enbutton').addClass('nowreading');
@@ -2416,14 +2448,19 @@ function displaystoryNormal(theid, language, forceTitle) {
             //console.log ("i: " + i + " ebodyTotal: " + ebodyTotal + ' cbodyTotal: ' + cbodyTotal);
         }
         ceDiff = cbodyTotal - ebodyTotal;
-        
-        if (allId.paywall === 1){
-            $('#storyview .storybody').html(paywallHintHtml);
-        }else if (allId.paywall === 2){
-            $('#storyview .storybody').html(downloadHintHtml);
-        }else{
+        if (isPay){
             $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
+        }else{
+            if (allId.paywall === 2){
+                $('#storyview .storybody').html(paywallHintHtml);
+            }else if (allId.paywall === 1){
+                $('#storyview .storybody').html(downloadHintHtml);
+            }else{
+                $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
+            }
         }
+        console.log('isPay'+isPay);
+
         $('#storyview .storybody').prepend('<div id="ceTwoColumn" class=centerButton><button class="ui-light-btn">中英文并排</button></div>');
         $('#ceTwoColumn').unbind().bind('click',function(){
             $('div.ebodyt').css({'float':'left','width':'48%','overflow':'hidden'});
@@ -2441,14 +2478,17 @@ function displaystoryNormal(theid, language, forceTitle) {
         actualLanguage = 'ch';
         byline = (allId.cbyline_description||'').replace(/作者[：:]/g, '') + ' ' + (allId.cauthor||'').replace(/,/g, '、') + ' ' + (allId.cbyline_status || '');
         //alert (allId.cbody);
-        if (allId.paywall === 1){
-            $('#storyview .storybody').html(storyimage).append(paywallHintHtml);
-        }else if (allId.paywall === 2){
-            $('#storyview .storybody').html(storyimage).append(downloadHintHtml);
-        }else{
+        if (isPay){
             $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));
-        }
-        
+        }else{
+            if (allId.paywall === 2){
+                $('#storyview .storybody').html(storyimage).append(paywallHintHtml);
+            }else if (allId.paywall === 1){
+                $('#storyview .storybody').html(storyimage).append(downloadHintHtml);
+            }else{
+                $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));
+            }
+       }  
         if (allId.cbody.indexOf('inlinevideo')>=0) {
             $('#storyview .storybody .inlinevideo').each(function (){
                 // if FT Scroller is used, add an overlay to the iframe
