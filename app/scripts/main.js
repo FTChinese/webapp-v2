@@ -1827,10 +1827,6 @@ function addstoryclick() {
         if (window.location.hostname === 'localhost' || window.location.hostname.indexOf('192.168') === 0 || window.location.hostname.indexOf('127.0') === 0) {
             readstory(storyid, storyHeadline); 
          }else{
-            //  payWallUpdateHint('/index.php/jsapi/paywall').then(function(){
-            //     readstory(storyid, storyHeadline); 
-            // });
-            // payWallUpdateHint('/index.php/jsapi/paywall');
             readstory(storyid, storyHeadline); 
          }
     });     
