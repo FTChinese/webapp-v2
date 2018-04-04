@@ -358,7 +358,7 @@ function startpage() {
             }else{
                 var iapAction = $(this).attr('iap-action');
                 var iapTitle = $(this).attr('iap-title') || $(this).html() || 'FT中文网';
-                var dataObj = payWallUpdateSub('/index.php/jsapi/paywall',iapAction,iapTitle);
+                var dataObj = payWallUpdateSub('/index.php/jsapi/paywall?3',iapAction,iapTitle);
             } 
          }
 
@@ -2389,12 +2389,13 @@ function displaystoryNormal(theid, language, forceTitle) {
         if (!isFTCw){
             $('#storyview .storybody').html(storyimage).append(allId.ebody);
         }else{
-            if (allId.paywall === 1){
+            if (allId.paywall === 2){
                 $('#storyview .storybody').html(storyimage).append(paywallHintHtml);
-            }else if (allId.paywall === 2){
+            }else if (allId.paywall === 1){
                 $('#storyview .storybody').html(storyimage).append(downloadHintHtml);
             }else{
-                $('#storyview .storybody').html(storyimage).append(allId.ebody);
+                $('#storyview .storybody').html(storyimage).append(downloadHintHtml);
+                // $('#storyview .storybody').html(storyimage).append(allId.ebody);
             }
         }
         
@@ -2452,7 +2453,8 @@ function displaystoryNormal(theid, language, forceTitle) {
             }else if (allId.paywall === 1){
                 $('#storyview .storybody').html(downloadHintHtml);
             }else{
-                $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
+                $('#storyview .storybody').html(paywallHintHtml);
+                // $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
             }
         }
 
@@ -3910,7 +3912,7 @@ function login(fromwhere) {
             closeOverlay();
             $('.statusmsg').empty();
             isReqSuccess = false;
-            payWall('/index.php/jsapi/paywall'); 
+            payWall('/index.php/jsapi/paywall?login'); 
         }
         else if (l.msg && l.status && l.status == 'error') {
             $('.statusmsg').html('<div class="highlight">'+ l.msg + '</div>');
@@ -3925,7 +3927,8 @@ function logout() {
     $('.logged .statusmsg').html('正在登出...');
     $.get('/index.php/users/logout?' + thed, function() {
         isReqSuccess = false;
-        payWall('/index.php/jsapi/paywall'); 
+        payWall('/index.php/jsapi/paywall?logout'); 
+        deleteCookie('isFTCw');
         $('#logincomment,#nologincomment, .logged, .notLogged').hide();
         $('#nologincomment,.notLogged').show();
         username = '';

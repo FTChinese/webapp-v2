@@ -1,4 +1,4 @@
-window.iapProducts = [{title: '标准会员',price: '¥198.00',id: 'com.ft.ftchinese.mobile.subscription.premium',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为标准会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 精选深度分析','- 中英双语内容','- 金融英语速读训练','- 英语原声电台','- 无限浏览7日前所有历史文章（近8万篇）'],period:'year'},{title: '高端会员',price: '¥1,998.00',id: 'com.ft.ftchinese.mobile.subscription.standard',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为高端会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 享受“标准会员”所有权益','- 编辑精选，总编/各版块主编每周五为您推荐本周必读资讯，分享他们的思考与观点','- FT中文网2018年度论坛门票2张，价值3999元/张 （不含差旅与食宿）'],period:'year'}];
+window.iapProducts = [{title: '标准会员',price: '¥198.00',id: 'ftc_premium',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为标准会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 精选深度分析','- 中英双语内容','- 金融英语速读训练','- 英语原声电台','- 无限浏览7日前所有历史文章（近8万篇）'],period:'year'},{title: '高端会员',price: '¥1,998.00',id: 'ftc_standard',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为高端会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 享受“标准会员”所有权益','- 编辑精选，总编/各版块主编每周五为您推荐本周必读资讯，分享他们的思考与观点','- FT中文网2018年度论坛门票2张，价值3999元/张 （不含差旅与食宿）'],period:'year'}];
 
 var subscribeIntruction = {
     title: '订阅说明与注意事项',
@@ -103,7 +103,7 @@ function getProductHTMLCode(products, forGroup, dataObj) {
                 if(dataObj.standard===1 && dataObj.premium===0){
                     products[0].isPurchased = true;
                     products[0].state = '<button class="iap-move-left">已订阅</button>';
-                    products[1].state = '<a'+getBuyCode(products[i].id, productPrice, gUserId, productName)+'><button class="iap-move-left">现在升级</button></a>';
+                    products[1].state = '<a'+getBuyCode(products[1].id, productPrice, gUserId, productName)+'><button class="iap-move-left">现在升级</button></a>';
                 }else if(dataObj.premium===1){
                     products[i].isPurchased = true;
                     products[i].state = '<button class="iap-move-left">已订阅</button>';
@@ -112,6 +112,7 @@ function getProductHTMLCode(products, forGroup, dataObj) {
                     products[i].state = '<a'+getBuyCode(products[i].id, productPrice, gUserId, productName)+'><button class="iap-move-left">订阅</button></a>';
                 }
                 if(!isEmptyObj(dataObj)){
+                    console.log(products[i].id);
                     console.log(products[i].state);
                     productActionButton = '<div class="iap-button" product-id="' + products[i].id + '" product-price="' + productPrice + '" product-title="' + productName + '">' + products[i].state + '<p class="iap-teaser">' + products[i].price + '/年' + '</p></div>';    
                 // if (products[i].isPurchased === true) {
@@ -223,7 +224,8 @@ function iapActions(productID, actionType, expireDate) {
     } else if (gNowView.indexOf('channelview') >= 0) {
         currentView = 'channelview';
     }
-    productID = (productID.split('_'))[0];
+    var productIDArr = productID.split('_');
+    productID = productIDArr[0]+'_'+productIDArr[1];
     // alert('productID'+productID);
     
     iapButtons = document.getElementById(currentView).querySelectorAll('.iap-button');
@@ -248,7 +250,8 @@ function iapActions(productID, actionType, expireDate) {
         memberNum = '100';
     } 
     var orderNum = getOrderNum(memberNum);
-    alert(productID);
+    console.log(':productID:'+productID+':orderNum:'+orderNum+':productPrice:'+productPrice+':actionType:'+actionType);
+    // alert(':productID:'+productID+':orderNum:'+orderNum+':productPrice:'+productPrice+':actionType:'+actionType);
     postPayState(productID, productPrice, gUserId, orderNum, actionType);
     // MARK: - iapHTMLCode is used for home and channel page, iapRailHTML is used for product detail page
     switch (actionType) { 
@@ -257,6 +260,7 @@ function iapActions(productID, actionType, expireDate) {
                 productExpire = expireDate || '未知';
                 iapHTMLCode = '<a><button class="iap-move-left">已订阅</button></a><p class="iap-teaser">'+ productPrice + '/年' + '</p>'; 
             } 
+            payWall('/index.php/jsapi/paywall?success'); 
             updateProductStatus(productIndex, true, true);
             break;
         case 'fail':
@@ -299,16 +303,13 @@ function getproductIndex(productID){
 }
 
 // MARK: - Get url scheme for iOS buy and JS onclick code for Android
-function getBuyCode(productId, productPrice, userId, productName) {
+function getBuyCode(productId, productPrice, userId, productName) {  
+    // iapActions('ftc_premium_FT0101522812152', 'success', '')
+    
     if (!!userId){
         var buyCode = ''; 
         var priceForAndroid = '';
-        if (productId==='com.ft.ftchinese.mobile.subscription.premium'){
-            priceForAndroid = '0.01';
-        }else{
-            priceForAndroid = '0.02';
-        }
-
+        
         if (/premium$/.test(productId)) {
             memberNum = '010';
         }else if (/standard$/.test(productId)){
@@ -318,11 +319,11 @@ function getBuyCode(productId, productPrice, userId, productName) {
 
         productId = productId + '_' + orderNum;
 
+        priceForAndroid = '0.01';
+
         if(osVersion.indexOf('Android')<0){
             buyCode = ' href="buy://' + productId + '"';
-        } else {
-            // postPayState(productId, productPrice, userId, orderNum, '');
-            
+        } else {           
             buyCode = ' onclick="ftjavacriptapp.payzfb(\''+ productId +'\',\''+ priceForAndroid +'\',\''+ userId +'\',\''+ productName +'\')"';
         }
 
@@ -389,7 +390,6 @@ function payWall(url){
                 setCookie('isFTCw', parsedData.paywall, '', '/');
                 if (parsedData.paywall >= 1) {      
                     updateUnlockClass();  
-                    // console.log('updateUnlockClass:'+parsedData.paywall);
                 }else{
                     updateLockClass();
                 }
@@ -528,8 +528,8 @@ function updatePageAction(){
         payWall('api/paywall.json');
     }else{
         var userId1 = getCookie('USER_ID') || ''
-        if (userId1 !== null) {
-            payWall('/index.php/jsapi/paywall');   
+        if (!userId1) {
+            payWall('/index.php/jsapi/paywall?update');   
         }
     }
 }
