@@ -536,6 +536,7 @@ function updatePageAction(){
 
 window.onload = function(){
     updatePageAction();
+    console.log('the lock?')
 }
 
 

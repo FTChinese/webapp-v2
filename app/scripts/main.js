@@ -1831,13 +1831,17 @@ function addstoryclick() {
          }
     });     
 
-    $('.story').unbind().bind('click', function() {
+    $('.story,.ajax').unbind().bind('click', function() {
         var storyid = $(this).attr('storyid'), 
             storyHeadline = $(this).find('.headline, .hl').html() || '';
         pageStarted=1;
         _popstate=0;
         readstory(storyid, storyHeadline);
     });
+
+
+
+  
 
     
 }
@@ -2453,7 +2457,7 @@ function displaystoryNormal(theid, language, forceTitle) {
             }else if (allId.paywall === 1){
                 $('#storyview .storybody').html(downloadHintHtml);
             }else{
-                $('#storyview .storybody').html(paywallHintHtml);
+                $('#storyview .storybody').html(downloadHintHtml);
                 // $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
             }
         }
