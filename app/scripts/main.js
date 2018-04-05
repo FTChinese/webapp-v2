@@ -1839,17 +1839,6 @@ function addstoryclick() {
         readstory(storyid, storyHeadline);
     });
 
-    $('.ajax').unbind().bind('click', function() {
-        var storyid = $(this).attr('storyid'), 
-            storyHeadline = $(this).find('.headline, .hl').html() || '';
-        pageStarted=1;
-        _popstate=0;
-        // readstory(storyid, storyHeadline);
-    });
-
-  
-
-    
 }
 // 装入热门文章或热门评论，以及年度文章
 function fillArticles(data, place) {
@@ -4019,7 +4008,7 @@ function watchVideo(videoUrl, videoTitle, videoId, videoLead, videoImage,videoTa
     updateShare('http://www.ftchinese.com', 'http://www.ftchinese.com', '/video/', videoId, shareTitle, shareTitle, videoImage, shareLead, '');
 }
 
-
+// showSlide("/index.php/ft/interactive/11122?i=2","战争阴云笼罩下的达沃斯", 0);
 function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFrame){
     var randomTime = new Date().getTime();
     var url = slideUrl;
@@ -4044,6 +4033,7 @@ function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFra
     turnonOverlay('slideShow');
     urlMore = (url.indexOf('?')>0) ? '&' : '?';
     url = url + urlMore + randomTime;
+    console.log('url'+url);
     if (typeof interactiveType === 'string') {
         interactiveTypeName = interactiveType;
     }
