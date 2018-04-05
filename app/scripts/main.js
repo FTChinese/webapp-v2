@@ -1831,7 +1831,7 @@ function addstoryclick() {
          }
     });     
 
-    $('.story,.ajax').unbind().bind('click', function() {
+    $('.story').unbind().bind('click', function() {
         var storyid = $(this).attr('storyid'), 
             storyHeadline = $(this).find('.headline, .hl').html() || '';
         pageStarted=1;
@@ -1839,7 +1839,13 @@ function addstoryclick() {
         readstory(storyid, storyHeadline);
     });
 
-
+    $('.ajax').unbind().bind('click', function() {
+        var storyid = $(this).attr('storyid'), 
+            storyHeadline = $(this).find('.headline, .hl').html() || '';
+        pageStarted=1;
+        _popstate=0;
+        // readstory(storyid, storyHeadline);
+    });
 
   
 
@@ -2484,9 +2490,9 @@ function displaystoryNormal(theid, language, forceTitle) {
         if (!isFTCw){
             $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));
         }else{
-            if (allId.paywall === 2){
+            if (allId.paywall === 1){
                 $('#storyview .storybody').html(storyimage).append(paywallHintHtml);
-            }else if (allId.paywall === 1){
+            }else if (allId.paywall === 2){
                 $('#storyview .storybody').html(storyimage).append(downloadHintHtml);
             }else{
                 $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));
