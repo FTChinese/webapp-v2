@@ -2289,7 +2289,7 @@ var downloadHintHtml = '<div class="subscribe-lock-container"><div class="lock-b
 var selectedStoryId = '';
 function displaystoryNormal(theid, language, forceTitle) {
     selectedStoryId = theid;
-    // console.log('Display story normal'+selectedStoryId);
+    
     var columnintro = ''; 
     var storyimage;
     var allId = allstories[theid];
@@ -2339,6 +2339,13 @@ function displaystoryNormal(theid, language, forceTitle) {
     var regIsImage = /<img/i;
     var actualLanguage;
     langmode = language;
+    var isStoryBeforeOneWeek = false;
+    
+    var oneWeeklyTime = Math.round(new Date().getTime()/1000)-604800;
+    if(Number(allId.last_publish_time)< oneWeeklyTime ){
+        isStoryBeforeOneWeek = true;
+        console.log(Number(allId.last_publish_time)+604800);
+    }
 
     var isFTCw = Boolean(Number(getCookie('isFTCw')));
    
@@ -2450,9 +2457,9 @@ function displaystoryNormal(theid, language, forceTitle) {
         if (!isFTCw){
             $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
         }else{
-            if (allId.paywall === 2){
+            if (allId.paywall === 2 || isStoryBeforeOneWeek){
                 $('#storyview .storybody').html(paywallHintHtml);
-            }else if (allId.paywall === 1){
+            }else if (allId.paywall === 1 || isStoryBeforeOneWeek){
                 $('#storyview .storybody').html(downloadHintHtml);
             }else{
                 $('#storyview .storybody').html(downloadHintHtml);
@@ -2482,9 +2489,9 @@ function displaystoryNormal(theid, language, forceTitle) {
         if (!isFTCw){
             $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));
         }else{
-            if (allId.paywall === 1){
+            if (allId.paywall === 1 || isStoryBeforeOneWeek){
                 $('#storyview .storybody').html(storyimage).append(paywallHintHtml);
-            }else if (allId.paywall === 2){
+            }else if (allId.paywall === 2 || isStoryBeforeOneWeek){
                 $('#storyview .storybody').html(storyimage).append(downloadHintHtml);
             }else{
                 $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));
