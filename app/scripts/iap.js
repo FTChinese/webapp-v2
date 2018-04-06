@@ -253,6 +253,7 @@ function iapActions(productID, actionType, expireDate) {
     console.log(':productID:'+productID+':orderNum:'+orderNum+':productPrice:'+productPrice+':actionType:'+actionType);
     // alert(':productID:'+productID+':orderNum:'+orderNum+':productPrice:'+productPrice+':actionType:'+actionType);
     postPayState(productID, productPrice, gUserId, orderNum, actionType);
+    ga('send','event','android member subscribe','toPay',productID + ' ' + actionType);
     // MARK: - iapHTMLCode is used for home and channel page, iapRailHTML is used for product detail page
     switch (actionType) { 
         case 'success':
@@ -329,6 +330,7 @@ function getBuyCode(productId, productPrice, userId, productName) {
 
         return buyCode;
     }
+    ga('send','event','android member subscribe','openPayment',productId);
     
 }
 
@@ -536,7 +538,7 @@ function updatePageAction(){
 
 window.onload = function(){
     updatePageAction();
-    console.log('the lock?')
+    // console.log('the lock?')
 }
 
 

@@ -360,6 +360,8 @@ function startpage() {
                 var iapTitle = $(this).attr('iap-title') || $(this).html() || 'FT中文网';
                 var dataObj = payWallUpdateSub('/index.php/jsapi/paywall?3',iapAction,iapTitle);
             } 
+            
+            ga('send','event','android member subscribe','subscribe now',iapTitle+' '+selectedStoryId);
          }
 
     });
@@ -2284,9 +2286,10 @@ var paywallHintHtml = '<div class="subscribe-lock-container"><div class="lock-bl
 var downloadHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">使用FT中文网 iOS应用</div><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="subscribe-btn"><span><a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.ft#" target="_blank" style="color:white">下载应用&#x25BA;︎</a></span></div></div></div>';
 
 
-
+var selectedStoryId = '';
 function displaystoryNormal(theid, language, forceTitle) {
-    console.log('Display story normal');
+    selectedStoryId = theid;
+    // console.log('Display story normal'+selectedStoryId);
     var columnintro = ''; 
     var storyimage;
     var allId = allstories[theid];
