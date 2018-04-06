@@ -2344,7 +2344,7 @@ function displaystoryNormal(theid, language, forceTitle) {
     var oneWeeklyTime = Math.round(new Date().getTime()/1000)-604800;
     if(Number(allId.last_publish_time)< oneWeeklyTime ){
         isStoryBeforeOneWeek = true;
-        console.log(Number(allId.last_publish_time)+604800);
+        // console.log(Number(allId.last_publish_time)+604800);
     }
 
     var isFTCw = Boolean(Number(getCookie('isFTCw')));
@@ -2569,10 +2569,11 @@ function displaystoryNormal(theid, language, forceTitle) {
     //insert to the end of the target paragraph
 
 
-
-    if (allId.paywall === 1 || allId.paywall === 2 ){
+    if (!!isFTCw){
+    // if (allId.paywall === 1 || allId.paywall === 2 ){
         var adInPaywall = $('.subscribe-lock-container');
         $('<div class="adiframe mpu-phone for-phone" type="250" frame="ad300x250-story"></div>').insertAfter(adInPaywall);
+        console.log('insert ad ??')
     }else{
 
         if (insertAd > 0) {
