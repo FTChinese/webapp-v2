@@ -2348,6 +2348,7 @@ function displaystoryNormal(theid, language, forceTitle) {
     }
 
     var isFTCw = Boolean(Number(getCookie('isFTCw')));
+    let isHasPaywall = false;
    
     //文章的scroller
     addStoryScroller();
@@ -2397,6 +2398,7 @@ function displaystoryNormal(theid, language, forceTitle) {
         
         if (!isFTCw){
             $('#storyview .storybody').html(storyimage).append(allId.ebody);
+            isHasPaywall = false;
         }else{
             if (allId.paywall === 2){
                 $('#storyview .storybody').html(storyimage).append(paywallHintHtml);
@@ -2406,6 +2408,7 @@ function displaystoryNormal(theid, language, forceTitle) {
                 $('#storyview .storybody').html(storyimage).append(downloadHintHtml);
                 // $('#storyview .storybody').html(storyimage).append(allId.ebody);
             }
+            isHasPaywall = true;
         }
         
         $('.enbutton').addClass('nowreading');
@@ -2456,6 +2459,7 @@ function displaystoryNormal(theid, language, forceTitle) {
         ceDiff = cbodyTotal - ebodyTotal;
         if (!isFTCw){
             $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
+            isHasPaywall = false;
         }else{
             if (allId.paywall === 2 || isStoryBeforeOneWeek){
                 $('#storyview .storybody').html(paywallHintHtml);
@@ -2465,6 +2469,7 @@ function displaystoryNormal(theid, language, forceTitle) {
                 $('#storyview .storybody').html(downloadHintHtml);
                 // $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
             }
+            isHasPaywall = true;
         }
 
         
@@ -2487,15 +2492,17 @@ function displaystoryNormal(theid, language, forceTitle) {
         byline = (allId.cbyline_description||'').replace(/作者[：:]/g, '') + ' ' + (allId.cauthor||'').replace(/,/g, '、') + ' ' + (allId.cbyline_status || '');
         //alert (allId.cbody);
         if (!isFTCw){
-            $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));
+            $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));     
+            isHasPaywall = false;
         }else{
-            if (allId.paywall === 1 || isStoryBeforeOneWeek){
+            if (allId.paywall === 2 || isStoryBeforeOneWeek){
                 $('#storyview .storybody').html(storyimage).append(paywallHintHtml);
-            }else if (allId.paywall === 2 || isStoryBeforeOneWeek){
+            }else if (allId.paywall === 1 || isStoryBeforeOneWeek){
                 $('#storyview .storybody').html(storyimage).append(downloadHintHtml);
             }else{
                 $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));
             }
+            isHasPaywall = true;
        }  
         if (allId.cbody.indexOf('inlinevideo')>=0) {
             $('#storyview .storybody .inlinevideo').each(function (){
@@ -2569,7 +2576,7 @@ function displaystoryNormal(theid, language, forceTitle) {
     //insert to the end of the target paragraph
 
 
-    // if (!!isFTCw){
+    // if (isHasPaywall){
     if (allId.paywall === 1 || allId.paywall === 2 ){
         var adInPaywall = $('.subscribe-lock-container');
         $('<div class="adiframe mpu-phone for-phone" type="250" frame="ad300x250-story"></div>').insertAfter(adInPaywall);
