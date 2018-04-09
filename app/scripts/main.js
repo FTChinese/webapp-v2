@@ -2409,6 +2409,7 @@ function displaystoryNormal(theid, language, forceTitle) {
                 // $('#storyview .storybody').html(storyimage).append(allId.ebody);
             }
             isHasPaywall = true;
+            ga('send','event','android member subscribe','story to pay',theid + ' ' + actualLanguage);
         }
         
         $('.enbutton').addClass('nowreading');
@@ -2470,6 +2471,7 @@ function displaystoryNormal(theid, language, forceTitle) {
                 // $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
             }
             isHasPaywall = true;
+            ga('send','event','android member subscribe','story to pay',theid + ' ' + actualLanguage);
         }
 
         
@@ -2503,6 +2505,7 @@ function displaystoryNormal(theid, language, forceTitle) {
                 $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));
             }
             isHasPaywall = true;
+            ga('send','event','android member subscribe','story to pay',theid + ' ' + actualLanguage);
        }  
         if (allId.cbody.indexOf('inlinevideo')>=0) {
             $('#storyview .storybody .inlinevideo').each(function (){
