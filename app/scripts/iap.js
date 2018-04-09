@@ -262,8 +262,11 @@ function iapActions(productID, actionType, expireDate) {
                 productExpire = expireDate || '未知';
                 iapHTMLCode = '<a><button class="iap-move-left">已订阅</button></a><p class="iap-teaser">'+ productPrice + '/年' + '</p>'; 
             } 
-            payWall('/index.php/jsapi/paywall?success'); 
+            isReqSuccess = false;
+            // payWall('/index.php/jsapi/paywall?success'); 
             updateProductStatus(productIndex, true, true);
+            // console.log('success display:'+window.location);
+            window.location.reload();
             break;
         case 'fail':
             if (productType === 'membership') {  
@@ -306,7 +309,6 @@ function getproductIndex(productID){
 
 // MARK: - Get url scheme for iOS buy and JS onclick code for Android
 function getBuyCode(productId, productPrice, userId, productName) {  
-    // iapActions('ftc_premium_FT0101522812152', 'success', '')
     if (!!userId){
         var buyCode = ''; 
         var priceForAndroid = '';
@@ -333,6 +335,15 @@ function getBuyCode(productId, productPrice, userId, productName) {
     ga('send','event','android member subscribe','openPayment',productId);
     
 }
+
+// 测试付费成功与否的地方
+// function paySuccess(){
+//     var psySuccess = document.getElementById('pay-success-btn');
+//     psySuccess.onclick=function(){
+//         iapActions('ftc_premium_FT0101522812152', 'success', '');
+//     }
+// }
+// paySuccess();
 
 // MARK: - Test paywall for Android
 function postPayState(productId, productPrice, userId, orderNum, actionType){
@@ -379,7 +390,8 @@ $('body').on('click', '#iap-know', function(){
 var isReqSuccess = false;
 var i = 0;
 function payWall(url){
-    if(!isReqSuccess && i<3){  
+    if(!isReqSuccess && i<3){ 
+        deleteCookie('isFTCw'); 
         var xhrpw = new XMLHttpRequest();
         xhrpw.open('get', url);
         xhrpw.setRequestHeader('Content-Type', 'application/text');
@@ -405,7 +417,9 @@ function payWall(url){
             }
         };
         xhrpw.send(null);
+        console.log('what times the paywall?'+i);
     }
+    
 }
 /**
  * 获取url参数转化成对象
@@ -471,7 +485,7 @@ function vipCenter(dataObj){
 
 function updateLockClass(){
     var toPayHeadline =  getPayStory('narrow-locked','wide-locked');
-    // console.log('updateLockClass:'+toPayHeadline.length);
+    console.log('updateLockClass:'+toPayHeadline.length);
     if (toPayHeadline.length>0){
         for (var k = 0, len=toPayHeadline.length; k < len; k++) {
             if (hasClass(toPayHeadline[k],'narrow-locked')){
@@ -528,17 +542,18 @@ function updatePageAction(){
         var dataObj = parseUrlSearch();//(2) ["premium=0", "standard=1"]
         vipCenter(dataObj);
         payWall('api/paywall.json');
+        console.log('userId is:'+userId1);
     }else{
-        var userId1 = getCookie('USER_ID') || ''
-        if (!userId1) {
+        var userId1 = getCookie('USER_ID') || '';
+        if (!!userId1) {  
             payWall('/index.php/jsapi/paywall?update');   
         }
     }
 }
 
 window.onload = function(){
+    
     updatePageAction();
-    // console.log('the lock?')
 }
 
 

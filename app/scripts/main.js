@@ -2576,8 +2576,8 @@ function displaystoryNormal(theid, language, forceTitle) {
     //insert to the end of the target paragraph
 
 
-    // if (isHasPaywall){
-    if (allId.paywall === 1 || allId.paywall === 2 ){
+    if (isHasPaywall){
+    // if (allId.paywall === 1 || allId.paywall === 2 ){
         var adInPaywall = $('.subscribe-lock-container');
         $('<div class="adiframe mpu-phone for-phone" type="250" frame="ad300x250-story"></div>').insertAfter(adInPaywall);
         
