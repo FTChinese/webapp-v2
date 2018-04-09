@@ -23,6 +23,8 @@
                 <li class="channel economy" url="/index.php/ft/channel/phonetemplate.html?channel=economy">经济</li>
                 <li class="channel markets" url="/index.php/ft/channel/phonetemplate.html?channel=markets">金融市场</li>
                 <li class="channel business" url="/index.php/ft/channel/phonetemplate.html?channel=business">商业</li>
+                <li class="channel innovation" url="/index.php/ft/channel/phonetemplate.html?channel=technology">科技</li>
+                <li class="channel education new" url="/index.php/ft/channel/phonetemplate.html?channel=education">教育</li>
                 <li class="channel innovation" url="/index.php/ft/channel/phonetemplate.html?channel=innovation">创新经济</li>
                 <li class="channel management" url="/index.php/ft/channel/phonetemplate.html?channel=management">管理</li>
                 <li class="channel lifestyle" url="/index.php/ft/channel/phonetemplate.html?channel=lifestyle">生活时尚</li>
@@ -34,6 +36,7 @@
                 <li class="channel vd" url="/index.php/ft/channel/phonetemplate.html?channel=speedread">金融英语速读</li>
                 <li class="channel markets" url="/index.php/ft/channel/phonetemplate.html?channel=fti">FT研究院</li>
                 <li class="channel hotstory" url="/index.php/ft/channel/phonetemplate.html?channel=month">热门文章</li>
+                <li class="channel hotstory" url="/index.php/ft/channel/phonetemplate.html?channel=ebook">热门文章</li>
                 <li class="channel clip require-log-in" url="/index.php/users/favstorylist?i=2">我的收藏</li>
             </ul>
         </div>
@@ -96,7 +99,7 @@
         </div>
 		<div id="o-connection-status"></div>
         <div class=copyright onclick="showConnectionStatus()">
-            <b>&copy; 英国金融时报</b> 有限公司 2017&nbsp;&nbsp;
+            <b>&copy; 英国金融时报</b> 有限公司 2018&nbsp;&nbsp;
             <span><acronym title="Financial Times">FT中文网</acronym>为英国金融时报的注册商标</span>
         </div>
         
@@ -354,7 +357,7 @@ background-color: rgba(0,0,0,0.14) !important;
                     </span>
                 </div>
                 <div class="fontSelect" onclick="setFontSize()">
-                    <div id=currentFont>默认</div>
+                    <div id=currentFont>默���</div>
                     <strong>字号大小</strong>					
 				</div>
                 <div class="standalonebutton"><button class="ui-light-btn" onclick="turnonOverlay('loginBox')">登录</button></div>                
@@ -628,7 +631,7 @@ background-color: rgba(0,0,0,0.14) !important;
 					<div>1. 全选并复制下方文字</div>
 					<textarea class="commentTextArea paste" rows=4 type="text" id="shareSinaWeibo"></textarea>
 				</div>
-                <div class="standalonebutton last-child"><a class="button ui-light-btn" href="weibo://" id="openWeibo">2. 打开微���客户端并粘贴</a></div>
+                <div class="standalonebutton last-child"><a class="button ui-light-btn" href="weibo://" id="openWeibo">2. 打开微博客户端并粘贴</a></div>
 			</div>
 		</div>
 	</div>

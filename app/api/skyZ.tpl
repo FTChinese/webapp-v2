@@ -18,6 +18,8 @@
                 <li class="channel economy" url="/index.php/ft/channel/phonetemplate.html?channel=economy">经济</li>
                 <li class="channel markets" url="/index.php/ft/channel/phonetemplate.html?channel=markets">金融市场</li>
                 <li class="channel business" url="/index.php/ft/channel/phonetemplate.html?channel=business">商业</li>
+                <li class="channel innovation" url="/index.php/ft/channel/phonetemplate.html?channel=technology">科技</li>
+                <li class="channel education new" url="/index.php/ft/channel/phonetemplate.html?channel=education">教育</li>
                 <li class="channel innovation" url="/index.php/ft/channel/phonetemplate.html?channel=innovation">创新经济</li>
                 <li class="channel management" url="/index.php/ft/channel/phonetemplate.html?channel=management">管理</li>
                 <li class="channel lifestyle" url="/index.php/ft/channel/phonetemplate.html?channel=lifestyle">生活时尚</li>
@@ -29,6 +31,7 @@
                 <li class="channel vd" url="/index.php/ft/channel/phonetemplate.html?channel=speedread">金融英语速读</li>
                 <li class="channel markets" url="/index.php/ft/channel/phonetemplate.html?channel=fti">FT研究院</li>
                 <li class="channel hotstory" url="/index.php/ft/channel/phonetemplate.html?channel=month">热门文章</li>
+                <li class="channel hotstory" url="/index.php/ft/channel/phonetemplate.html?channel=ebook">热门文章</li>
                 <li class="channel clip require-log-in" url="/index.php/users/favstorylist?i=2">我的收藏</li>
             </ul>
         </div>
@@ -64,11 +67,12 @@
 <div url="/index.php/ft/column/007000049?i=2" class="channel oneStory more first-child">经济人</div>
 <div url="/index.php/ft/column/007000072?i=2" class="channel oneStory more">公司治理新视野</div>
 <div url="/index.php/ft/column/007000010?i=2" class="channel oneStory more">中间论坛</div>
-<div url="/index.php/ft/column/007000005?i=2" class="channel oneStory more">第一时间解读</div>
-<div url="/index.php/ft/column/007000007?i=2" class="channel oneStory more">中国纪事</div>
-<div url="/index.php/ft/column/007000054?i=2" class="channel oneStory more">一知半解</div>
 <div url="/index.php/ft/column/007000044?i=2" class="channel oneStory more">天则横议</div>
 <div url="/index.php/ft/column/007000062?i=2" class="channel oneStory more">市值管理评论</div>
+<div url="/index.php/ft/column/007000074?i=2" class="channel oneStory more">远观近思</div>
+<div url="/index.php/ft/column/007000005?i=2" class="channel oneStory more">第一时间解读</div>
+<div url="/index.php/ft/column/007000054?i=2" class="channel oneStory more">一知半解</div>
+<div url="/index.php/ft/column/007000007?i=2" class="channel oneStory more">中国纪事</div>
 <div url="/index.php/ft/column/007000060?i=2" class="channel oneStory more">谈艺录</div>
 <div url="/index.php/ft/column/007000036?i=2" class="channel oneStory more">市场的边界</div>
 <div url="/index.php/ft/column/007000004?i=2" class="channel oneStory more">远观中国</div>
@@ -124,7 +128,7 @@
 </div>
 
 <div class=copyright>
-    <b><font face="arial">&copy; </font>英国金融时报</b> 有限公司 <font face="arial">2017</font>&nbsp;&nbsp;
+    <b><font face="arial">&copy; </font>英国金融时报</b> 有限公司 <font face="arial">2018</font>&nbsp;&nbsp;
     <span><acronym title="Financial Times">FT中文网</acronym>为英国金融时报的注册商标</span>
 </div>
 
