@@ -2569,11 +2569,11 @@ function displaystoryNormal(theid, language, forceTitle) {
     //insert to the end of the target paragraph
 
 
-    if (!!isFTCw){
-    // if (allId.paywall === 1 || allId.paywall === 2 ){
+    // if (!!isFTCw){
+    if (allId.paywall === 1 || allId.paywall === 2 ){
         var adInPaywall = $('.subscribe-lock-container');
         $('<div class="adiframe mpu-phone for-phone" type="250" frame="ad300x250-story"></div>').insertAfter(adInPaywall);
-        console.log('insert ad ??')
+        
     }else{
 
         if (insertAd > 0) {
@@ -4019,7 +4019,7 @@ function watchVideo(videoUrl, videoTitle, videoId, videoLead, videoImage,videoTa
     updateShare('http://www.ftchinese.com', 'http://www.ftchinese.com', '/video/', videoId, shareTitle, shareTitle, videoImage, shareLead, '');
 }
 
-// showSlide("/index.php/ft/interactive/11122?i=2","战争阴云笼罩下的达沃斯", 0);
+
 function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFrame){
     var randomTime = new Date().getTime();
     var url = slideUrl;
@@ -4044,7 +4044,7 @@ function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFra
     turnonOverlay('slideShow');
     urlMore = (url.indexOf('?')>0) ? '&' : '?';
     url = url + urlMore + randomTime;
-    console.log('url'+url);
+    // console.log('showSlide url'+url);
     if (typeof interactiveType === 'string') {
         interactiveTypeName = interactiveType;
     }
@@ -4052,12 +4052,16 @@ function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFra
         $('#slideShow').html('<iframe src="' + url + '" width="100%" height="100%" border=0 frameborder=0></iframe>');
         httpspv(gDeviceType + '/'+ interactiveTypeName +'/'+ slideUrl);
     } else {
+      
         $('#slideShow').html('<div id="bookstart" class=opening><span><font id="bookname" style="font-size:2em;">'+ slideTitle + '</font><p class=booklead id="booklead">获取内容...</p><p class=booklead id="loadstatus">触摸<b onclick="closeOverlay()">此处</b>返回</p></span></div>');
+        var data1 = '';
         $.get(url, function(data) {
-            data = checkhttps(data);
+            data1 = checkhttps(data);
             $('#slideShow').html(data);
             httpspv(gDeviceType + '/'+ interactiveTypeName +'/'+ slideUrl);
+            // console.log('showSlide data:'+data);
         });
+        // console.log('showSlide data2:'+data1);
     }
 }
 

@@ -206,6 +206,7 @@ function updateProductStatus(productIndex, isProductPurchased, isProductDownload
     }
 }
 
+
 // MARK: - Update DOM UI based on user actions
 function iapActions(productID, actionType, expireDate) {    
     var iapButtons='';
@@ -306,7 +307,6 @@ function getproductIndex(productID){
 // MARK: - Get url scheme for iOS buy and JS onclick code for Android
 function getBuyCode(productId, productPrice, userId, productName) {  
     // iapActions('ftc_premium_FT0101522812152', 'success', '')
-    
     if (!!userId){
         var buyCode = ''; 
         var priceForAndroid = '';
@@ -473,29 +473,29 @@ function updateLockClass(){
     var toPayHeadline =  getPayStory('narrow-locked','wide-locked');
     // console.log('updateLockClass:'+toPayHeadline.length);
     if (toPayHeadline.length>0){
-    for (var k = 0, len=toPayHeadline.length; k < len; k++) {
-        if (hasClass(toPayHeadline[k],'narrow-locked')){
-            removeClass(toPayHeadline[k], 'narrow-locked');
-            addClass(toPayHeadline[k], 'narrow-unlocked');
-        } else if(hasClass(toPayHeadline[k],'wide-locked')){
-            removeClass(toPayHeadline[k], 'wide-locked');
-            addClass(toPayHeadline[k], 'wide-unlocked');
+        for (var k = 0, len=toPayHeadline.length; k < len; k++) {
+            if (hasClass(toPayHeadline[k],'narrow-locked')){
+                removeClass(toPayHeadline[k], 'narrow-locked');
+                addClass(toPayHeadline[k], 'narrow-unlocked');
+            } else if(hasClass(toPayHeadline[k],'wide-locked')){
+                removeClass(toPayHeadline[k], 'wide-locked');
+                addClass(toPayHeadline[k], 'wide-unlocked');
+            }
         }
-    }
     }
 }
 function updateUnlockClass(){
     var toPayHeadline =  getPayStory('narrow-unlocked','wide-unlocked');
     if (toPayHeadline.length>0){
-    for (var k = 0, len=toPayHeadline.length; k < len; k++) {
-        if (hasClass(toPayHeadline[k],'narrow-unlocked')){
-            removeClass(toPayHeadline[k], 'narrow-unlocked');
-            addClass(toPayHeadline[k], 'narrow-locked');
-        } else if(hasClass(toPayHeadline[k],'wide-unlocked')){
-            removeClass(toPayHeadline[k], 'wide-unlocked');
-            addClass(toPayHeadline[k], 'wide-locked');
-        } 
-    }
+        for (var k = 0, len=toPayHeadline.length; k < len; k++) {
+            if (hasClass(toPayHeadline[k],'narrow-unlocked')){
+                removeClass(toPayHeadline[k], 'narrow-unlocked');
+                addClass(toPayHeadline[k], 'narrow-locked');
+            } else if(hasClass(toPayHeadline[k],'wide-unlocked')){
+                removeClass(toPayHeadline[k], 'wide-unlocked');
+                addClass(toPayHeadline[k], 'wide-locked');
+            } 
+        }
     }
 }
 function hasClass(ele, cls) {
