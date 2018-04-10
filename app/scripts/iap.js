@@ -194,7 +194,6 @@ function displayProducts(products, page, pageTitle,dataObj) {
           var url = $(this).attr('url');
         //   window.location.href = url;
           window.open(url);
-          console.log('open policy');
         });
     }
 }
@@ -328,11 +327,13 @@ function getBuyCode(productId, productPrice, userId, productName) {
             buyCode = ' href="buy://' + productId + '"';
         } else {           
             buyCode = ' onclick="ftjavacriptapp.payzfb(\''+ productId +'\',\''+ priceForAndroid +'\',\''+ userId +'\',\''+ productName +'\')"';
+
+            ga('send','event','android member subscribe','openPayment',productId);
         }
 
         return buyCode;
     }
-    ga('send','event','android member subscribe','openPayment',productId);
+    
     
 }
 

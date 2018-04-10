@@ -349,7 +349,8 @@ function startpage() {
     $('body').on('click', '.iap-channel', function(){
          if (window.location.hostname === 'localhost' || window.location.hostname.indexOf('192.168') === 0 || window.location.hostname.indexOf('127.0') === 0) {
             var iapAction = $(this).attr('iap-action');
-            var iapTitle = $(this).attr('iap-title') || $(this).html() || 'FT中文网';
+            var iapTitle = $(this).attr('iap-title')|| 'FT中文网';
+            var channelType = $(this).attr('channel-type');
             payWallUpdateSub('api/paywall.json',iapAction,iapTitle);   
          }else{
             var getUserId = getCookie('USER_ID');
@@ -357,11 +358,13 @@ function startpage() {
                 turnonOverlay('loginBox');
             }else{
                 var iapAction = $(this).attr('iap-action');
-                var iapTitle = $(this).attr('iap-title') || $(this).html() || 'FT中文网';
+                var iapTitle = $(this).attr('iap-title')|| 'FT中文网';
+                var channelType = $(this).attr('channel-type');
                 var dataObj = payWallUpdateSub('/index.php/jsapi/paywall?3',iapAction,iapTitle);
             } 
+            console.log('channelType:'+channelType);
             
-            ga('send','event','android member subscribe','subscribe now',iapTitle+' '+selectedStoryId);
+            ga('send','event','android member subscribe','subscribe now',channelType+' '+selectedStoryId);
          }
 
     });
@@ -2281,9 +2284,17 @@ function displaystory(theid, language, forceTitle) {
 //     });
 //     updateAds();
 // }
-var paywallHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="lock-content">如果已经是会员，请<a href="http://user.ftchinese.com/login">点击这里</a>登录</div><div class="subscribe-btn iap-channel" iap-action="membership" iap-title="会员"><span style="color:white">成为会员&#x25BA;</span></div></div></div>';
 
-var downloadHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">使用FT中文网 iOS应用</div><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="subscribe-btn"><span><a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.ft#" target="_blank" style="color:white">下载应用&#x25BA;︎</a></span></div></div></div>';
+
+
+function getpaywallHint(channelType){
+   var paywallHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="lock-content">如果已经是会员，请<a href="http://user.ftchinese.com/login">点击这里</a>登录</div><div class="subscribe-btn iap-channel" iap-action="membership" iap-title="会员" channel-type='+channelType+'><span style="color:white">成为会员&#x25BA;</span></div></div></div>'; 
+   return paywallHintHtml;
+}
+function getdownloadHint(channelType){
+    var downloadHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">使用FT中文网 iOS应用</div><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="subscribe-btn" channel-type='+channelType+'><span><a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.ft#" target="_blank" style="color:white">下载应用&#x25BA;︎</a></span></div></div></div>';
+    return downloadHintHtml;
+}
 
 
 var selectedStoryId = '';
@@ -2400,12 +2411,12 @@ function displaystoryNormal(theid, language, forceTitle) {
             $('#storyview .storybody').html(storyimage).append(allId.ebody);
             isHasPaywall = false;
         }else{
-            if (allId.paywall === 2){
-                $('#storyview .storybody').html(storyimage).append(paywallHintHtml);
+            if (allId.paywall === 2){ 
+                $('#storyview .storybody').html(storyimage).append(getpaywallHint('story_'+theid+'_'+actualLanguage));
             }else if (allId.paywall === 1){
-                $('#storyview .storybody').html(storyimage).append(downloadHintHtml);
+                $('#storyview .storybody').html(storyimage).append(getdownloadHint('story_'+theid+'_'+actualLanguage));
             }else{
-                $('#storyview .storybody').html(storyimage).append(downloadHintHtml);
+                $('#storyview .storybody').html(storyimage).append(getdownloadHint('story_'+theid+'_'+actualLanguage));
                 // $('#storyview .storybody').html(storyimage).append(allId.ebody);
             }
             isHasPaywall = true;
@@ -2463,15 +2474,15 @@ function displaystoryNormal(theid, language, forceTitle) {
             isHasPaywall = false;
         }else{
             if (allId.paywall === 2 || isStoryBeforeOneWeek){
-                $('#storyview .storybody').html(paywallHintHtml);
+                $('#storyview .storybody').html(getpaywallHint('story_'+theid+'_'+actualLanguage));
             }else if (allId.paywall === 1 || isStoryBeforeOneWeek){
-                $('#storyview .storybody').html(downloadHintHtml);
+                $('#storyview .storybody').html(getdownloadHint('story_'+theid+'_'+actualLanguage));
             }else{
-                $('#storyview .storybody').html(downloadHintHtml);
+                $('#storyview .storybody').html(getdownloadHint('story_'+theid+'_'+actualLanguage));
                 // $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
             }
             isHasPaywall = true;
-            ga('send','event','android member subscribe','story to pay',theid + ' ' + actualLanguage);
+            // ga('send','event','android member subscribe','story to pay',theid + ' ' + actualLanguage);
         }
 
         
@@ -2498,14 +2509,16 @@ function displaystoryNormal(theid, language, forceTitle) {
             isHasPaywall = false;
         }else{
             if (allId.paywall === 2 || isStoryBeforeOneWeek){
-                $('#storyview .storybody').html(storyimage).append(paywallHintHtml);
+                $('#storyview .storybody').html(storyimage).append(getpaywallHint('story_'+theid+'_'+actualLanguage));
+                ga('send','event','android member subscribe','story to pay',theid + ' ' + actualLanguage);
             }else if (allId.paywall === 1 || isStoryBeforeOneWeek){
-                $('#storyview .storybody').html(storyimage).append(downloadHintHtml);
+                $('#storyview .storybody').html(storyimage).append(getdownloadHint('story_'+theid+'_'+actualLanguage));
+                ga('send','event','android member subscribe','story to pay',theid + ' ' + actualLanguage);
             }else{
                 $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));
             }
             isHasPaywall = true;
-            ga('send','event','android member subscribe','story to pay',theid + ' ' + actualLanguage);
+            
        }  
         if (allId.cbody.indexOf('inlinevideo')>=0) {
             $('#storyview .storybody .inlinevideo').each(function (){
@@ -4071,20 +4084,21 @@ function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFra
             data1 = checkhttps(data);
             $('#slideShow').html(data);
             setTimeout(function(){
-                blockDailyEnglish();
+                blockDailyEnglish(url);
             },500);
             httpspv(gDeviceType + '/'+ interactiveTypeName +'/'+ slideUrl);
         });
     }
 }
-function blockDailyEnglish(){ 
+function blockDailyEnglish(url){ 
     var content = $('#scrollcontainer').html();
     var isFTCpw = Boolean(Number(getCookie('isFTCw')));
     var content = $('.bottom-part').html();
     if(isFTCpw){
         $('.prev-next').hide();
-        $('#scrollcontainer').html(downloadHintHtml);
-        $('.bottom-part').html('<div style="text-align: center;">成为付费会员，阅读FT独家内容<br>请<a href="http://www.ftacademy.cn/subscription.html" style="color:#26747a">点击此处</a> 。</div>');
+        $('#scrollcontainer').html(getdownloadHint(url));
+        $('.bottom-part').html('<div channel-type='+url+' style="text-align: center;">成为付费会员，阅读FT独家内容<br>请<a href="http://www.ftacademy.cn/subscription.html" style="color:#26747a">点击此处</a> 。</div>');
+        ga('send','event','android member subscribe','daily english to pay', url);
     }else{
         $('.prev-next').show();
         $('#scrollcontainer').html(content);
