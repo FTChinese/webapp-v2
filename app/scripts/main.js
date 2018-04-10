@@ -4071,13 +4071,13 @@ function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFra
             data1 = checkhttps(data);
             $('#slideShow').html(data);
             setTimeout(function(){
-                blockDaillyEnglish();
+                blockDailyEnglish();
             },500);
             httpspv(gDeviceType + '/'+ interactiveTypeName +'/'+ slideUrl);
         });
     }
 }
-function blockDaillyEnglish(){ 
+function blockDailyEnglish(){ 
     var content = $('#scrollcontainer').html();
     var isFTCpw = Boolean(Number(getCookie('isFTCw')));
     var content = $('.bottom-part').html();
