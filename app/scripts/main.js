@@ -364,7 +364,7 @@ function startpage() {
             } 
             console.log('channelType:'+channelType);
             
-            ga('send','event','android member subscribe','subscribe now',channelType+' '+selectedStoryId);
+            ga('send','event','android member subscribe','subscribe now',channelType);
          }
 
     });
@@ -2482,7 +2482,7 @@ function displaystoryNormal(theid, language, forceTitle) {
                 // $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
             }
             isHasPaywall = true;
-            // ga('send','event','android member subscribe','story to pay',theid + ' ' + actualLanguage);
+            ga('send','event','android member subscribe','story to pay',theid + ' ' + actualLanguage);
         }
 
         
