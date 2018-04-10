@@ -4083,7 +4083,7 @@ function blockDailyEnglish(){
     var content = $('.bottom-part').html();
     if(isFTCpw){
         $('.prev-next').hide();
-        $('#scrollcontainer').html(paywallHintHtml);
+        $('#scrollcontainer').html(downloadHintHtml);
         $('.bottom-part').html('<div style="text-align: center;">成为付费会员，阅读FT独家内容<br>请<a href="http://www.ftacademy.cn/subscription.html" style="color:#26747a">点击此处</a> 。</div>');
     }else{
         $('.prev-next').show();
