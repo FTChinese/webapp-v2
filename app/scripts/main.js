@@ -4054,6 +4054,7 @@ function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFra
     turnonOverlay('slideShow');
     urlMore = (url.indexOf('?')>0) ? '&' : '?';
     url = url + urlMore + randomTime;
+    var domain = document.location.origin;
     // console.log('showSlide url'+url);
     if (typeof interactiveType === 'string') {
         interactiveTypeName = interactiveType;
@@ -4065,15 +4066,33 @@ function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFra
       
         $('#slideShow').html('<div id="bookstart" class=opening><span><font id="bookname" style="font-size:2em;">'+ slideTitle + '</font><p class=booklead id="booklead">获取内容...</p><p class=booklead id="loadstatus">触摸<b onclick="closeOverlay()">此处</b>返回</p></span></div>');
         var data1 = '';
+      
         $.get(url, function(data) {
             data1 = checkhttps(data);
             $('#slideShow').html(data);
+            setTimeout(function(){
+                blockDaillyEnglish();
+            },500);
             httpspv(gDeviceType + '/'+ interactiveTypeName +'/'+ slideUrl);
-            // console.log('showSlide data:'+data);
         });
-        // console.log('showSlide data2:'+data1);
     }
 }
+function blockDaillyEnglish(){ 
+    var content = $('#scrollcontainer').html();
+    var isFTCpw = Boolean(Number(getCookie('isFTCw')));
+    var content = $('.bottom-part').html();
+    if(isFTCpw){
+        $('.prev-next').hide();
+        $('#scrollcontainer').html(paywallHintHtml);
+        $('.bottom-part').html('<div style="text-align: center;">成为付费会员，阅读FT独家内容<br>请<a href="http://www.ftacademy.cn/subscription.html" style="color:#26747a">点击此处</a> 。</div>');
+    }else{
+        $('.prev-next').show();
+        $('#scrollcontainer').html(content);
+        $('.bottom-part').html(content);
+    }
+     
+}
+
 
 function showPicture (link) {
     turnonOverlay('watchVideo');
