@@ -113,9 +113,45 @@ function startTrackingAdViews(scrollerId) {
   //console.log (scrollerId + ' scroll event listened');
 }
 
+function getAdChannelId() {
+  //var matchSpecial = false;
+
+  if (window.gSpecialAnchors && window.gSpecialAnchors.length > 0 && window.gTagData.length >0) {
+    for (var i=0; i < window.gSpecialAnchors.length; i++) {
+        // MARK: - this is added per request of ad sales
+        // MARK: - to exclude situations where ad sales don't want to invoke sponsored special report code
+        var useSpecialCode = true;
+        try {
+            if (gNowView === 'storyview' && window.gSpecialAnchors[i].adid === '2062') {
+                useSpecialCode = false;
+            }
+        } catch (ignore) {
+            
+        }
+        var keywordsOfCurrentPage = window.gTagData;
+        var keywordForCheck = window.gSpecialAnchors[i].tag;
+        if (keywordForCheck.indexOf('http') >= 0 && window.gSpecialAnchors[i].channel) {
+            keywordForCheck = window.gSpecialAnchors[i].channel;
+        }
+
+        if (useSpecialCode === true && keywordsOfCurrentPage.indexOf(keywordForCheck) >=0) {
+            return window.gSpecialAnchors[i].adid;
+            //matchSpecial = true;
+        }
+    }
+  }
+  return '1000';
+}
 // MARK: - 刷新广告位
 function updateAds() {
    console.log('execute updateAds');
+   try {
+    console.log('adChannelId', getAdChannelId());
+
+   } catch (ignore) {
+
+   }
+
     var nowV = gNowView;
     var isColumnFlow = false;
     var currentViewPortAds;
