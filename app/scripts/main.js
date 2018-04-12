@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1248; //当前的版本号
+var _currentVersion = 1249; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -3179,6 +3179,7 @@ function httpspv(theurl) {
         console.log(gHideAd);
         try {
             updateAds(); //wyc Note:这里会有错，然后导致后面的全部无法执行
+            //updateAdsDB();
         } catch (ignore) {
 
         }
