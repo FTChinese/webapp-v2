@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1248; //当前的版本号
+var _currentVersion = 1249; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -2420,7 +2420,7 @@ function displaystoryNormal(theid, language, forceTitle) {
                 // $('#storyview .storybody').html(storyimage).append(allId.ebody);
             }
             isHasPaywall = true;
-            ga('send','event','android member subscribe','story to pay',theid + ' ' + actualLanguage);
+            ga('send','event','android member subscribe','subscribe hint','storyid:'+theid + '_' + actualLanguage);
         }
         
         $('.enbutton').addClass('nowreading');
@@ -2482,7 +2482,7 @@ function displaystoryNormal(theid, language, forceTitle) {
                 // $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
             }
             isHasPaywall = true;
-            ga('send','event','android member subscribe','story to pay',theid + ' ' + actualLanguage);
+            ga('send','event','android member subscribe','subscribe hint','storyid:'+theid + '_' + actualLanguage);
         }
 
         
@@ -2510,10 +2510,10 @@ function displaystoryNormal(theid, language, forceTitle) {
         }else{
             if (allId.paywall === 2 || isStoryBeforeOneWeek){
                 $('#storyview .storybody').html(storyimage).append(getpaywallHint('story_'+theid+'_'+actualLanguage));
-                ga('send','event','android member subscribe','story to pay',theid + ' ' + actualLanguage);
+                ga('send','event','android member subscribe','subscribe hint','storyid:'+theid + '_' + actualLanguage);
             }else if (allId.paywall === 1 || isStoryBeforeOneWeek){
                 $('#storyview .storybody').html(storyimage).append(getdownloadHint('story_'+theid+'_'+actualLanguage));
-                ga('send','event','android member subscribe','story to pay',theid + ' ' + actualLanguage);
+                ga('send','event','android member subscribe','subscribe hint','storyid:'+theid + '_' + actualLanguage);
             }else{
                 $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));
             }
@@ -4099,7 +4099,7 @@ function blockDailyEnglish(url){
         $('.prev-next').hide();
         $('#scrollcontainer').html(getdownloadHint(url));
         $('.bottom-part').html('<div channel-type='+url+' style="text-align: center;">成为付费会员，阅读FT独家内容<br>请<a href="http://www.ftacademy.cn/subscription.html" style="color:#26747a">点击此处</a> 。</div>');
-        ga('send','event','android member subscribe','daily english to pay', url);
+        ga('send','event','android member subscribe','subscribe hint', url);
     }else{
         $('.prev-next').show();
         $('#scrollcontainer').html(content);
