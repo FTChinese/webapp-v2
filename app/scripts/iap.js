@@ -1,3 +1,30 @@
+// FT010 123 1522033086
+// （标准会员——FT + 010 + 000~999随机数 + 时间戳）
+// （高级会员——FT + 100 + 000~999随机数 + 时间戳）
+// function getOrderNum(memberNum){
+//     var randomVal = Math.round(Math.random()*999);
+//     var newRandomVal = '';
+//     var orderNum = '';
+//     if (Math.floor(randomVal/10) === 0){
+//         newRandomVal = '00' + randomVal;
+//     }else if(String(Math.floor(randomVal%100)).length === 2){
+//         newRandomVal = '0' + randomVal;
+//     }else{
+//         newRandomVal = randomVal;
+//     }
+//     var time = Math.round(new Date().getTime()/1000);   
+//     orderNum = 'FT' + memberNum + newRandomVal + time;
+//     return orderNum;
+// }
+
+function getOrderNum(memberNum){
+    var randomVal = Math.round(Math.random()*899)+100;
+    var orderNum = '';
+    var time = Math.round(new Date().getTime()/1000);   
+    orderNum = 'FT' + memberNum + randomVal + time;
+    return orderNum;
+}
+
 window.iapProducts = [{title: '标准会员',price: '¥198.00',id: 'ftc_premium',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为标准会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 精选深度分析','- 中英双语内容','- 金融英语速读训练','- 英语原声电台','- 无限浏览7日前所有历史文章（近8万篇）'],period:'year'},{title: '高端会员',price: '¥1,998.00',id: 'ftc_standard',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为高端会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 享受“标准会员”所有权益','- 编辑精选，总编/各版块主编每周五为您推荐本周必读资讯，分享他们的思考与观点','- FT中文网2018年度论坛门票2张，价值3999元/张 （不含差旅与食宿）'],period:'year'}];
 
 var subscribeIntruction = {
@@ -6,25 +33,6 @@ var subscribeIntruction = {
         {headline: '订阅价格与周期', lead: '您可以在应用内订阅《FT中文网会员》和《FT中文网高端会员》两种服务。《FT中文网会员》每年订阅价格为 198元（$28.99），订阅后您可以解锁阅读FT中文网每日新增的两篇独家文章内容，以及解锁双语文章的英语语音服务。《FT中文网高端会员》每年订阅价格为 1998元（$294.99），订阅后您可以解锁《FT中文网会员》提供的所有服务，再加上每周的《编辑精选》周刊。'}
     ],
     moreService: ['隐私申明','用户协议','反馈']
-}
-// FT010 123 1522033086
-// （标准会员——FT + 010 + 000~999随机数 + 时间戳）
-// （高级会员——FT + 100 + 000~999随机数 + 时间戳）
-
-function getOrderNum(memberNum){
-    var randomVal = Math.round(Math.random()*999);
-    var newRandomVal = '';
-    var orderNum = '';
-    if (Math.floor(randomVal/10) === 0){
-        newRandomVal = '00' + randomVal;
-    }else if(String(Math.floor(randomVal%100)).length === 2){
-        newRandomVal = '0' + randomVal;
-    }else{
-        newRandomVal = randomVal;
-    }
-    var time = Math.round(new Date().getTime()/1000);   
-    orderNum = 'FT' + memberNum + time;
-    return orderNum;
 }
 
 function getSubscribeIntructionHtml(){
@@ -99,17 +107,20 @@ function getProductHTMLCode(products, forGroup, dataObj) {
                 var productBenefits = '';
                 var benefitsArray = [];
                 var productName = products[i].title || '';
+
+                var memberNum = (products[i].title == '高端会员') ? '100' : '010';
+                var orderNum = getOrderNum(memberNum);
                 
                 if(dataObj.standard===1 && dataObj.premium===0){
                     products[0].isPurchased = true;
                     products[0].state = '<button class="iap-move-left">已订阅</button>';
-                    products[1].state = '<a'+getBuyCode(products[1].id, productPrice, gUserId, productName)+'><button class="iap-move-left">现在升级</button></a>';
+                    products[1].state = '<a'+getBuyCode(products[1].id, productPrice, gUserId, productName, orderNum)+'><button class="iap-move-left">现在升级</button></a>';
                 }else if(dataObj.premium===1){
                     products[i].isPurchased = true;
                     products[i].state = '<button class="iap-move-left">已订阅</button>';
                 }else{
                     products[i].isPurchased = false;
-                    products[i].state = '<a'+getBuyCode(products[i].id, productPrice, gUserId, productName)+'><button class="iap-move-left">订阅</button></a>';
+                    products[i].state = '<a'+getBuyCode(products[i].id, productPrice, gUserId, productName, orderNum)+'><button class="iap-move-left">订阅</button></a>';
                 }
                 if(!isEmptyObj(dataObj)){
                     console.log(products[i].id);
@@ -125,7 +136,7 @@ function getProductHTMLCode(products, forGroup, dataObj) {
                 // } else {
                 //     if (products[i].group === 'membership') {
                 //         // MARK: - Button HTML for membership
-                //         productActionButton = '<div class="iap-button" product-id="' + products[i].id + '" product-price="' + productPrice + '" product-title="' + productName + '"><a'+getBuyCode(products[i].id, productPrice, gUserId, productName)+'><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + products[i].price + '/年' + '</p></div>';
+                //         productActionButton = '<div class="iap-button" product-id="' + products[i].id + '" product-price="' + productPrice + '" product-title="' + productName + '"><a'+getBuyCode(products[i].id, productPrice, gUserId, productName, orderNum)+'><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + products[i].price + '/年' + '</p></div>';
                 //     }
                 }
                 // MARK: - use onclick to capture click rather than jQuery's body.on, which is buggy on iPhone
@@ -224,8 +235,8 @@ function iapActions(productID, actionType, expireDate) {
     } else if (gNowView.indexOf('channelview') >= 0) {
         currentView = 'channelview';
     }
-    var productIDArr = productID.split('_');
-    productID = productIDArr[0]+'_'+productIDArr[1];
+    var productIDArr = productID.substring(2,5);
+    productID = (productIDArr == '100') ? 'ft_premium' : 'ft_standard';
     // alert('productID'+productID);
     
     iapButtons = document.getElementById(currentView).querySelectorAll('.iap-button');
@@ -249,7 +260,7 @@ function iapActions(productID, actionType, expireDate) {
     }else if (/standard$/.test(productID)){
         memberNum = '100';
     } 
-    var orderNum = getOrderNum(memberNum);
+    var orderNum = productID;
     console.log(':productID:'+productID+':orderNum:'+orderNum+':productPrice:'+productPrice+':actionType:'+actionType);
     // alert(':productID:'+productID+':orderNum:'+orderNum+':productPrice:'+productPrice+':actionType:'+actionType);
     postPayState(productID, productPrice, gUserId, orderNum, actionType);
@@ -271,7 +282,7 @@ function iapActions(productID, actionType, expireDate) {
             if (productType === 'membership') {  
                 // alert('交易失败，您的钱还在口袋里');
                 turnonOverlay('iap-hint');
-                iapHTMLCode = '<a'+getBuyCode(productID, productPrice, gUserId, productName)+'><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>'; 
+                iapHTMLCode = '<a'+getBuyCode(productID, productPrice, gUserId, productName, orderNum)+'><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>'; 
             } 
             updateProductStatus(productIndex, false, false); 
             break;
@@ -284,7 +295,7 @@ function iapActions(productID, actionType, expireDate) {
                 iapButtons[i].innerHTML = iapHTMLCode; 
             } else if (productID === '') {
                 // 这里应该一直不会执行
-                iapHTMLCode = '<a'+getBuyCode(iapButtons[i].getAttribute('product-id'), iapButtons[i].getAttribute('product-price'), gUserId, iapButtons[i].getAttribute('product-title'))+'><button class="iap-move-left">' + productPrice + '</button></a>';
+                iapHTMLCode = '<a'+getBuyCode(iapButtons[i].getAttribute('product-id'), iapButtons[i].getAttribute('product-price'), gUserId, iapButtons[i].getAttribute('product-title'), orderNum)+'><button class="iap-move-left">' + productPrice + '</button></a>';
                 iapButtons[i].innerHTML = iapHTMLCode;
             }
         }
@@ -307,7 +318,7 @@ function getproductIndex(productID){
 }
 
 // MARK: - Get url scheme for iOS buy and JS onclick code for Android
-function getBuyCode(productId, productPrice, userId, productName) {  
+function getBuyCode(productId, productPrice, userId, productName, orderNum) {  
     if (!!userId){
         var buyCode = ''; 
         var priceForAndroid = '';
@@ -317,19 +328,14 @@ function getBuyCode(productId, productPrice, userId, productName) {
         }else if (/standard$/.test(productId)){
             memberNum = '100';
         }
-        var orderNum = getOrderNum(memberNum);
 
-        productId = productId + '_' + orderNum;
+        productId = orderNum;
 
         priceForAndroid = '0.01';
 
-        if(osVersion.indexOf('Android')<0){
-            buyCode = ' href="buy://' + productId + '"';
-        } else {           
-            buyCode = ' onclick="ftjavacriptapp.payzfb(\''+ productId +'\',\''+ priceForAndroid +'\',\''+ userId +'\',\''+ productName +'\')"';
+        buyCode = ' onclick="ftjavacriptapp.payzfb(\''+ productId +'\',\''+ priceForAndroid +'\',\''+ userId +'\',\''+ productName +'\')"';
 
-            ga('send','event','android member subscribe','openPayment',productId);
-        }
+        ga('send','event','android member subscribe','openPayment',productId);
 
         return buyCode;
     }
@@ -350,7 +356,7 @@ function getBuyCode(productId, productPrice, userId, productName) {
 function postPayState(productId, productPrice, userId, orderNum, actionType){
     if (!!userId){
         var xhrpw = new XMLHttpRequest();
-        xhrpw.open('post', './index.php/pay/app');
+        xhrpw.open('post', './index.php/pay/app?token=1');
         xhrpw.setRequestHeader('Content-Type', 'application/text');
         var payInfo = {
             productId:productId,
