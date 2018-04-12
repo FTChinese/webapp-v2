@@ -3178,6 +3178,7 @@ function httpspv(theurl) {
         console.log(gHideAd);
         try {
             updateAds(); //wyc Note:这里会有错，然后导致后面的全部无法执行
+            //updateAdsDB();
         } catch (ignore) {
 
         }
