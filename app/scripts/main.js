@@ -2509,10 +2509,10 @@ function displaystoryNormal(theid, language, forceTitle) {
             $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));     
             isHasPaywall = false;
         }else{
-            if (allId.paywall === 1 || isStoryBeforeOneWeek){
+            if (allId.paywall === 2 || isStoryBeforeOneWeek){
                 $('#storyview .storybody').html(storyimage).append(getpaywallHint('story_'+theid+'_'+actualLanguage));
                 ga('send','event','android member subscribe','subscribe hint','storyid:'+theid + '_' + actualLanguage);
-            }else if (allId.paywall === 2 || isStoryBeforeOneWeek){
+            }else if (allId.paywall === 1 || isStoryBeforeOneWeek){
                 $('#storyview .storybody').html(storyimage).append(getdownloadHint('story_'+theid+'_'+actualLanguage));
                 ga('send','event','android member subscribe','subscribe hint','storyid:'+theid + '_' + actualLanguage);
             }else{
