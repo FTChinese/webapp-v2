@@ -363,8 +363,8 @@ function startpage() {
                 var dataObj = payWallUpdateSub('/index.php/jsapi/paywall?3',iapAction,iapTitle);
             } 
             console.log('channelType:'+channelType);
-            
-            ga('send','event','android member subscribe','subscribe now',channelType);
+            var url = window.location.hash;
+            ga('send','event','android member subscribe','subscribe now','url:'+url+'type:'+channelType);
          }
 
     });

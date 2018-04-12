@@ -1,21 +1,6 @@
 // FT010 123 1522033086
 // （标准会员——FT + 010 + 000~999随机数 + 时间戳）
 // （高级会员——FT + 100 + 000~999随机数 + 时间戳）
-// function getOrderNum(memberNum){
-//     var randomVal = Math.round(Math.random()*999);
-//     var newRandomVal = '';
-//     var orderNum = '';
-//     if (Math.floor(randomVal/10) === 0){
-//         newRandomVal = '00' + randomVal;
-//     }else if(String(Math.floor(randomVal%100)).length === 2){
-//         newRandomVal = '0' + randomVal;
-//     }else{
-//         newRandomVal = randomVal;
-//     }
-//     var time = Math.round(new Date().getTime()/1000);   
-//     orderNum = 'FT' + memberNum + newRandomVal + time;
-//     return orderNum;
-// }
 
 function getOrderNum(memberNum){
     var randomVal = Math.round(Math.random()*899)+100;
@@ -264,7 +249,9 @@ function iapActions(productID, actionType, expireDate) {
     console.log(':productID:'+productID+':orderNum:'+orderNum+':productPrice:'+productPrice+':actionType:'+actionType);
     // alert(':productID:'+productID+':orderNum:'+orderNum+':productPrice:'+productPrice+':actionType:'+actionType);
     postPayState(productID, productPrice, gUserId, orderNum, actionType);
-    ga('send','event','android member subscribe','toPay',productID + ' ' + actionType);
+    var url = window.location.hash;
+    ga('send','event','android member subscribe','toPay','url:'+ url + 'productId:' +  productID + 'buyState:' + actionType);
+
     // MARK: - iapHTMLCode is used for home and channel page, iapRailHTML is used for product detail page
     switch (actionType) { 
         case 'success':
@@ -332,15 +319,14 @@ function getBuyCode(productId, productPrice, userId, productName, orderNum) {
         productId = orderNum;
 
         priceForAndroid = '0.01';
+        if(osVersion.indexOf('Android')>=0){
+            buyCode = ' onclick="ftjavacriptapp.payzfb(\''+ productId +'\',\''+ priceForAndroid +'\',\''+ userId +'\',\''+ productName +'\')"';
 
-        buyCode = ' onclick="ftjavacriptapp.payzfb(\''+ productId +'\',\''+ priceForAndroid +'\',\''+ userId +'\',\''+ productName +'\')"';
-
-        ga('send','event','android member subscribe','openPayment',productId);
-
+            var url = window.location.hash;
+            ga('send','event','android member subscribe','openPayment','url:'+url+'productId:'+productId);
+        }
         return buyCode;
-    }
-    
-    
+    } 
 }
 
 // 测试付费成功与否的地方
