@@ -155,6 +155,9 @@ function insertDBSourceScript() {
             +  adChannelId +'0301", [[320,80],[375, 94],[414, 104]], "Mobile-Banner-Num1"). addService(googletag.pubads()));'
             
             + 'gptadslots.push(googletag.defineSlot("/80682004/AndroidApp-4000/4000' 
+            +  adChannelId +'0401", [300,250], "Mobile-MPU-Middle1"). addService(googletag.pubads()));'
+
+            + 'gptadslots.push(googletag.defineSlot("/80682004/AndroidApp-4000/4000' 
             +  adChannelId +'0302", [[320,80],[375, 94],[414, 104]], "Mobile-Banner-Num2"). addService(googletag.pubads()));'
             
         
@@ -237,9 +240,9 @@ function updateAds() {
                     } else if (adFrame === 'banner-paid-post-home-2') {
                       adName = 'Information-Num2'
                     } else if (adFrame =='ad300x600-SP' || adFrame ==='ad300x600' || adFrame === 'ad300x250' || adFrame === 'ad300x250-e' || adFrame === 'ad300x250-home' || adFrame === 'ad300x250-story') {
-                      adName = 'MPU-Middle1';
+                      adName = 'Mobile-MPU-Middle1';
                     } else if (adFrame === 'ad300x250-SP' || adFrame === 'ad300x250-2' || adFrame === 'ad300x250-story-bottom' || adFrame === 'ad300x250-story-vw') {
-                      adName = 'MPU-Middle2';
+                      adName = 'Mobile-MPU-Middle2';
                     }
 
                     var adClass = 'db-ad';
@@ -250,7 +253,7 @@ function updateAds() {
                     }
 
                     
-                    if (window.location.search.indexOf('testDB=yes') > 0 && (adName === 'Mobile-Banner-Num1' || adName === 'Mobile-Banner-Num2') && adChannelId === '1000') {
+                    if (window.location.search.indexOf('testDB=yes') > 0 && (adName === 'Mobile-Banner-Num1' || adName === 'Mobile-Banner-Num2' || adName === 'Mobile-MPU-Middle1') && adChannelId === '1000') {
                       console.log('show db ad');
                       var adCode = ' <div id="'+ adName +'" class ="' + adClass + '"style="padding-top:0;"><scr'+'ipt>googletag.cmd.push(function() { googletag.display("'+ adName +'")})</scr'+'ipt></div>';
             
