@@ -551,11 +551,11 @@ function updatePageAction(){
         }else{
             setCookie('isFTCw', 1, '', '/');
         }
+        payWall('/index.php/jsapi/paywall?onload');
     }
 }
 
 window.onload = function(){
-    
     updatePageAction();
 }
 
