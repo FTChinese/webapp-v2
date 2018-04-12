@@ -2299,6 +2299,7 @@ function getdownloadHint(channelType){
 
 var selectedStoryId = '';
 function displaystoryNormal(theid, language, forceTitle) {
+    
     selectedStoryId = theid;
     
     var columnintro = ''; 
@@ -2358,7 +2359,7 @@ function displaystoryNormal(theid, language, forceTitle) {
         // console.log(Number(allId.last_publish_time)+604800);
     }
 
-    var isFTCw = Boolean(Number(getCookie('isFTCw')));
+    var isFTCw = (!getCookie('isFTCw')) ? true : Boolean(Number(getCookie('isFTCw')));
     let isHasPaywall = false;
    
     //文章的scroller
