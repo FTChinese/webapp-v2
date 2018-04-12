@@ -2360,7 +2360,7 @@ function displaystoryNormal(theid, language, forceTitle) {
     }
 
     var isFTCw = (!getCookie('isFTCw')) ? true : Boolean(Number(getCookie('isFTCw')));
-    let isHasPaywall = false;
+    var isHasPaywall = false;
    
     //文章的scroller
     addStoryScroller();
