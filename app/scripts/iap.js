@@ -80,9 +80,11 @@ function isEmptyObj(dataObj){
      }
 }
 function getProductHTMLCode(products, forGroup, dataObj) {
+    
     var productsHTML = '';
     var currentGroup = '';
     var productLen = products.length;
+    var gUserId = getCookie('USER_ID') || '';
     if (typeof products === 'object' && productLen > 0) {
         for (var i = 0; i < productLen; i++) {
             if (forGroup === products[i].group) {
@@ -106,6 +108,7 @@ function getProductHTMLCode(products, forGroup, dataObj) {
                 }else{
                     products[i].isPurchased = false;
                     products[i].state = '<a'+getBuyCode(products[i].id, productPrice, gUserId, productName, orderNum)+'><button class="iap-move-left">订阅</button></a>';
+                    
                 }
                 if(!isEmptyObj(dataObj)){
                     console.log(products[i].id);
@@ -213,6 +216,7 @@ function iapActions(productID, actionType, expireDate) {
     var productName ='';
     var productExpire = '为止';
     var memberNum = '';
+    var tradeNum = '';
     // MARK: get iapButtons based on the current view
     var currentView = 'fullbody';
     if (gNowView.indexOf('storyview') >= 0) {
@@ -220,6 +224,7 @@ function iapActions(productID, actionType, expireDate) {
     } else if (gNowView.indexOf('channelview') >= 0) {
         currentView = 'channelview';
     }
+    tradeNum = productID;
     var productIDArr = productID.substring(2,5);
     productID = (productIDArr == '100') ? 'ft_premium' : 'ft_standard';
     // alert('productID'+productID);
@@ -245,10 +250,10 @@ function iapActions(productID, actionType, expireDate) {
     }else if (/standard$/.test(productID)){
         memberNum = '100';
     } 
-    var orderNum = productID;
-    console.log(':productID:'+productID+':orderNum:'+orderNum+':productPrice:'+productPrice+':actionType:'+actionType);
-    // alert(':productID:'+productID+':orderNum:'+orderNum+':productPrice:'+productPrice+':actionType:'+actionType);
-    postPayState(productID, productPrice, gUserId, orderNum, actionType);
+    // var orderNum = productID;
+    // alert(':productID:'+productID+':tradeNum:'+tradeNum+':productPrice:'+productPrice+':actionType:'+actionType);
+ 
+    postPayState(productID, productPrice, gUserId, tradeNum, actionType);
     var url = window.location.hash;
     ga('send','event','android member subscribe','toPay','url:'+ url + 'productId:' +  productID + 'buyState:' + actionType);
 
@@ -269,7 +274,7 @@ function iapActions(productID, actionType, expireDate) {
             if (productType === 'membership') {  
                 // alert('交易失败，您的钱还在口袋里');
                 turnonOverlay('iap-hint');
-                iapHTMLCode = '<a'+getBuyCode(productID, productPrice, gUserId, productName, orderNum)+'><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>'; 
+                iapHTMLCode = '<a'+getBuyCode(productID, productPrice, gUserId, productName, tradeNum)+'><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>'; 
             } 
             updateProductStatus(productIndex, false, false); 
             break;
@@ -282,7 +287,7 @@ function iapActions(productID, actionType, expireDate) {
                 iapButtons[i].innerHTML = iapHTMLCode; 
             } else if (productID === '') {
                 // 这里应该一直不会执行
-                iapHTMLCode = '<a'+getBuyCode(iapButtons[i].getAttribute('product-id'), iapButtons[i].getAttribute('product-price'), gUserId, iapButtons[i].getAttribute('product-title'), orderNum)+'><button class="iap-move-left">' + productPrice + '</button></a>';
+                iapHTMLCode = '<a'+getBuyCode(iapButtons[i].getAttribute('product-id'), iapButtons[i].getAttribute('product-price'), gUserId, iapButtons[i].getAttribute('product-title'), tradeNum)+'><button class="iap-move-left">' + productPrice + '</button></a>';
                 iapButtons[i].innerHTML = iapHTMLCode;
             }
         }
@@ -310,20 +315,21 @@ function getBuyCode(productId, productPrice, userId, productName, orderNum) {
         var buyCode = ''; 
         var priceForAndroid = '';
         
-        if (/premium$/.test(productId)) {
-            memberNum = '010';
-        }else if (/standard$/.test(productId)){
-            memberNum = '100';
-        }
-
         productId = orderNum;
 
         priceForAndroid = '0.01';
-        if(osVersion.indexOf('Android')>=0){
-            buyCode = ' onclick="ftjavacriptapp.payzfb(\''+ productId +'\',\''+ priceForAndroid +'\',\''+ userId +'\',\''+ productName +'\')"';
 
-            var url = window.location.hash;
-            ga('send','event','android member subscribe','openPayment','url:'+url+'productId:'+productId);
+        if(osVersion.indexOf('Android')>=0){
+            try {
+                buyCode = ' onclick="ftjavacriptapp.payzfb(\''+ productId +'\',\''+ priceForAndroid +'\',\''+ userId +'\',\''+ productName +'\')"';
+
+                var url = window.location.hash;
+                ga('send','event','android member subscribe','openPayment','url:'+url+'productId:'+productId);
+            } catch (ignore) {
+                alert('请求失败！')
+            }
+
+            
         }
         return buyCode;
     } 
