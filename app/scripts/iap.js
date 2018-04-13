@@ -186,7 +186,6 @@ function displayProducts(products, page, pageTitle,dataObj) {
 
         $('.policy').unbind().bind('click', function() {
           var url = $(this).attr('url');
-        //   window.location.href = url;
           window.open(url);
         });
     }
@@ -253,12 +252,10 @@ function iapActions(productID, actionType, expireDate) {
             isReqSuccess = false;
             // payWall('/index.php/jsapi/paywall?success'); 
             updateProductStatus(productIndex, true, true);
-            // console.log('success display:'+window.location);
             window.location.reload();
             break;
         case 'fail':
             if (productType === 'membership') {  
-                // alert('交易失败，您的钱还在口袋里');
                 turnonOverlay('iap-hint');
                 iapHTMLCode = '<a'+getBuyCode(productID, productPrice, gUserId, productName, tradeNum)+'><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>'; 
             } 
@@ -273,7 +270,7 @@ function iapActions(productID, actionType, expireDate) {
                 iapButtons[i].innerHTML = iapHTMLCode; 
             } else if (productID === '') {
                 // 这里应该一直不会执行
-                iapHTMLCode = '<a'+getBuyCode(iapButtons[i].getAttribute('product-id'), iapButtons[i].getAttribute('product-price'), gUserId, iapButtons[i].getAttribute('product-title'), tradeNum)+'><button class="iap-move-left">' + productPrice + '</button></a>';
+                iapHTMLCode = '<a><button class="iap-move-left">正在请求</button></a>';
                 iapButtons[i].innerHTML = iapHTMLCode;
             }
         }
@@ -300,7 +297,10 @@ function getBuyCode(productId, productPrice, userId, productName, orderNum) {
     if (!!userId){
         var buyCode = ''; 
         var priceForAndroid = '';
-        
+
+        var productIDArr = productId.substring(2,5);
+        var productIdStr = (productIDArr == '100') ? 'ft_premium' : 'ft_standard';
+
         productId = orderNum;
 
         priceForAndroid = '0.01';
@@ -312,9 +312,9 @@ function getBuyCode(productId, productPrice, userId, productName, orderNum) {
                 var url = window.location.hash;
                 ga('send','event','android member subscribe','openPayment','url:'+url+'productId:'+productId);
             } catch (ignore) {
-                alert('请求失败！')
+                alert('请求失败！');
             }
-
+            postPayState(productIdStr, productPrice, userId, orderNum, 'start ali');
             
         }
         return buyCode;
@@ -546,52 +546,3 @@ window.onload = function(){
 
 
 
-// MARK: - Open the product detail page so that user can buy, download and use the product
-// Not for membership
-// function showProductDetail(productId) {
-//     // MARK: - Get current product information
-//     var currentProduct;
-//     if (typeof iapProducts === 'object' && iapProducts.length > 0) {
-//         for (var i = 0; i < iapProducts.length; i++) {
-//             if (iapProducts[i].id === productId) {
-//                 currentProduct = iapProducts[i];
-//                 break;
-//             }
-//         }
-//     }
-//     // MARK: - Display the story view
-//     if (typeof currentProduct === 'object') {
-//         // MARK: - Calculate Product Information
-//         var storyView = document.getElementById('storyview');
-//         var imageHTML = '<div class="leftPic imageloaded"><img src="https://www.ft.com/__origami/service/image/v2/images/raw/' + currentProduct.image + '?source=ftchinese&width=414"></div>';
-
-//         // MARK: - Get iap-rail Dom innerHTML to display two buttons at the bottom of product detail 
-//         var iapRailHTML = '';
-
-
-//         // MARK: - Update Dom here
-//         storyView.querySelector('.storydate').innerHTML = '';
-//         storyView.querySelector('.storybyline').innerHTML = '';
-//         storyView.querySelector('.storytitle').innerHTML = currentProduct.title;
-//         document.getElementById('bodytext').innerHTML = imageHTML + currentProduct.description;
-//         document.getElementById('header-title').innerHTML = currentProduct.groupTitle || '';
-
-//         // MARK: - Update the iap-rail Button
-//         document.getElementById('iap-rail').innerHTML = iapRailHTML;
-//         document.getElementById('iap-rail').setAttribute('data-id', productId);
-//         document.getElementById('iap-rail').setAttribute('data-price', currentProduct.price);
-
-//         // MARK: - Display the storyview by changing the className of body
-//         document.body.className = 'storyview story-iap';
-//         gNowView = 'storyview';
-//         addStoryScroller();
-
-//         // MARK: - Send Traffic Data so that this can be tracked
-//         httpspv(gDeviceType + '/storypage/iap' + productId);
-
-//         // MARK: update the hist array so that it can be swiped back
-//         if (hist && ((hist[0] && hist[0].url != 'story/' + productId) || hist.length == 0)) {
-//             hist.unshift({ 'url': 'story/' + productId, 'title': currentProduct.title });
-//         }
-//     }
-// }
