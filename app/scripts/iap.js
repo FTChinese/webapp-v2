@@ -290,18 +290,19 @@ function getproductIndex(productID){
 function getBuyCode(productId, productPrice, userId, productName, orderNum){
     // alert('aa:'+productId+productPrice+userId+productName+orderNum);
     if (!!userId){
-        var priceForAndroid = '';
+
         var productIDArr = productId.substring(2,5);
         var productIdStr = (productIDArr == '100') ? 'ftc_premium' : 'ftc_standard';
         productId = orderNum;
 
-        priceForAndroid = '0.01';
+        productPrice = (getCookie('TEST')) ? '0.01' : productPrice;
+ 
 
         if(osVersion.indexOf('Android')>=0){
             try {
                 if(ftjavacriptapp){
                     postPayState(productIdStr, productPrice, userId, orderNum, 'start');
-                    ftjavacriptapp.payzfb(productId,priceForAndroid,userId , productName);
+                    ftjavacriptapp.payzfb(productId,productPrice,userId , productName);
                 }
             } catch (ignore) {
                 alert('请求失败！');
