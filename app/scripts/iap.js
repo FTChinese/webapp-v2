@@ -79,6 +79,7 @@ function isEmptyObj(dataObj){
         return true;
      }
 }
+
 function getProductHTMLCode(products, forGroup, dataObj) {
     
     var productsHTML = '';
@@ -101,29 +102,20 @@ function getProductHTMLCode(products, forGroup, dataObj) {
                 if(dataObj.standard===1 && dataObj.premium===0){
                     products[0].isPurchased = true;
                     products[0].state = '<button class="iap-move-left">已订阅</button>';
-                    products[1].state = '<a'+getBuyCode(products[1].id, productPrice, gUserId, productName, orderNum)+'><button class="iap-move-left">现在升级</button></a>';
+                    // products[1].state = '<a'+getBuyCode(products[1].id, productPrice, gUserId, productName, orderNum)+'><button class="iap-move-left">现在升级</button></a>';
+                    products[1].state = '<a onclick="getBuyCode(\''+ products[1].id +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ orderNum +'\')"><button class="iap-move-left">订阅</button></a>';
                 }else if(dataObj.premium===1){
                     products[i].isPurchased = true;
                     products[i].state = '<button class="iap-move-left">已订阅</button>';
                 }else{
                     products[i].isPurchased = false;
-                    products[i].state = '<a'+getBuyCode(products[i].id, productPrice, gUserId, productName, orderNum)+'><button class="iap-move-left">订阅</button></a>';
-                    
+      
+                    products[i].state = '<a onclick="getBuyCode(\''+ products[i].id +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ orderNum +'\')"><button class="iap-move-left">订阅</button></a>';
+
                 }
                 if(!isEmptyObj(dataObj)){
                     productActionButton = '<div class="iap-button" product-id="' + products[i].id + '" product-price="' + productPrice + '" product-title="' + productName + '">' + products[i].state + '<p class="iap-teaser">' + products[i].price + '/年' + '</p></div>';    
-                // if (products[i].isPurchased === true) {
-                //     if (products[i].group === 'membership') {
-                //         // MARK: - Button HTML for membership
-                //         productActionButton = '<div class="iap-button" product-id="' + products[i].id + '" product-price="' + productPrice + '" product-title="' + productName + '"><a><button class="iap-move-left">' + products[i].state + '</button></a><p class="iap-teaser">' + products[i].price + '/年' + '</p></div>';
-                //     } else if (products[i].group === 'subscription') {
-                //         productActionButton = '';
-                //     }
-                // } else {
-                //     if (products[i].group === 'membership') {
-                //         // MARK: - Button HTML for membership
-                //         productActionButton = '<div class="iap-button" product-id="' + products[i].id + '" product-price="' + productPrice + '" product-title="' + productName + '"><a'+getBuyCode(products[i].id, productPrice, gUserId, productName, orderNum)+'><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + products[i].price + '/年' + '</p></div>';
-                //     }
+
                 }
                 // MARK: - use onclick to capture click rather than jQuery's body.on, which is buggy on iPhone
                 // MARK: render UI
@@ -257,7 +249,9 @@ function iapActions(productID, actionType, expireDate) {
         case 'fail':
             if (productType === 'membership') {  
                 turnonOverlay('iap-hint');
-                iapHTMLCode = '<a'+getBuyCode(productID, productPrice, gUserId, productName, tradeNum)+'><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>'; 
+                // iapHTMLCode = '<a'+getBuyCode(productID, productPrice, gUserId, productName, tradeNum)+'><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>';
+
+                iapHTMLCode = '<a onclick="getBuyCode(\''+ productID +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ tradeNum +'\')"><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>'; 
             } 
             updateProductStatus(productIndex, false, false); 
             break;
@@ -293,33 +287,64 @@ function getproductIndex(productID){
 }
 
 // MARK: - Get url scheme for iOS buy and JS onclick code for Android
-function getBuyCode(productId, productPrice, userId, productName, orderNum) {  
+function getBuyCode(productId, productPrice, userId, productName, orderNum){
+    // alert('aa:'+productId+productPrice+userId+productName+orderNum);
     if (!!userId){
-        var buyCode = ''; 
         var priceForAndroid = '';
-
         var productIDArr = productId.substring(2,5);
-        var productIdStr = (productIDArr == '100') ? 'ft_premium' : 'ft_standard';
-
+        var productIdStr = (productIDArr == '100') ? 'ftc_premium' : 'ftc_standard';
         productId = orderNum;
 
         priceForAndroid = '0.01';
 
         if(osVersion.indexOf('Android')>=0){
             try {
-                buyCode = ' onclick="ftjavacriptapp.payzfb(\''+ productId +'\',\''+ priceForAndroid +'\',\''+ userId +'\',\''+ productName +'\')"';
-
-                var url = window.location.hash;
-                ga('send','event','android member subscribe','openPayment','url:'+url+'productId:'+productId);
+                if(ftjavacriptapp){
+                    postPayState(productIdStr, productPrice, userId, orderNum, 'start');
+                    ftjavacriptapp.payzfb(productId,priceForAndroid,userId , productName);
+                }
             } catch (ignore) {
                 alert('请求失败！');
             }
-            postPayState(productIdStr, productPrice, userId, orderNum, 'start ali');
-            
         }
-        return buyCode;
-    } 
+    }
 }
+
+// function getBuyCode(productId, productPrice, userId, productName, orderNum) {  
+//     if (!!userId){
+//         var buyCode = ''; 
+//         var priceForAndroid = '';
+
+//         var productIDArr = productId.substring(2,5);
+//         var productIdStr = (productIDArr == '100') ? 'ftc_premium' : 'ftc_standard';
+
+//         productId = orderNum;
+
+//         priceForAndroid = '0.01';
+
+//         if(osVersion.indexOf('Android')>=0){
+//             try {
+//                 buyCode = ' onclick="ftjavacriptapp.payzfb(\''+ productId +'\',\''+ priceForAndroid +'\',\''+ userId +'\',\''+ productName +'\')"';
+
+//                 var url = window.location.hash;
+//                 ga('send','event','android member subscribe','openPayment','url:'+url+'productId:'+productId);
+//             } catch (ignore) {
+//                 alert('请求失败！');
+//             }
+//             postPayState(productIdStr, productPrice, userId, orderNum, 'start');
+            
+//         }
+//         return buyCode;
+//     } 
+// }
+
+/**
+ * 订阅界面动作
+ */
+
+$('body').on('click', '.openPayment', function(){
+    // getBuyCode(productId, productPrice, userId, productName, orderNum) 
+});
 
 // 测试付费成功与否的地方
 // function paySuccess(){
@@ -542,7 +567,6 @@ function updatePageAction(){
 window.onload = function(){
     updatePageAction();
 }
-
 
 
 
