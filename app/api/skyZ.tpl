@@ -87,13 +87,14 @@
 <div url="/index.php/ft/column/007000038?i=2" class="channel oneStory more">中外对话</div>
 <div url="/index.php/ft/column/007000058?i=2" class="channel oneStory more">中西两半录</div>
 <div url="/index.php/ft/column/007000052?i=2" class="channel oneStory more">切问近思录</div>
-<div url="/index.php/ft/column/007000056?i=2" class="channel oneStory more">投资者的敌人</div>
+<div url="/index.php/ft/column/007000056?i=2" class="channel oneStory more">投资���的敌人</div>
 <div url="/index.php/ft/column/007000055?i=2" class="channel oneStory more">名利场</div>
 <div url="/index.php/ft/column/007000053?i=2" class="channel oneStory more">纽约范儿</div>
 <div url="/index.php/ft/column/007000069?i=2" class="channel oneStory more">流动的盛宴</div>
 <div url="/index.php/ft/column/007000070?i=2" class="channel oneStory more">半酣记</div>
 <div url="/index.php/ft/column/007000071?i=2" class="channel oneStory more">居食趣</div>
 <div url="/index.php/ft/column/007000073?i=2" class="channel oneStory more">社交媒体与潮营销</div>
+<div url="/index.php/ft/column/007000075?i=2" class="channel oneStory more">去你的未来</div>
 
 </div>
 
