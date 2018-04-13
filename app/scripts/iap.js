@@ -111,8 +111,6 @@ function getProductHTMLCode(products, forGroup, dataObj) {
                     
                 }
                 if(!isEmptyObj(dataObj)){
-                    console.log(products[i].id);
-                    console.log(products[i].state);
                     productActionButton = '<div class="iap-button" product-id="' + products[i].id + '" product-price="' + productPrice + '" product-title="' + productName + '">' + products[i].state + '<p class="iap-teaser">' + products[i].price + '/年' + '</p></div>';    
                 // if (products[i].isPurchased === true) {
                 //     if (products[i].group === 'membership') {
@@ -162,9 +160,6 @@ function getProductHTMLCode(products, forGroup, dataObj) {
 // MARK: - extract product information and display it to home or channel page
 function displayProducts(products, page, pageTitle,dataObj) {
     if (typeof products === 'object' && products.length > 0) {
-        // console.log(dataObj)
-        // TODO: Page should be used as a filter, for example, "ebook" should be used to extra only the eBooks from the iapProducts
-        // page:products group; products: products
         var productsHTML = getProductHTMLCode(products, page, dataObj);
         // MARK: - if page is not 'home', then we should open channel view
         if (page !== '') {
@@ -214,8 +209,6 @@ function iapActions(productID, actionType, expireDate) {
     var productTeaser = '';
     var productIndex = 0;
     var productName ='';
-    var productExpire = '为止';
-    var memberNum = '';
     var tradeNum = '';
     // MARK: get iapButtons based on the current view
     var currentView = 'fullbody';
@@ -227,11 +220,10 @@ function iapActions(productID, actionType, expireDate) {
     tradeNum = productID;
     var productIDArr = productID.substring(2,5);
     productID = (productIDArr == '100') ? 'ft_premium' : 'ft_standard';
-    // alert('productID'+productID);
     
     iapButtons = document.getElementById(currentView).querySelectorAll('.iap-button');
 
-    productIndex = getproductIndex(productID)
+    productIndex = getproductIndex(productID);
 
     // MARK: - get product price here
     productPrice = window.iapProducts[productIndex].price || '0￥';
@@ -245,12 +237,7 @@ function iapActions(productID, actionType, expireDate) {
     }else {
         productType = 'eBook';
     }
-    if (/premium$/.test(productID)) {
-        memberNum = '010';
-    }else if (/standard$/.test(productID)){
-        memberNum = '100';
-    } 
-    // var orderNum = productID;
+ 
     // alert(':productID:'+productID+':tradeNum:'+tradeNum+':productPrice:'+productPrice+':actionType:'+actionType);
  
     postPayState(productID, productPrice, gUserId, tradeNum, actionType);
@@ -261,7 +248,6 @@ function iapActions(productID, actionType, expireDate) {
     switch (actionType) { 
         case 'success':
             if (productType === 'membership') {
-                productExpire = expireDate || '未知';
                 iapHTMLCode = '<a><button class="iap-move-left">已订阅</button></a><p class="iap-teaser">'+ productPrice + '/年' + '</p>'; 
             } 
             isReqSuccess = false;
@@ -347,8 +333,9 @@ function getBuyCode(productId, productPrice, userId, productName, orderNum) {
 // MARK: - Test paywall for Android
 function postPayState(productId, productPrice, userId, orderNum, actionType){
     if (!!userId){
+        var random = Math.random();
         var xhrpw = new XMLHttpRequest();
-        xhrpw.open('post', './index.php/pay/app?token=1');
+        xhrpw.open('post', './index.php/pay/app?token='+random);
         xhrpw.setRequestHeader('Content-Type', 'application/text');
         var payInfo = {
             productId:productId,
