@@ -190,7 +190,7 @@ function updateProductStatus(productIndex, isProductPurchased, isProductDownload
     }
 }
 
-
+// iapActions('FT0101231522033086', 'fail', '');
 // MARK: - Update DOM UI based on user actions
 function iapActions(productID, actionType, expireDate) {    
     var iapButtons='';
@@ -210,7 +210,7 @@ function iapActions(productID, actionType, expireDate) {
     }
     tradeNum = productID;
     var productIDArr = productID.substring(2,5);
-    productID = (productIDArr == '100') ? 'ft_premium' : 'ft_standard';
+    productID = (productIDArr == '100') ? 'ftc_premium' : 'ftc_standard';
     
     iapButtons = document.getElementById(currentView).querySelectorAll('.iap-button');
 
@@ -301,8 +301,9 @@ function getBuyCode(productId, productPrice, userId, productName, orderNum){
         if(osVersion.indexOf('Android')>=0){
             try {
                 if(ftjavacriptapp){
+                    // alert('bb:'+productId+productPrice+userId+productName+orderNum);
                     postPayState(productIdStr, productPrice, userId, orderNum, 'start');
-                    ftjavacriptapp.payzfb(productId,productPrice,userId , productName);
+                    ftjavacriptapp.payzfb(productId,productPrice,userId, productName);
                 }
             } catch (ignore) {
                 alert('请求失败！');
