@@ -295,13 +295,14 @@ function getBuyCode(productId, productPrice, userId, productName, orderNum){
         var productIdStr = (productIDArr == '100') ? 'ftc_premium' : 'ftc_standard';
         productId = orderNum;
 
-        productPrice = (getCookie('TEST')) ? '0.01' : productPrice;
+        productPrice =  productPrice.substr(1,productPrice.length);
+        // productPrice = (getCookie('TEST')) ? '0.01' : productPrice;
  
 
         if(osVersion.indexOf('Android')>=0){
             try {
                 if(ftjavacriptapp){
-                    // alert('bb:'+productId+productPrice+userId+productName+orderNum);
+                    // alert('aa:'+productId+productPrice+userId+productName+orderNum);
                     postPayState(productIdStr, productPrice, userId, orderNum, 'start');
                     ftjavacriptapp.payzfb(productId,productPrice,userId, productName);
                 }
