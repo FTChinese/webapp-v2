@@ -259,7 +259,7 @@ function updateAds() {
 
                     
                     if (window.location.search.indexOf('testDB=yes') > 0 && (adName === 'Mobile-Banner-Num1' || adName === 'Mobile-Banner-Num2' || adName === 'Mobile-MPU-Middle1') && adChannelId === '1000') {
-                      var adCode = '<div id="'+ adName + '" class ="' + adClass + '"style="padding-top:0;"><scr' + 'ipt>googletag.cmd.push(function() { googletag.display("' + adName + '")})</scr' + 'ipt></div>';
+                      var adCode = '<div id="'+ adName + '" class ="' + adClass + '"style="padding-top:0;"><scr' + 'ipt>googletag.cmd.push(function() { googletag.display("' + adName + '")})<\/scr' + 'ipt></div>';
                       $(this).html(adCode);            
                     }
                     /**Display DB Ad End */
