@@ -305,6 +305,8 @@ function getBuyCode(productId, productPrice, userId, productName, orderNum){
                     // alert('aa:'+productId+productPrice+userId+productName+orderNum);
                     postPayState(productIdStr, productPrice, userId, orderNum, 'start');
                     ftjavacriptapp.payzfb(productId,productPrice,userId, productName);
+                    var url = window.location.hash;
+                    ga('send','event','android member subscribe','openPayment','url:'+url+'productId:'+productId);
                 }
             } catch (ignore) {
                 alert('请求失败！');
