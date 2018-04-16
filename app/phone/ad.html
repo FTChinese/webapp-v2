@@ -143,9 +143,14 @@ img {border:0;max-width:100%;}
     // New Ad
     // MARK: determin device type 
 
-  
-    deviceId = '4000';//AndroidApp
-    deviceType = 'AndroidApp';
+    if (uaString.toLowerCase().indexOf("android")> -1 && uaString.toLowerCase().search("mobile") > -1) {
+        deviceId = '4000';//AndroidApp
+        deviceType = 'AndroidApp';
+    } else {
+        deviceId = '6000';
+        deviceId = 'PadApp'
+    }
+    
     
 
     adchannelId = '1000';
@@ -261,13 +266,10 @@ img {border:0;max-width:100%;}
     }
     c = deviceId + adchannelId + adPatternId;
     var adName = 'db-'+ c;
-    console.log('adName:', adName);
     var deviceWidth = window.parent.innerWidth || window.parent.document.documentElement.clientWidth || window.parent.document.body.clientWidth;
     var bannerW = deviceWidth;
     var bannerH = Math.round(bannerW/4);
-    console.log(bannerW);
-    console.log(typeof bannerW);
-    console.log(adPattern);
+    
     var adSizeArr;
     if(adPattern === 'Banner-Num1' || adPattern === 'Banner-Num2') {
         adSizeArr = [[bannerW,bannerH],[414, 104]];
@@ -330,7 +332,7 @@ if (gSearchVars.testDB === 'yes') {
 }
 
 if(gSearchVars.debugad && gSearchVars.debugad=="yes" ) {
-    console.log("debugad");
+    //console.log("debugad");
     adDescription = deviceType + '-' + adChannelTitle + '-' + adPattern;
 
     var debugAd = '<div style="display:block;width:100%;position:absolute;bottom:0;overflow:visible;"><div style="position:relative;top:0px;left:0;font-size:14px;color:#777;">' + c + ': ' + adDescription + '</div></div>';
