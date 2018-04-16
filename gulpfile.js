@@ -234,6 +234,7 @@ gulp.task('copy', ['build'], function () {
 
   // MARK: - use the one m.js file 
   var mainM = fs.readFileSync('dist/phone/m.js', 'utf8');
+  // mainM = mainM.replace('</script>', '</scr\' + \'ipt>');
 
   return gulp.src(['app/android.html'])
     .pipe($.if('*.html', $.htmlmin({collapseWhitespace: true})))
@@ -257,7 +258,6 @@ gulp.task('copy', ['build'], function () {
             console.log('big 5 file writen to ' + fileName);
       });
     });
-    //.pipe(rename('androidappbig5.html'));
 });
 
 
