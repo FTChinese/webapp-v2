@@ -224,7 +224,7 @@ gulp.task('copy', ['build'], function () {
   // android file;
   var fs = require('fs');
   var cssbundle = fs.readFileSync('dist/phone/s.css', 'utf8');
-  var googleanalytics = fs.readFileSync('dist/log/ga.js', 'utf8');
+  var googleanalytics = fs.readFileSync('app/log/ga.js', 'utf8');
 
   if (googleanalytics === '') {
     return console.log ('Google analytics js file is empty, please try again! ')
@@ -266,7 +266,7 @@ gulp.task('ga', function () {
     //var gaUrl = 'http://m.ftchinese.com/index.php/jsapi/analytics';
     var gaUrl = 'https://www.google-analytics.com/analytics.js';
     getUrltoFile(gaUrl, './app/log/ga.js');
-    getUrltoFile(gaUrl, './dist/log/ga.js');
+    //getUrltoFile(gaUrl, './dist/log/ga.js');
 });
 
 
