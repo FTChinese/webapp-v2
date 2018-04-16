@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1252; //当前的版本号
+var _currentVersion = 1254; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -2414,9 +2414,9 @@ function displaystoryNormal(theid, language, forceTitle) {
             $('#storyview .storybody').html(storyimage).append(allId.ebody);
             isHasPaywall = false;
         }else{
-            if ( allId.paywall === 2 || isStoryBeforeOneWeek){ 
+            if ( allId.paywall === 1 || isStoryBeforeOneWeek){ 
                 $('#storyview .storybody').html(storyimage).append(getpaywallHint('story_'+theid+'_'+actualLanguage));
-            }else if (allId.paywall === 1 || isStoryBeforeOneWeek){
+            }else if (allId.paywall === 2 || isStoryBeforeOneWeek){
                 $('#storyview .storybody').html(storyimage).append(getdownloadHint('story_'+theid+'_'+actualLanguage));
             }else{
                 $('#storyview .storybody').html(storyimage).append(getpaywallHint('story_'+theid+'_'+actualLanguage));
@@ -2475,9 +2475,9 @@ function displaystoryNormal(theid, language, forceTitle) {
             $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
             isHasPaywall = false;
         }else{
-            if (allId.paywall === 2 || isStoryBeforeOneWeek ){
+            if (allId.paywall === 1 || isStoryBeforeOneWeek ){
                 $('#storyview .storybody').html(getpaywallHint('story_'+theid+'_'+actualLanguage));
-            }else if (allId.paywall === 1 || isStoryBeforeOneWeek){
+            }else if (allId.paywall === 2 || isStoryBeforeOneWeek){
                 $('#storyview .storybody').html(getdownloadHint('story_'+theid+'_'+actualLanguage));
             }else{
                     $('#storyview .storybody').html(getpaywallHint('story_'+theid+'_'+actualLanguage));
@@ -2509,10 +2509,10 @@ function displaystoryNormal(theid, language, forceTitle) {
             $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));     
             isHasPaywall = false;
         }else{
-            if (allId.paywall === 2 || isStoryBeforeOneWeek){
+            if (allId.paywall === 1){
                 $('#storyview .storybody').html(storyimage).append(getpaywallHint('story_'+theid+'_'+actualLanguage));
                 ga('send','event','android member subscribe','subscribe hint','storyid:'+theid + '_' + actualLanguage);
-            }else if (allId.paywall === 1 || isStoryBeforeOneWeek){
+            }else if (allId.paywall === 2){
                 $('#storyview .storybody').html(storyimage).append(getdownloadHint('story_'+theid+'_'+actualLanguage));
                 ga('send','event','android member subscribe','subscribe hint','storyid:'+theid + '_' + actualLanguage);
             }else{
