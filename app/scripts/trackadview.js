@@ -199,7 +199,7 @@ function updateAds() {
                     //console.log('hereherehere');
                     var testDBParam = '';
                     if (window.location.search.indexOf('testDB=yes') > 0) {
-                      testDBParam = '&testDB=yes'
+                      testDBParam = '&testDB=yes';
                     } 
                     $(this).html('<iframe id="' + nowV + index + '" src="/phone/ad.html?isad=0&v=' + _currentVersion + '&adtype=' + adFrame + '&adid=' + nowV + index + testDBParam + '" frameborder=0  marginheight="0" marginwidth="0" frameborder="0" scrolling="no" width="'+adwidth+'" height="100%"></iframe>' + adOverlay);
                     //console.log ($(this).html());
