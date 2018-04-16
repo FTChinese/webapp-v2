@@ -2481,7 +2481,6 @@ function displaystoryNormal(theid, language, forceTitle) {
                 $('#storyview .storybody').html(getdownloadHint('story_'+theid+'_'+actualLanguage));
             }else{
                     $('#storyview .storybody').html(getpaywallHint('story_'+theid+'_'+actualLanguage));
-                }
             }
             isHasPaywall = true;
             ga('send','event','android member subscribe','subscribe hint','storyid:'+theid + '_' + actualLanguage);
