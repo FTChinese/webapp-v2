@@ -142,6 +142,8 @@ function getAdChannelId() {
   }
   return '1000';
 }
+
+
 // MARK: - 刷新广告位
 var gInsertedDBSourceScript = false;
 function insertDBSourceScript() {
@@ -172,6 +174,8 @@ function insertDBSourceScript() {
     gInsertedDBSourceScript = true;
   }
 }
+
+
 function updateAds() {
    console.log('execute updateAds');
    insertDBSourceScript();
@@ -190,7 +194,7 @@ function updateAds() {
     //         nowV = 'storyScroller';
     //     }
     // }
-    if (isOnline()=='possible') {        
+    if (isOnline() === 'possible') {        
         screenWidth = $(window).width();
         if (nowV === 'story-column-flow') {
             currentViewPortAds = $('#'+nowV).find('.cf-render-area .adiframe');
@@ -198,9 +202,10 @@ function updateAds() {
             currentViewPortAds = $('#'+nowV).find('.adiframe');
         }
         nowV = nowV.replace(/\-/g, '');
-        console.log (nowV);
-        console.log('currentViewPortAds:');
-        console.log(currentViewPortAds);
+        // console.log (nowV);
+        // console.log('currentViewPortAds:');
+        // console.log(currentViewPortAds);
+        
         currentViewPortAds.each(function(index) {
             var adHeight=$(this).attr('type') || 0;
             var adFrame=$(this).attr('frame') || '';
@@ -223,7 +228,7 @@ function updateAds() {
                     if (useFTScroller===1 || nowV === 'story-column-flow') {
                         adOverlay = '<a target=_blank class="ad-overlay"></a>';
                     }
-                    console.log('hereherehere');
+                    //console.log('hereherehere');
                     $(this).html('<iframe id="' + nowV + index + '" src="/phone/ad.html?isad=0&v=' + _currentVersion + '#adtype=' + adFrame + '&adid=' + nowV + index + '" frameborder=0  marginheight="0" marginwidth="0" frameborder="0" scrolling="no" width="'+adwidth+'" height="100%"></iframe>' + adOverlay);
                     //console.log ($(this).html());
                     $(this).attr('id','ad-' + nowV + index);
@@ -253,18 +258,14 @@ function updateAds() {
                     }
 
                     
-                    if (window.location.search.indexOf('testDB=yes') > 0 && (adName === 'Mobile-Banner-Num1' || adName === 'Mobile-Banner-Num2' || adName === 'Mobile-MPU-Middle1') && adChannelId === '1000') {
-                      console.log('show db ad');
-                      var adCode = ' <div id="'+ adName +'" class ="' + adClass + '"style="padding-top:0;"><scr'+'ipt>googletag.cmd.push(function() { googletag.display("'+ adName +'")})</scr'+'ipt></div>';
-            
-                      $(this).html(adCode);            
-                      console.log('insertDBAdCode');
-                    }
-
+                    // if (window.location.search.indexOf('testDB=yes') > 0 && (adName === 'Mobile-Banner-Num1' || adName === 'Mobile-Banner-Num2' || adName === 'Mobile-MPU-Middle1') && adChannelId === '1000') {
+                    //   var adCode = '<div id="'+ adName + '" class ="' + adClass + '"style="padding-top:0;"><scr' + 'ipt>googletag.cmd.push(function() { googletag.display("' + adName + '")})</scr' + 'ipt></div>';
+                    //   $(this).html(adCode);            
+                    // }
                     /**Display DB Ad End */
                 }
             }
-            if (useFTScroller===1 || nowV === 'story-column-flow') {
+            if (useFTScroller === 1 || nowV === 'story-column-flow') {
                 if ($(this).offset().top >= 0 && $(this).offset().top <= screenWidth) {
                     $(this).addClass('loaded-in-view');
                 } else {
@@ -272,6 +273,7 @@ function updateAds() {
                 }
             }
         });
+
 
       // MARK: - when ad position is updated, create the ad positions again. 
       createViewableAds();
@@ -321,6 +323,7 @@ function updateAdsDB() {
   insertDBRequests();
 }
 */
+
 function playVideoInAdIframe(adId) {
 
   // console.log ('look for this id ' + adId + ' and play video');

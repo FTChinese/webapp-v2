@@ -29,7 +29,7 @@
                 <li class="channel management" url="/index.php/ft/channel/phonetemplate.html?channel=management">管理</li>
                 <li class="channel lifestyle" url="/index.php/ft/channel/phonetemplate.html?channel=lifestyle">生活时尚</li>
                 <li class="channel photo" url="/index.php/ft/channel/phonetemplate.html?channel=video">视频</li>
-                <li class="channel specialreport" url="/index.php/ft/channel/phonetemplate.html?channel=specialreport">���别报导</li>
+                <li class="channel specialreport" url="/index.php/ft/channel/phonetemplate.html?channel=specialreport">特别报导</li>
                 <li class="channel management" url="/index.php/ft/channel/phonetemplate.html?channel=datanews">数据新闻</li>
                 <li class="channel vd" url="/index.php/ft/channel/phonetemplate.html?channel=photo">图辑</li>
                 <li class="channel vd" url="/index.php/ft/channel/phonetemplate.html?channel=newsquiz">互动小测</li>
@@ -357,7 +357,7 @@ background-color: rgba(0,0,0,0.14) !important;
                     </span>
                 </div>
                 <div class="fontSelect" onclick="setFontSize()">
-                    <div id=currentFont>默认</div>
+                    <div id=currentFont>默��</div>
                     <strong>字号大小</strong>					
 				</div>
                 <div class="standalonebutton"><button class="ui-light-btn" onclick="turnonOverlay('loginBox')">登录</button></div>                

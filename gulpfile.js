@@ -225,6 +225,10 @@ gulp.task('copy', ['build'], function () {
   var fs = require('fs');
   var cssbundle = fs.readFileSync('dist/phone/s.css', 'utf8');
   var googleanalytics = fs.readFileSync('dist/log/ga.js', 'utf8');
+
+  if (googleanalytics === '') {
+    return console.log ('Google analytics js file is empty, please try again! ')
+  }
   //var fa = fs.readFileSync('dist/log/analytics.js', 'utf8');
   var fa = '';
 

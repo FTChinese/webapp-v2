@@ -920,254 +920,6 @@ function freezeCheck() {
 
 
 
-//在获取到当天的文章JSON数据接口后，根据文章的priority，配图情况，以及其他信息，将它们插入到版面中，生成类似报纸的效果
-/*
-function fillPage(thedata) {
-    gStartStatus = "fillPage start";
-    //遍历接口的所有文章，根据其属性将其插入相应位置
-    var jsondata, cover1 = 0,  todaystamp,  storytotalnum = 0, longheadline, shortheadline, longlead, shortlead, coverImg, cauthor, tag, genre, topic, industry, priority, byline, onhomepage = 0, iconImg, bigButton, portraitImg="", errorMessage="", jsonHeadPosition, jsonWrong, specialTag="", specialTitle="";
-    var dataStatus = 'unknown';
-    //var backupAPIDate;
-    countInsert=[];
-    
-	//如果返回数据长度不足1000，说明此次返回的数据根本就不对，跳出函数
-	if (thedata.length<1000){return;}
-    thedata = checkhttps(thedata) || "";
-    try {
-        jsonHeadPosition = thedata.indexOf('{"head"');
-        if (jsonHeadPosition>0) {//如果返回的数据前有服务器返回的乱码（参见jsoneerror.html），则先去除它
-            jsonWrong = thedata.substring(0,100);
-            thedata = thedata.slice(jsonHeadPosition);
-            if (gOnlineAPI === true) {
-                trackErr(jsonWrong, "wrong jsondata live");
-            } else {
-                trackErr(jsonWrong, "wrong jsondata cache");
-            }
-        }
-        jsondata = $.parseJSON(thedata);
-    }catch(err){
-        thedata = thedata.substring(0,22);
-        if (gOnlineAPI === true) {
-            trackErr(err + "." + thedata, "fillPage jsondata");
-            dataStatus = 'online error';
-        } else {
-            trackErr(err + "." + thedata, "fillPage jsondata cache");
-            dataStatus = 'cache error';
-        }
-    }
-
-
-	//清空这个数据
-	thedata="";
-    thisday = new Date();
-	thisdayunix = Math.round(thisday.getTime() / 1000);
-
-    //如果第一次在线获取的数据返回错误
-    //则先尝试备份的API
-    //再尝试当天文章的API
-    if (dataStatus === 'online error') {
-
-        if (gApiUrl.efforts === 0) {
-            gApiUrl.efforts = 1;
-            gApiUrl.a10001 = gApiUrl.aBackUp;
-            //console.log ('try backup api: ' + gApiUrl.efforts);
-            filloneday();
-        } else if (gApiUrl.efforts === 1){
-            gApiUrl.efforts = 2;
-            backupAPIDate = thisday.getFullYear() + '/' + (thisday.getMonth() + 1) + '/' + thisday.getDate();
-            //console.log (backupAPIDate + ' First API Wrong, you should get the backup one!');
-            filloneday(backupAPIDate);
-        }
-    }
-
-	//检查数据格式是否符合标准
-    if (!jsondata || jsondata.length <= 1 || dataStatus === 'error') {
-        return;
-	}
-    
-    try {
-        if (jsondata.body.odatalist.length>=0) {
-            jsondata = jsondata.body.odatalist;
-        } else {   
-            ga('send','event', 'CatchError', 'API Error', '{errorcode: "' + jsondata.body.oelement.errorcode + '", host: "' + location.host + '"}');
-            fa('send','event', 'CatchError', 'API Error', '{errorcode: "' + jsondata.body.oelement.errorcode + '", host: "' + location.host + '"}');
-        }
-    } catch (ignore) {
-        //alert (ignore.toString());
-    }
-
-    //根据最新一条新闻的Pubdate确定出版时间
-    latestunix = jsondata[0].pubdate;
-    todaystamp = unixtochinese(jsondata[0].pubdate, 0);
-    todaystamp += ' 出版 | 刷新';
-    $('#datestamp').html(todaystamp);
-    
-    gSpecialAnchors = [];
-    if ($(".specialanchor").length>0) {
-        $('.specialanchor').each(function(){
-            var adId = $(this).attr('adid') || '';
-            var sTag = $(this).attr('tag') || '';
-            var sTitle = $(this).attr('title') || '';
-            gSpecialAnchors.push({
-                "tag": sTag,
-                "title": sTitle,
-                "adid": adId
-            });
-        });
-    }
-
-    // 首页至少要有20篇文章，而且昨天午后出版的文章也要上首页
-    $.each(jsondata, function(entryIndex, entry) {
-        var inserted = false;
-        allstories[entry.id] = entry;
-        //60*60*22 = 79200
-        if (((entry.last_publish_time && thisdayunix - entry.last_publish_time < 79200) || storytotalnum < 20 || (entry.pubdate && latestunix == entry.pubdate) || longholiday === 1) && (!entry.customlink)) {
-            onhomepage = 1;
-            storytotalnum += 1;
-            //console.log ("Show: " + entry.cheadline + ":" + (thisdayunix - entry.last_publish_time));
-        } else {
-			onhomepage = 0;
-            //console.log ("Remove: " + entry.cheadline + ":" + (thisdayunix - entry.last_publish_time));
-		}
-
-        //分析每条文章的各字段内容
-        if (onhomepage === 1) {
-            longheadline = entry.cheadline || ''; 
-            shortheadline = entry.cheadline || entry.cskylineheadline || ''; 
-            longlead = entry.clongleadbody || entry.cshortleadbody || entry.cskylinetext || ''; 
-            shortlead = entry.cskylinetext || entry.cshortleadbody || entry.clongleadbody || ''; 
-            cauthor = (entry.cauthor||'').replace(/,/g, '、') || ''; 
-			tag=entry.tag || '';
-            genre = entry.genre || '';
-            topic = entry.topic || '';
-            industry = entry.industry || '';
-			priority = entry.priority || 99;
-            byline = entry.cbyline_description || '';
-            byline = byline.replace(/作者[：:]/g, '').replace(/英国《金融时报》(.+)/g, 'FT$1') + ' ' + cauthor + ' ' + (entry.cbyline_status || '');
-			shortlead=shortlead.replace(/。$/g,"");
-            if (byline.length > 20 && byline.indexOf('英国《金融时报》') >= 0) {
-                byline = byline.replace(/英国《金融时报》 /g, '').replace(/英国《金融时报》/g, 'FT').replace(/为FT撰稿/g, '');
-            }
-            if (byline.toLowerCase().indexOf('lex专栏') >= 0) {
-                byline = byline.replace(/英国《金融时报》/g, '');
-            }
-            shortheadline = shortheadline.replace(/[Ll][Ee][Xx]专栏[：:]/g, '')
-            //    .replace(/分析[：:]/g, '').replace(/特写[：:]/g, '')
-                .replace(/中国国开行/g, '国开行').replace(/工商银行/g, '工行')
-                .replace(/建设银行/g, '建行').replace(/农业银行/g, '农行').replace(/通用电气/g, 'GE')
-                .replace(/FT社评[：:]/g,'');
-            if (entry.story_pic.icon) {
-                iconImg='<div class="icon image"><figure><img class="app-image" src="'+entry.story_pic.icon+'"></figure></div>';
-            } else {
-                iconImg='';
-            }
-
-            bigButton=entry.story_pic.cover || entry.story_pic.bigbutton || '';
-            if (bigButton !== '') {
-                bigButton = '<div class="image bigbutton"><figure><img class="app-image" src="'+bigButton+'"></figure></div>';
-            } else if (entry.story_pic.other  || entry.story_pic.smallbutton) {
-                bigButton = entry.story_pic.other  || entry.story_pic.smallbutton;
-                portraitImg = (tag.indexOf('插图')>=0) ? ' portrait-image' : '';
-                bigButton = '<div class="image bigbutton' + portraitImg + '"><figure><img class="app-image" src="'+bigButton+'"></figure></div>';
-            } else if (entry.story_pic.skyline !== undefined && entry.story_pic.skyline !== '') {
-                bigButton = entry.story_pic.skyline;
-                bigButton = '<div class="bigbutton skyline-image image"><figure><img class="app-image" src="'+bigButton+'"></figure></div>';
-            }
-            //console.log ("cover1: " + cover1);
-            //先处理Cover Story
-            if ((priority >= 1 && priority <= 10 && (cover1===0 || thisdayunix - entry.last_publish_time < 79200)) || (cover1===0 && entry.story_pic.cover)) {
-				if (entry.story_pic.cover) {
-                    //alert (coverImg);
-                    coverImg = entry.story_pic.cover;
-					coverImg = '<div class="coverIMG image"><figure><img class="app-image" src="' + coverImg + '"></figure></div>';
-				} else if (entry.story_pic.smallbutton || entry.story_pic.other) {
-                    coverImg=entry.story_pic.smallbutton || entry.story_pic.other;
-                    if (gIsInSWIFT === true) {
-                        coverImg=resizeImg(coverImg,600);
-                    }
-                    //coverImg='<div class="coverIMG image imageloaded"><figure style="background-image:url('+ entry.story_pic.cover +')"></figure></div>';
-					coverImg='<div class="coverIMG image"><figure><img class="app-image" src="' + coverImg + '"></figure></div>';
-				} else {
-					coverImg='';
-				}
-                coverImg=saveImgSize(coverImg);
-                insertCover('coveranchor',cover1,entry.id,shortheadline,coverImg,iconImg,longlead);
-                cover1 = cover1+1;
-            } else {                
-                if ($(".specialanchor").length>0) {
-                    $('.specialanchor').each(function(index){
-                        var specialanchorId = 'specialanchor' + index;
-                        var adId = $(this).attr('adid') || '';
-                        specialTag = $(this).attr('tag') || '';
-                        specialTitle = $(this).attr('title') || '';
-
-                        if ((tag.indexOf(specialTag) >= 0)) {
-                            $(this).attr('id', specialanchorId);
-                            insertArticle('special',specialanchorId,'\/index.php\/ft\/tag\/'+ specialTag +'?i=2',specialTitle,entry.id,shortheadline,iconImg,longlead,bigButton);
-                            inserted = true;
-                        } 
-                    });
-                }
-                if (inserted === true) {
-
-                    //if it is already inserted as a specia report, do nothing
-                } else if (genre.indexOf('news') >= 0 && genre.indexOf('analysis') < 0 && genre.indexOf('comment') < 0 && genre.indexOf('feature') < 0 && longheadline.indexOf("分析") !== 0) {
-                    insertArticle('news','newsanchor','news','新闻',entry.id,shortheadline,iconImg,shortlead,bigButton);
-                } else if ((longheadline.indexOf('媒体札记') >= 0 || tag.indexOf('媒体札记') >= 0) && $('#mediaanchor').length>0) {
-                    insertArticle('media','mediaanchor','\/index.php\/ft\/channel\/phonetemplate.html?column=007000006','媒体札记',entry.id,shortheadline,iconImg,longlead,bigButton);
-                } else if (topic.indexOf('people') >= 0 && genre.indexOf('letter') < 0) {
-                    insertArticle('people','peopleanchor','people','人物',entry.id,shortheadline,iconImg,longlead,bigButton);
-                } else if (topic.indexOf('politics') >= 0 && genre.indexOf('letter') < 0) {
-                    insertArticle('politics','politicsanchor','politics','政治与政策',entry.id,shortheadline,iconImg,longlead,bigButton);
-                } else if ((topic.indexOf('markets') >= 0 || topic.indexOf('economy') >= 0 || industry.indexOf('finance')>=0) && genre.indexOf('letter') < 0) {
-                    insertArticle('economy','economyanchor','economymarkets','经济与金融',entry.id,shortheadline,iconImg,longlead,bigButton);
-                } else if ((topic.indexOf('business') >= 0 || topic.indexOf('management') >= 0) && genre.indexOf('letter') < 0) {
-                    insertArticle('business','businessanchor','businessmanagement','商业与管理',entry.id,shortheadline,iconImg,longlead,bigButton);
-                } else if ((topic.indexOf('society') >= 0 || topic.indexOf('culture') >= 0) && genre.indexOf('letter') < 0) {
-                    insertArticle('society','societyanchor','societyculture','社会与文化',entry.id,shortheadline,iconImg,longlead,bigButton);
-                } else if ((topic.indexOf('lifestyle') >= 0 || topic.indexOf('travel') >= 0) && genre.indexOf('letter') < 0) {
-                    insertArticle('lifestyle','lifestyleanchor','lifestyle','生活时尚',entry.id,shortheadline,iconImg,longlead,bigButton);
-                } else if (topic.indexOf('book') >= 0 && genre.indexOf('letter') < 0) {
-                    insertArticle('book','bookanchor','book','读书',entry.id,shortheadline,iconImg,longlead,bigButton);
-                } else if (genre.indexOf('letter') >= 0) {
-                    insertArticle('letter','letteranchor','letter','读者有话说',entry.id,shortheadline,iconImg,longlead,bigButton);
-                } else if (tag.indexOf('50ideas')>=0){
-                    insertArticle('ideas','ideaanchor','/index.php/ft/tag/50ideas?i=2','50个塑造今日商业世界的观念',entry.id,shortheadline,iconImg,longlead,bigButton);
-                } else  {
-                    insertArticle('more','moreanchor','','更多',entry.id,shortheadline,iconImg,longlead,bigButton);
-                }
-            }
-        } else {
-			delete window.allstories[entry.id];
-		}
-        unusedEntryIndex = entryIndex;
-    });
-
-    //点击story阅读全文
-    addstoryclick();
-	removeBrokenIMG();
-
-    //display app images when loaded
-    showAppImage('fullbody');
-    
-    //检查用户是不是长时间没有获得新内容
-    try {
-        if (lateststory != "" && gOnlineAPI === true) {
-            lateststory = parseInt(lateststory, 10);
-            if (lateststory - latestunix > 86400) { //difference larger than 1 day
-                errorMessage = (lateststory - latestunix)/86400;
-                errorMessage = "Delay: " + errorMessage + " days. ";
-                trackErr(errorMessage, "API Delay");
-            }
-        }
-    } catch (ignore) {
-    
-    }
-    gOnlineAPI = false;
-    gStartStatus = "fillPage end";
-}
-*/
-
 function showAppImage(ele) {
     $('#' + ele + ' .image>figure>img').each(function() {
         var imgUrl = this.src || '';
@@ -1193,64 +945,7 @@ function showThisImage(ele, imgUrl) {
     //ele.parent().parent();
 }
 
-/*
-//插入头版文章
-function insertCover(insertID,insertCount,entryId,shortheadline,coverImg,iconImg,insertLead) {
-    var firstBigButton = '';
-    var iconCode=iconImg;
-    if (insertCount==0) {
-        $('#'+insertID).append('<div class="story oneStory first-child topStory track-click" eventLabel="'+insertID + ': ' + insertCount +'" storyid="' + entryId + '"><div class="cover headline narrow-screen">' + shortheadline + '</div>' + coverImg + '<div class="cover headline wide-screen">' + shortheadline + '</div><div class=lead>'+insertLead+'</div></div>');
-    } else {
-        if (screenWidth>=700 && coverImg!="") {
-            firstBigButton=coverImg.replace(/coverIMG image/g,'coverIMG middle-screen image');
-            iconCode=iconCode.replace(/icon image/g,'icon mobile-screen image');
-        }
-        $('#'+insertID).append('<div class="story oneStory track-click" eventLabel="'+insertID + ': ' + insertCount +'" storyid="' + entryId + '"><div class="headline narrow-screen more-cover">' + shortheadline + '</div>' + firstBigButton + '<div class="cover headline wide-screen">' + shortheadline + '</div>' + iconCode + '<div class=lead>'+insertLead+'</div></div>');
-    }
-}
 
-//插入下面的文章
-function insertArticle(insertCountProp,insertID,channelLink,channelTitle,entryId,shortheadline,iconImg,shortlead,bigButton) {
-    var currentInsert=countInsert[insertCountProp],firstChild='',sectionTitle='',channelURL=channelLink,channelOnClick="",storyTopBreak="",firstBigButton="",headlineNarrow="",headlineWide='<div class="headline">' + shortheadline + '</div>';
-    if (currentInsert === undefined) {
-        currentInsert = 0;
-    }
-    if (channelURL.indexOf("/")<0 && channelURL!=""){
-        channelURL='/index.php/ft/channel/phonetemplate.html?channel='+channelURL;
-    }
-    if (channelURL!=""){
-        channelOnClick=' onclick=\'showchannel(\"' + channelURL + '\",\"'+channelTitle+'\");\'';
-    }
-    if (currentInsert === 0) {
-        firstChild=' first-child';
-        sectionTitle='<a class="section"' + channelOnClick + '><span>'+channelTitle+'</span></a>';
-        storyTopBreak='first-break ';
-        if (screenWidth>=700) {
-            firstBigButton=bigButton;
-            firstChild = firstChild + ' hasBigButton';
-            headlineNarrow='<div class="headline narrow-screen">' + shortheadline + '</div>';
-            headlineWide='<div class="headline wide-screen">' + shortheadline + '</div>';
-            if (shortlead.length<=50) {
-                firstBigButton = firstBigButton.replace(/bigbutton/g,'bigbutton height-limit-96');
-            }
-        }
-    }
-    if (currentInsert % 2 ===0) {
-        firstChild = firstChild + " grid-1-2";
-        storyTopBreak=storyTopBreak + "break-1-2";
-        $('#'+insertID).removeClass("even-item").addClass("odd-item");
-    } else {
-        firstChild = firstChild + " grid-2-2";
-        storyTopBreak=storyTopBreak + "break-2-2";
-        $('#'+insertID).removeClass("odd-item").addClass("even-item");
-    }
-    storyTopBreak='<div class="'+storyTopBreak+'"></div>';
-    $('#'+insertID).append(sectionTitle + storyTopBreak + '<div class="story oneStory'+firstChild+' track-click"  eventLabel="'+ insertID + ': ' + currentInsert +'" storyid="' + entryId + '"><div class=storyInner>'+ headlineNarrow + firstBigButton+ headlineWide + iconImg + '<div class=lead>'+shortlead+'</div></div></div>');
-    //console.log (firstBigButton);
-    countInsert[insertCountProp] = currentInsert + 1;
-    gStartStatus = "fillPage end";
-}
-*/
 
 
 //获取某一天的所有文章
@@ -1262,104 +957,7 @@ function filloneday(onedaydate) {
     var uaStringFillPage;
     //clearfields();
     
-    //更新首页上的视频与互动部分
-    /*
-    if (typeof window.gCustom === "object") {
-        if (typeof window.gCustom.fetchItems === "object") {
-            $.each(window.gCustom.fetchItems, function(i,v) {
-                fetchItem(v.url+themi, v.storage, v.wrapper);
-                unusedEntryIndex = i;
-            });
-        }
-    } else if (!onedaydate || onedaydate == 'newyear') {
-        fetchItem(gHomePageVideo+themi, 'homepagevideo', '#homepageVideo');
-    }
-    */
-    /*
-    if (gStartPageAPI === true) {
-        if (onedaydate != '' && onedaydate != null) {
-            loadcontent='加载' + onedaydate.replace(/([0-9]{4})\-([0-9]+)\-([0-9]+)/g, '$1年$2月$3日')+'文章';
-            apiurl = '/index.php/jsapi/get_last_publish_story?day='+ onedaydate + '&';
-        } else {
-            //apiurl = '/index.php/jsapi/get_new_story?rows=30&';
-            apiurl = gApiUrl.a10001;
-            try{
-                if (_localStorage===1 && localStorage.getItem(gNewStoryStorageKey)) {
-                    savedhomepage = localStorage.getItem(gNewStoryStorageKey);
-                    clearfields();
-                    fillPage(savedhomepage);
-                    if (isOnline()=="possible") {
-                        loadcontent='检查最新的文章';
-                    }
-                    else {
-                        get_allimgdata_from_offline_db();
-                    }
-                } else {
-                    loadcontent='加载最新的文章';
-                }
-            }catch(err){
-                loadcontent='加载最新的文章';
-            }
-        }
-        if (isOnline()=="possible") {
-            $(".loadingStory").html('<div id="homeload"><div class="cell loadingStatus">'+loadcontent+'</div><div class="cell right"><div class="progresscontainer" style="width:auto;"><div id="homeprogressbar" class="progressbar standardprogressbar uses3d progressbg structureprogress" style="width:0%"></div></div></div></div>');
-            $("#homeprogressbar").animate({width:"10%"},300,function(){
-                
-                var message = {};
-                message.head = {};
-                message.head.transactiontype = '10001';
-                message.head.source = 'web';
-                message.body = {};
-                message.body.ielement = {};
-                message.body.ielement.num = 30;
-                gHomeAPIRequest = new Date().getTime();
-
-                $.ajax({
-                    method: gApi001Method,
-                    url: apiurl + '?' + themi,
-                    //data: JSON.stringify(message),
-                    dataType: 'text'
-                })
-                    .done(function(data) {
-                        gHomeAPISuccess = new Date().getTime();
-                        var timeSpent = gHomeAPISuccess - gHomeAPIRequest;
-                        ga('send', 'timing', 'App', 'API Request', timeSpent, 'Home Stories');
-                        if (data.length <= 300) {
-                            return;
-                        }
-                        clearfields();
-                        //console.log (data);
-                        gOnlineAPI = true;
-                        fillPage(data);
-                        saveoneday(onedaydate, data);
-                        notifysuccess();
-                        if (ipadstorage) {
-                            setTimeout(function() {
-                                ipadstorage.droptable();
-                                //save_allimg_to_offline_db();
-                            },10000);
-                        }
-                    }).fail(function(jqXHR){
-                        gOnlineAPI = false;
-                        gHomeAPIFail = new Date().getTime();
-                        var timeSpent = gHomeAPIFail - gHomeAPIRequest;
-                        trackFail(message.head.transactiontype + ":" + jqXHR.status + "," + jqXHR.statusText + "," + timeSpent, "Latest News");
-                    });
-
-                $('.video').remove();
-                $.get(giPadVideo+ onedaydate + themi, function(data) {
-                    if (data != null && data != '') {
-                        data = checkhttps(data);
-                        $('#videocoveranchor').html(data);
-                    }	
-                });
-            });
-        } else {
-            $(".loadingStory").html('<div id="homeload"><div class="cell loadingStatus"></div><div class="cell right"><a class="button light-btn">刷新</a></div></div>');
-            notifysuccess();
-        }
-    }
-    */
+ 
     setTimeout(function(){
         httpspv(gDeviceType + '/homepage');
     }, 2000);
@@ -1391,21 +989,9 @@ function notifysuccess() {
     var todaystamp = unixtochinese(latestunix, 0);
         $('#homeload .loadingStatus').html(todaystamp + ' 出版');
     }
-    // if ($("#homeprogressbar").length>0) {
-    //     $("#homeprogressbar").animate({width:"100%"}, 1500, function(){
-    //         $('#homeload .right').html('<a class="button light-btn">刷新</a>');
-    //         $('#homeload').unbind();
-    //     });
-    // }
 }
 
-/*
-function clearfields() {
-    notifysuccess();
-    $('#datestamp').empty();
-    $('#fullbody .toempty').empty();
-}
-*/
+
 
 function jumpToPage(){
     var hashURI = location.hash || '', _channel_name, _channel_title, k;
@@ -1774,35 +1360,7 @@ function refresh(forceDownload){
     }
 }
 
-/*
-function checkbreakingnews() {
-    var message={};
-    message.head = {};
-    // 突发新闻
-    message.head.transactiontype = '10007';
-    message.head.source = 'web';
-    message.body = {};
-    message.body.ielement = {};
-    message.body.ielement.type = 'breaking';
-    $.ajax({
-        method: gPostMethod,
-        url: gApiUrl.a10007,
-        data: JSON.stringify(message),
-        dataType: 'json'
-    }).done(function(data, textStatus) {
-        if (textStatus == 'success' && data.body.oelement.errorcode === 0) {
-            var breakingNews = data.body.odatalist[0].title || '';
-            breakingNews = breakingNews.replace(/\r\n\t/g,'');
-            if (breakingNews.length>=3) {
-                breakingNews = '<div style="font-size:17px;margin-bottom:10px;color:#FFF;background:-webkit-gradient(linear, 0 0, 0 100%, from(#9E2F50), to(#8E0000));padding:8px;background-color:#9E2F50;">突发新闻：' +  breakingNews + '</div>';
-            }
-            $('#breakingnews').html(breakingNews);
-        }
-    }).fail(function(jqXHR){
-        trackErr(message.head.transactiontype, 'breaking news');
-    });
-}
-*/
+
 
 function payWallUpdateHint(url){
     return new Promise((resolve, reject) => {
@@ -2172,118 +1730,10 @@ function displaystory(theid, language, forceTitle) {
             }
         }
     }
-    // if (storyViewMode === 'normal') {
-    //     $('#storyview').removeClass('columnFlowOn');
-    //     displaystoryNormal(theid, language);
-    // } else {
-    //     $('#storyview').addClass('columnFlowOn');
-    //     displaystoryColumn(theid, language);
-    // }
+
     displaystoryNormal(theid, language, forceTitle);
 }
 
-
-// function displaystoryColumn(theid, language) {
-//     // dependency: unixtochinese, saveImgSize
-
-//     //remove popup ad target
-//     $('#pop-ad').remove();
-
-//     // manipulate dom 
-//     document.getElementById('story-column-flow').innerHTML = '<section id="story-column-viewport"><article id="story-column-target"></article></section>';
-//     var storyColumnViewport = document.getElementById('story-column-viewport');
-//     var windowWidth = $(window).width();
-//     var coverHeight = $(window).height();
-
-//     //console.log (coverHeight);
-
-//     // if page padding is lower than 25, it will not flow good on all screens
-//     var pagePadding = 25;
-//     var contentHeight;
-
-//     // get story data to flow into the pages
-//     var storyData = allstories[theid];
-
-//     // construct flowed content
-//     var storyBody = storyData.cbody;
-//     var flowedContent = storyBody;
-
-//     // construct fixed content
-//     //var storyTopBanner = '<div class="adiframe banner full-width" type="fullwidth" frame="adfullwidth"></div>';
-//     var storyTopBanner = '';
-//     var storyTimeStamp = unixtochinese(storyData.last_publish_time||storyData.fileupdatetime, 1);
-//     var byline = (storyData.cbyline_description||'').replace(/作者[：:]/g, '') + ' ' + (storyData.cauthor||'').replace(/,/g, '、') + ' ' + (storyData.cbyline_status||'');
-//     var storyHeadline = storyData.cheadline || '';
-//     var storyTag = storyData.tag || '';
-//     var storyImage;
-//     if ((storyData.story_pic.smallbutton || storyData.story_pic.other) && storyTag.indexOf('插图') >= 0) {
-//         storyImage = '<div class="coverIMG"><figure><img src="'+(storyData.story_pic.smallbutton || storyData.story_pic.other)+'"></figure></div>';
-//     } else if (storyData.story_pic.smallbutton || storyData.story_pic.other) {
-//         storyImage = '<div class="bigIMG image"><figure><img class="app-image" src="'+saveImgSize((storyData.story_pic.smallbutton || storyData.story_pic.other))+'"></figure></div>';
-//     } else if (storyData.story_pic.cover) {
-//         storyImage = '<div class="coverIMG image"><figure><img class="app-image" src="'+saveImgSize(storyData.story_pic.cover)+'"></figure></div>';
-//     } else if (storyData.story_pic.skyline) {
-//         storyImage = '<div class="leftimage image" style="width:130px;height:84px;"><figure><img src="'+storyData.story_pic.skyline+'" class="app-image"></figure></div>';
-//     } else if (storyData.story_pic.bigbutton) {
-//         storyImage = '<div class="leftimage image" style="width:167px;height:96px;"><figure><img src="'+saveImgSize(storyData.story_pic.bigbutton)+'" class="app-image"></figure></div>';
-//     } else {
-//         storyImage = '';
-//     }
-
-
-//     var storyHeader = '<div class="col-span-2">' + storyTopBanner + '<div class="column-story-header">' + storyImage + '<div class="dateStamp">'+storyTimeStamp+'</div><h1 class="column-story-headline">'+storyHeadline+'</h1><div class="byline">'+byline+'</div></div></div>';
-//     var fullPageAd = '<div class="col-span-4 attach-page-2"><div class="full-page-ad" style="width:  '+ windowWidth +'px;height: '+ coverHeight +'px;"><div style="top:-'+ pagePadding +'px;left:0;width:100%;height:100%;position:absolute;background: #333;color:white;"><div id="pop-ad" class="overlay in-page"></div><div class="adiframe hidden" type="0" adwidth="0" frame="fullScreen"></div></div></div></div>';
-//     var mpuVW = '<div class="anchor-bottom-col-2 attach-page-4"><div class="adiframe mpu-phone for-phone" type="250" frame="ad300x250-story-vw"></div></div>';
-//     var mpuStory = '<div class="anchor-top-col-2 attach-page-6"><div class="adiframe mpu-phone for-phone" type="250" frame="ad300x250-story"></div></div>';
-//     var fixedContent  = storyHeader + fullPageAd + mpuVW + mpuStory;
-    
-
-//     window.cf = new FTColumnflow("story-column-target", "story-column-viewport", {
-//         //showGrid: true,
-//         columnWidth:            400,
-//         //lineHeight:             30,
-//         viewportWidth:          windowWidth,
-//         viewportHeight:         coverHeight,
-//         columnGap:              21,
-//         standardiseLineHeight:  true, //useful when you have subTitle or varied fonts
-//         pagePadding:            pagePadding,
-//         minFixedPadding:        0.5,
-//         pageArrangement:       'vertical'
-//     });
-
-
-//     cf.flow(flowedContent, fixedContent);
-
-//     var scrollingPart = document.getElementById('story-column-target');
-
-//     // insert full screen ads between pages
-//     // var fullScreenAdEle = document.createElement('div');
-//     // fullScreenAdEle.className = 'full-screen-ad';
-//     // fullScreenAdEle.style.height = coverHeight + 'px';
-//     // var cfRenderArea = scrollingPart.querySelector('.cf-render-area');
-//     // if (cf.pageCount >= 3) {
-//     //     cfRenderArea.insertBefore(fullScreenAdEle, cfRenderArea.childNodes[2]);
-//     // }
-
-    
-//     // scrollingPart.innerHTML = '<div id=sectionwrapper><section><div>Page 1<p>Swipe left to scroll the next page into view.  If you swipe quickly...</p></div></section><section><div>Page 2<p>...lots...</p></div></section><section><div>Page 3<p>...and lots...</p></div></section><section><div>Page 4<p>...of pages...</p></div></section><section><div>Page 5<p>...in one single...</p></div></section><section><div>Page 6<p>...scroll movement.  FTScroller will snap to the nearest page when the scroll animation comes to rest.</p></div></section>        </div>';
-//     //console.log (scrollingPart.offsetHeight);
-//     contentHeight = coverHeight * cf.pageCount;
-//     // console.log (scrollingPart.style);
-//     scrollingPart.style.height = contentHeight + 'px';
-//     // console.log (scrollingPart.style.height);
-//     window.Columnscroller = new FTScroller(document.getElementById('story-column-viewport'), {
-//         snapping: true,
-//         bouncing: true,
-//         scrollbars: true,
-//         scrollingX: false,
-//         singlePageScrolls: true,
-//         snapSizeY: coverHeight,
-//         contentWidth: windowWidth,
-//         contentHeight: contentHeight
-//     });
-//     updateAds();
-// }
 
 
 
@@ -2558,37 +2008,6 @@ function displaystoryNormal(theid, language, forceTitle) {
     }
 
 
-    /*
-    pCount = 0;
-    insertAdForVW = ($('#fullbody [frame=ad300x250-home-vw]').length >0)? true: false;
-    
-    if (insertAdForVW === true) {
-        // this means VW's ad is on
-        // two mpu ads need to be displayed in story
-        for (pCount=0; insertAdCharCount<70 && pCount<100; pCount++) {
-            currentPara = paraGraphs.eq(pCount);
-            if (currentPara.html() && !regIsTitle.test(currentPara.html()) && !regIsImage.test(currentPara.html())) {
-                insertAdCharCount += currentPara.html().length;
-            }
-        }
-        insertAd2 = pCount;
-        pCountLimit = 270;
-    } else {
-        pCountLimit = 220;
-    }
-    if (actualLanguage === 'en') {
-        pCountLimit = 3 * pCountLimit;
-    }
-    insertAdCharCount = 0;
-    for (pCount=pCount; insertAdCharCount<pCountLimit && pCount<100; pCount++) {
-        currentPara = paraGraphs.eq(pCount);
-        if (currentPara.html() && !regIsTitle.test(currentPara.html()) && !regIsImage.test(currentPara.html()) && !currentPara.hasClass('centerButton')) {
-            insertAdCharCount += currentPara.html().length;
-        }
-    }
-    insertAd = pCount;
-    */
-
     //insert ad position into story page
     //insert to the end of the target paragraph
 
@@ -2604,21 +2023,13 @@ function displaystoryNormal(theid, language, forceTitle) {
             insertAd = insertAd - 1;
         }
         $('<div class="adiframe mpu-phone for-phone" type="250" frame="ad300x250-story"></div>').insertAfter(paraGraphs.eq(insertAd));
-    //if (insertAdForVW === true) {
-        /*
-        if (insertAd2 > 0) {
-            insertAd2 = insertAd2 -1;
-        }
-        
-        insertAd2  = 10;
-        */
       
         $('<div class="adiframe mpu-phone for-phone" type="250" frame="ad300x250-story-vw"></div>').insertAfter(paraGraphs.eq(insertAd2));
         console.log('aa:'+paraGraphs.eq(insertAd));
     }
 
              
-    //}
+
 
 
     
@@ -4616,17 +4027,7 @@ function init_union_adv() {
     return false;
 }
 
-//navigator.connection.type is not supported by most browsers yet
-/*
-function updateConnectionClass() {   
-    var root = document.documentElement,   
-        types = "unknown ethernet wifi 2g 3g 4g none".split(" ");   
-    for (var i = 0, n = types.length; i < n; i++) {   
-        root.classList.remove("network-" + types[i]);   
-    }   
-    root.classList.add("network-" + navigator.connection.type);   
-} 
-*/
+
 
 //in native iOS app, tap status bar will trigger this
 function scrollToTop() {
