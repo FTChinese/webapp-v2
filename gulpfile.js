@@ -94,7 +94,6 @@ gulp.task('origami', function () {
   getUrltoFile ('http://build.origami.ft.com/bundles/css?modules=o-ft-header@^2.5.15,o-ft-footer@^2.0.4,o-table@^1.6.0', './bower_components/origami/build.scss');
 });
 
-
 gulp.task('ea', function () {
   var message = {};
   message.head = {};

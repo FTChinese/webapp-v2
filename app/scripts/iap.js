@@ -46,7 +46,6 @@ var memberTemplate = '<div product-id="{{id}}" class="iap-item oneStory iap-memb
 var gUserId = getCookie('USER_ID') || '';
 
 
-
 // MARK: - Display all the iap products on the home page
 function displayProductsOnHome(products) {
     // TODO: When displaying iap products on home, it should be grouped by type
@@ -233,7 +232,7 @@ function iapActions(productID, actionType, expireDate) {
  
     postPayState(productID, productPrice, gUserId, tradeNum, actionType);
     var url = window.location.hash;
-    ga('send','event','android member subscribe','toPay','url:'+ url + 'productId:' +  productID + 'buyState:' + actionType);
+    
 
     // MARK: - iapHTMLCode is used for home and channel page, iapRailHTML is used for product detail page
     switch (actionType) { 
@@ -269,8 +268,14 @@ function iapActions(productID, actionType, expireDate) {
             }
         }
     }
+
+    // MARK: - Send Event to GA and Other Analytics
+    var eventAction = 'Buy ' + actionType + ': ' + productID;
+    ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel);
+    // FIXME: Is this useful? 
     actionType = '';
 }
+
  // MARK: - Get the index number of the current product for window.iapProducts
 function getproductIndex(productID){
     var productIndex = 0;
@@ -306,7 +311,8 @@ function getBuyCode(productId, productPrice, userId, productName, orderNum){
                     postPayState(productIdStr, productPrice, userId, orderNum, 'start');
                     ftjavacriptapp.payzfb(productId,productPrice,userId, productName);
                     var url = window.location.hash;
-                    ga('send','event','android member subscribe','openPayment','url:'+url+'productId:'+productId);
+                    var eventAction = 'Buy: ' + productIdStr;
+                    ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel);
                 }
             } catch (ignore) {
                 alert('请求失败！');
@@ -332,7 +338,6 @@ function getBuyCode(productId, productPrice, userId, productName, orderNum){
 //                 buyCode = ' onclick="ftjavacriptapp.payzfb(\''+ productId +'\',\''+ priceForAndroid +'\',\''+ userId +'\',\''+ productName +'\')"';
 
 //                 var url = window.location.hash;
-//                 ga('send','event','android member subscribe','openPayment','url:'+url+'productId:'+productId);
 //             } catch (ignore) {
 //                 alert('请求失败！');
 //             }
