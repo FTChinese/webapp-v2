@@ -142,15 +142,14 @@ img {border:0;max-width:100%;}
     }
     // New Ad
     // MARK: determin device type 
-
-    if (uaString.toLowerCase().indexOf("android")> -1 && uaString.toLowerCase().search("mobile") > -1) {
+    
+    if (uaString.toLowerCase().indexOf("android")> -1 && uaString.toLowerCase().indexOf("mobile") < 0) {
+        deviceId = '6000';
+        deviceType = 'PadApp';
+    } else {
         deviceId = '4000';//AndroidApp
         deviceType = 'AndroidApp';
-    } else {
-        deviceId = '6000';
-        deviceId = 'PadApp'
     }
-    
     
 
     adchannelId = '1000';
@@ -265,6 +264,7 @@ img {border:0;max-width:100%;}
         adchannelId = gSpecialAdId;
     }
     c = deviceId + adchannelId + adPatternId;
+    //console.log('computed c:',c);
     var adName = 'db-'+ c;
     var deviceWidth = window.parent.innerWidth || window.parent.document.documentElement.clientWidth || window.parent.document.body.clientWidth;
     var bannerW = deviceWidth;
@@ -427,7 +427,6 @@ try {
         document.body.style.backgroundColor = '#fff1e5';
     }
 
-    //console.log (adId);
     try {
         gParentDom = parent.document.getElementById(adId);
         gParentA = gParentDom.getElementsByTagName("a")[0];
