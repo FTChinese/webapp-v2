@@ -497,22 +497,26 @@ function vipCenter(dataObj){
     var headlineDiv = document.querySelectorAll('.headline');
     var toPayHeadline = [];
     var len = headlineDiv.length;
+
     if (len>0){
         for (var i = 0; i < len; i++) {
             if (hasClass(headlineDiv[i],narrowClass)||hasClass(headlineDiv[i],wideClass)){
                 toPayHeadline.push(headlineDiv[i]);
             }
+        //    console.log('getPayStory len:'+len +'--headlineDiv:'+ hasClass(headlineDiv[0],'narrow-locked'));
         }
     }
+
     return toPayHeadline;
  }
     
 
 function updateLockClass(){
     var toPayHeadline =  getPayStory('narrow-locked','wide-locked');
-    console.log('updateLockClass:'+toPayHeadline.length);
+    // console.log('updateLockClass:'+toPayHeadline.length);
     if (toPayHeadline.length>0){
         for (var k = 0, len=toPayHeadline.length; k < len; k++) {
+            console.log('hasClass:'+hasClass(toPayHeadline[k],'narrow-locked'));
             if (hasClass(toPayHeadline[k],'narrow-locked')){
                 removeClass(toPayHeadline[k], 'narrow-locked');
                 addClass(toPayHeadline[k], 'narrow-unlocked');
@@ -538,7 +542,7 @@ function updateUnlockClass(){
     }
 }
 function hasClass(ele, cls) {
-    cls = cls || '';
+    var cls = cls || '';
     if (cls.replace(/\s/g, '').length === 0) {
         return false; 
     }else{
