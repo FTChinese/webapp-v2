@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1263; //当前的版本号
+var _currentVersion = 1264; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -1841,6 +1841,8 @@ function displaystoryNormal(theid, language, forceTitle) {
         // console.log(Number(allId.last_publish_time)+604800);
     }
 
+    console.log(isStoryBeforeOneWeek);
+
     var isFTCw = (!getCookie('isFTCw')) ? true : Boolean(Number(getCookie('isFTCw')));
     var isHasPaywall = false;
 
@@ -1962,7 +1964,7 @@ function displaystoryNormal(theid, language, forceTitle) {
             }else if (allId.paywall === 2 || isStoryBeforeOneWeek){
                 $('#storyview .storybody').html(getdownloadHint('story_'+theid+'_'+actualLanguage));
             }else{
-                    $('#storyview .storybody').html(getpaywallHint('story_'+theid+'_'+actualLanguage));
+                $('#storyview .storybody').html(getpaywallHint('story_'+theid+'_'+actualLanguage));
             }
             isHasPaywall = true;
             window.gSubscriptionEventLabel = 'EnglishText/story/'+theid+'/'+actualLanguage;
@@ -1987,20 +1989,24 @@ function displaystoryNormal(theid, language, forceTitle) {
         actualLanguage = 'ch';
         byline = (allId.cbyline_description||'').replace(/作者[：:]/g, '') + ' ' + (allId.cauthor||'').replace(/,/g, '、') + ' ' + (allId.cbyline_status || '');
         //alert (allId.cbody);
+        window.gSubscriptionEventLabel = 'ExclusiveContent/premium/' + theid;
         if (!isFTCw) {
             $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));     
             isHasPaywall = false;
         } else {
             if (allId.paywall === 1) {
-                $('#storyview .storybody').html(storyimage).append(getpaywallHint('story_'+theid+'_'+actualLanguage));
-                window.gSubscriptionEventLabel = 'ExclusiveContent/premium/' + theid;
+                $('#storyview .storybody').html(storyimage).append(getpaywallHint('story_'+theid+'_'+actualLanguage));  
                 ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
             } else if (allId.paywall === 2) {
                 $('#storyview .storybody').html(storyimage).append(getdownloadHint('story_'+theid+'_'+actualLanguage));
-                window.gSubscriptionEventLabel = 'ExclusiveContent/premium/' + theid;
                 ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
             } else {
-                $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));
+                if(isStoryBeforeOneWeek){
+                    $('#storyview .storybody').html(storyimage).append(getpaywallHint('story_'+theid+'_'+actualLanguage));
+                    ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
+                }else{
+                    $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));
+                }
             }
             isHasPaywall = true;
         }
@@ -2241,6 +2247,9 @@ function displaystoryNormal(theid, language, forceTitle) {
 
 //share to social buttons
 function updateShare(domainUrl, mobileDomainUrl, contentType, contentId, contentTitle, contentLongTitle, contentImage, contentDescription, shareMobile) {
+    isReqSuccess = false;
+    updatePageAction();
+
     console.log('exect updateShare');
     var url = encodeURIComponent(domainUrl) + encodeURIComponent(contentType) + contentId;
     var mobileUrl = encodeURIComponent(mobileDomainUrl) + encodeURIComponent(contentType) + contentId;
