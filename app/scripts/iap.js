@@ -306,15 +306,18 @@ function getBuyCode(productId, productPrice, userId, productName, orderNum){
 
         if(osVersion.indexOf('Android')>=0){
             try {
-                if(ftjavacriptapp){
-                    // alert('aa:'+productId+productPrice+userId+productName+orderNum);
-                    postPayState(productIdStr, productPrice, userId, orderNum, 'start');
+                if(ftjavacriptapp){                   
                     ftjavacriptapp.payzfb(productId,productPrice,userId, productName);
+                    postPayState(productIdStr, productPrice, userId, orderNum, 'start');
                     var url = window.location.hash;
                     var eventAction = 'Buy: ' + productIdStr;
                     ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel);
+                    setTimeout(function(){
+                        postPayState(productIdStr, productPrice, userId, orderNum, 'start pending');
+                    },15000);
                 }
             } catch (ignore) {
+                postPayState(productIdStr, productPrice, userId, orderNum, 'start fail');
                 alert('请求失败！');
             }
         }
@@ -377,7 +380,8 @@ function postPayState(productId, productPrice, userId, orderNum, actionType){
             productPrice:productPrice,
             userId:userId,
             orderNum:orderNum,
-            actionType:actionType
+            actionType:actionType,
+            actionVersion:_currentVersion
         }
         xhrpw.onload = function() {
             if (xhrpw.status === 200) {
