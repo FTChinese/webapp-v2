@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1256; //当前的版本号
+var _currentVersion = 1259; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -62,6 +62,8 @@ var gHideAd = (window.location.href.indexOf('hideAd=yes') >= 0) ? true: false;
 
 // MARK: For Tencent market, hide ad sign
 var gHideAdSign = (window.location.href.indexOf('utm_campaign=an_tencent') >= 0) ? true: false;
+
+var gSubscriptionEventLabel = '';
 
 //开机的时候检查屏幕宽度，以便节约流量
 //我们的基本假设是，不管横屏还是竖屏，只要宽度小于700，那就是手机；否则就是平板
@@ -128,6 +130,14 @@ if (window.location.hostname === 'localhost' || window.location.hostname.indexOf
         gStartPageTemplate = 'api/homecontent.html?';
     }
 }
+
+
+function getEventLabelFromUrl(url) {
+    var eventLabel = url;
+    console.log ('event label is now: ' + eventLabel);
+    return eventLabel;
+}
+
 
 //选择模板
 if (typeof window.gCustom === 'object') {
@@ -352,7 +362,7 @@ function startpage() {
             var iapTitle = $(this).attr('iap-title')|| 'FT中文网';
             var channelType = $(this).attr('channel-type');
             payWallUpdateSub('api/paywall.json',iapAction,iapTitle);   
-         }else{
+         } else {
             var getUserId = getCookie('USER_ID');
             if(!getUserId){
                 turnonOverlay('loginBox');
@@ -364,9 +374,8 @@ function startpage() {
             } 
             console.log('channelType:'+channelType);
             var url = window.location.hash;
-            ga('send','event','android member subscribe','subscribe now','url:'+url+'type:'+channelType);
+            ga('send', 'event', 'Android Privileges','Buy: ' + iapTitle, window.gSubscriptionEventLabel);
          }
-
     });
 
 function payWallUpdateSub(url,iapAction,iapTitle){
@@ -3503,23 +3512,23 @@ function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFra
         });
     }
 }
-function blockDailyEnglish(url){ 
+function blockDailyEnglish(url){
     var content = $('#scrollcontainer').html();
     var isFTCpw = Boolean(Number(getCookie('isFTCw')));
     var content = $('.bottom-part').html();
-    if(isFTCpw){
+    if (isFTCpw) {
         $('.prev-next').hide();
         $('#scrollcontainer').html(getdownloadHint(url));
         $('.bottom-part').html('<div channel-type='+url+' style="text-align: center;">成为付费会员，阅读FT独家内容<br>请<a href="http://www.ftacademy.cn/subscription.html" style="color:#26747a">点击此处</a> 。</div>');
-        ga('send','event','android member subscribe','subscribe hint', url);
-    }else{
+        window.gSubscriptionEventLabel = getEventLabelFromUrl(url);
+        ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
+    } else {
         $('.prev-next').show();
         $('#scrollcontainer').html(content);
         $('.bottom-part').html(content);
     }
      
 }
-
 
 function showPicture (link) {
     turnonOverlay('watchVideo');
