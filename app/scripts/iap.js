@@ -516,7 +516,7 @@ function updateLockClass(){
     // console.log('updateLockClass:'+toPayHeadline.length);
     if (toPayHeadline.length>0){
         for (var k = 0, len=toPayHeadline.length; k < len; k++) {
-            console.log('hasClass:'+hasClass(toPayHeadline[k],'narrow-locked'));
+           
             if (hasClass(toPayHeadline[k],'narrow-locked')){
                 removeClass(toPayHeadline[k], 'narrow-locked');
                 addClass(toPayHeadline[k], 'narrow-unlocked');

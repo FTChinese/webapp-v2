@@ -2240,9 +2240,7 @@ function displaystoryNormal(theid, language, forceTitle) {
 
 //share to social buttons
 function updateShare(domainUrl, mobileDomainUrl, contentType, contentId, contentTitle, contentLongTitle, contentImage, contentDescription, shareMobile) {
-    isReqSuccess = false;
-    updatePageAction();
-
+    
     console.log('exect updateShare');
     var url = encodeURIComponent(domainUrl) + encodeURIComponent(contentType) + contentId;
     var mobileUrl = encodeURIComponent(mobileDomainUrl) + encodeURIComponent(contentType) + contentId;
@@ -2307,6 +2305,9 @@ function updateShare(domainUrl, mobileDomainUrl, contentType, contentId, content
     if (shareMobile !== '') {
         $('#shareMobile').val(shareMobile);
     }
+
+    isReqSuccess = false;
+    updatePageAction();
 }
 
 
