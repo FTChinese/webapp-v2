@@ -101,7 +101,6 @@ function getProductHTMLCode(products, forGroup, dataObj) {
                 if(dataObj.standard===1 && dataObj.premium===0){
                     products[0].isPurchased = true;
                     products[0].state = '<button class="iap-move-left">已订阅</button>';
-                    // products[1].state = '<a'+getBuyCode(products[1].id, productPrice, gUserId, productName, orderNum)+'><button class="iap-move-left">现在升级</button></a>';
                     products[1].state = '<a onclick="getBuyCode(\''+ products[1].id +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ orderNum +'\')"><button class="iap-move-left">订阅</button></a>';
                 }else if(dataObj.premium===1){
                     products[i].isPurchased = true;
@@ -193,10 +192,8 @@ function updateProductStatus(productIndex, isProductPurchased, isProductDownload
 // MARK: - Update DOM UI based on user actions
 function iapActions(productID, actionType, expireDate) {    
     var iapButtons='';
-    var iapRailHTML = '';
     var iapHTMLCode = '';
     var productPrice = '';
-    var productTeaser = '';
     var productIndex = 0;
     var productName ='';
     var tradeNum = '';
@@ -217,7 +214,6 @@ function iapActions(productID, actionType, expireDate) {
 
     // MARK: - get product price here
     productPrice = window.iapProducts[productIndex].price || '0￥';
-    productTeaser = window.iapProducts[productIndex].teaser || '';
     productName = window.iapProducts[productIndex].title || '';
 
     // MARK: - Get product type based on its identifiers
@@ -227,14 +223,10 @@ function iapActions(productID, actionType, expireDate) {
     }else {
         productType = 'eBook';
     }
- 
-    // alert(':productID:'+productID+':tradeNum:'+tradeNum+':productPrice:'+productPrice+':actionType:'+actionType);
+
  
     postPayState(productID, productPrice, gUserId, tradeNum, actionType);
-    var url = window.location.hash;
-    
 
-    // MARK: - iapHTMLCode is used for home and channel page, iapRailHTML is used for product detail page
     switch (actionType) { 
         case 'success':
             if (productType === 'membership') {
@@ -248,8 +240,6 @@ function iapActions(productID, actionType, expireDate) {
         case 'fail':
             if (productType === 'membership') {  
                 turnonOverlay('iap-hint');
-                // iapHTMLCode = '<a'+getBuyCode(productID, productPrice, gUserId, productName, tradeNum)+'><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>';
-
                 iapHTMLCode = '<a onclick="getBuyCode(\''+ productID +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ tradeNum +'\')"><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>'; 
             } 
             updateProductStatus(productIndex, false, false); 
