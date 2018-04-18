@@ -417,14 +417,7 @@ function startpage() {
     });
 
 
-    // $('body').on('click', '.paywall-channel', function(){
-    //     var iapAction = $(this).attr('iap-action');
-    //     var iapTitle = $(this).attr('iap-title') || $(this).html() || 'FT中文网';
-    //     if (iapAction) {
-    //         displayProducts(window.iapProducts, iapAction, iapTitle);
-    //     }
-    // });
-    
+
 
     //openning a page in an iframe is not viable for now in iPhone native app
     /*
@@ -1779,11 +1772,14 @@ function getdownloadHint(channelType){
 }
 
 
-var selectedStoryId = '';
+
 function displaystoryNormal(theid, language, forceTitle) {
     
-    selectedStoryId = theid;
-    
+    if (isEditorChoiceChannel){
+        isEditorChoiceStory = true;
+    }else{
+        isEditorChoiceStory = false;
+    }
     var columnintro = ''; 
     var storyimage;
     var allId = allstories[theid];
@@ -1841,7 +1837,6 @@ function displaystoryNormal(theid, language, forceTitle) {
         // console.log(Number(allId.last_publish_time)+604800);
     }
 
-    console.log(isStoryBeforeOneWeek);
 
     var isFTCw = (!getCookie('isFTCw')) ? true : Boolean(Number(getCookie('isFTCw')));
     var hasPaywall = false;
@@ -1893,10 +1888,17 @@ function displaystoryNormal(theid, language, forceTitle) {
 
         actualLanguage = 'en';
         byline = (allstories[theid].ebyline_description || 'By') + ' ' + eauthor;
-        
+        window.gSubscriptionEventLabel = 'EnglishText/story/'+theid+'/'+actualLanguage;
         if (!isFTCw){
-            $('#storyview .storybody').html(storyimage).append(allId.ebody);
-            hasPaywall = false;
+            if (!isPremium && isEditorChoiceStory){
+                $('#storyview .storybody').html(storyimage).append(getpaywallHint('story_'+theid+'_'+actualLanguage));     
+                hasPaywall = true; 
+                ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
+            }else{
+                $('#storyview .storybody').html(storyimage).append(allId.ebody);
+                hasPaywall = false;   
+            }
+
         } else {
             if ( allId.paywall === 1 || isStoryBeforeOneWeek){ 
                 $('#storyview .storybody').html(storyimage).append(getpaywallHint('story_'+theid+'_'+actualLanguage));
@@ -1906,7 +1908,7 @@ function displaystoryNormal(theid, language, forceTitle) {
                 $('#storyview .storybody').html(storyimage).append(getpaywallHint('story_'+theid+'_'+actualLanguage));
             }
             hasPaywall = true;
-            window.gSubscriptionEventLabel = 'EnglishText/story/'+theid+'/'+actualLanguage;
+            
             ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
         }
         $('.enbutton').addClass('nowreading');
@@ -1955,9 +1957,16 @@ function displaystoryNormal(theid, language, forceTitle) {
             //console.log ("i: " + i + " ebodyTotal: " + ebodyTotal + ' cbodyTotal: ' + cbodyTotal);
         }
         ceDiff = cbodyTotal - ebodyTotal;
+        window.gSubscriptionEventLabel = 'EnglishText/story/'+theid+'/'+actualLanguage;
         if (!isFTCw){
-            $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
-            hasPaywall = false;
+            if (!isPremium && isEditorChoiceStory){
+                $('#storyview .storybody').html(getpaywallHint('story_'+theid+'_'+actualLanguage));
+                hasPaywall = true; 
+                ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
+            }else{
+                $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
+                hasPaywall = false;  
+            }
         }else{
             if (allId.paywall === 1 || isStoryBeforeOneWeek ){
                 $('#storyview .storybody').html(getpaywallHint('story_'+theid+'_'+actualLanguage));
@@ -1966,8 +1975,7 @@ function displaystoryNormal(theid, language, forceTitle) {
             }else{
                 $('#storyview .storybody').html(getpaywallHint('story_'+theid+'_'+actualLanguage));
             }
-            hasPaywall = true;
-            window.gSubscriptionEventLabel = 'EnglishText/story/'+theid+'/'+actualLanguage;
+            hasPaywall = true;    
             ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
         }
 
@@ -2757,6 +2765,7 @@ function getURLParameter(url, name) {
 }
 
 function showchannel(url, channel, requireLogin, openIniFrame, channelDescription) {
+
     if (requireLogin !== undefined && requireLogin === 1 && (username === undefined || username ==='')) {
         $('#popup-title').html('提示');
         $('#popup-description').html('对不起，您需要先登录才能使用这个功能');
@@ -2952,7 +2961,7 @@ function showchannel(url, channel, requireLogin, openIniFrame, channelDescriptio
     pauseallvideo();
 	removeBrokenIMG();
 
-    
+    isEditorChoiceChannel = (channelClass==='editorchoice') ? true : false;
 }
 
 function startslides() {

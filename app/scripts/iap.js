@@ -404,6 +404,9 @@ $('body').on('click', '#iap-know', function(){
 //MARK: - refresh page to update lock class
 var isReqSuccess = false;
 var i = 0;
+var isPremium = false;
+var isEditorChoiceStory = false;
+var isEditorChoiceChannel = false;
 function payWall(url){
     if(!isReqSuccess && i<3){ 
         deleteCookie('isFTCw'); 
@@ -417,10 +420,15 @@ function payWall(url){
                 vipCenter(parsedData)
                 isReqSuccess = true;
                 setCookie('isFTCw', parsedData.paywall, '', '/');
-                if (parsedData.paywall >= 1) {      
+                if (parsedData.paywall >= 1) { 
                     updateUnlockClass();  
-                }else{
-                    updateLockClass();
+                }else{  
+                    isPremium = (parsedData.premium >= 1) ? true : false ;  
+                    if(!isPremium && isEditorChoiceChannel){
+                        updateUnlockClass();
+                    }else{
+                        updateLockClass();
+                    }   
                 }
             } else {
                 isReqSuccess = false;
@@ -561,7 +569,6 @@ function updatePageAction(){
         var dataObj = parseUrlSearch();//(2) ["premium=0", "standard=1"]
         vipCenter(dataObj);
         payWall('api/paywall.json');
-        console.log('userId is:'+userId1);
     }else{
         var userId1 = getCookie('USER_ID') || '';
         if (!!userId1) {  
@@ -575,6 +582,7 @@ function updatePageAction(){
 window.onload = function(){
     updatePageAction();
 }
+
 
 
 
