@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1267; //当前的版本号
+var _currentVersion = 1268; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -2904,6 +2904,8 @@ function showchannel(url, channel, requireLogin, openIniFrame, channelDescriptio
                 var p=$(this).attr('title') || $(this).html() || 'FT中文网';
                 showchannel($(this).attr('url'), p, ($(this).hasClass('require-log-in') == true) ? 1 : 0);
             });
+
+            
             //startslides();
 
             //记录频道页面PV
@@ -2949,6 +2951,8 @@ function showchannel(url, channel, requireLogin, openIniFrame, channelDescriptio
     updateShare(url, url, '', '', channel, channel, gIconImage, channelDetail, channel+ ' ' +url);
     pauseallvideo();
 	removeBrokenIMG();
+
+    
 }
 
 function startslides() {
