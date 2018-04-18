@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1264; //当前的版本号
+var _currentVersion = 1267; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -1844,7 +1844,7 @@ function displaystoryNormal(theid, language, forceTitle) {
     console.log(isStoryBeforeOneWeek);
 
     var isFTCw = (!getCookie('isFTCw')) ? true : Boolean(Number(getCookie('isFTCw')));
-    var isHasPaywall = false;
+    var hasPaywall = false;
 
     // new Date(2018,3,16,00,00,00).getTime()
    
@@ -1896,7 +1896,7 @@ function displaystoryNormal(theid, language, forceTitle) {
         
         if (!isFTCw){
             $('#storyview .storybody').html(storyimage).append(allId.ebody);
-            isHasPaywall = false;
+            hasPaywall = false;
         } else {
             if ( allId.paywall === 1 || isStoryBeforeOneWeek){ 
                 $('#storyview .storybody').html(storyimage).append(getpaywallHint('story_'+theid+'_'+actualLanguage));
@@ -1905,7 +1905,7 @@ function displaystoryNormal(theid, language, forceTitle) {
             }else{
                 $('#storyview .storybody').html(storyimage).append(getpaywallHint('story_'+theid+'_'+actualLanguage));
             }
-            isHasPaywall = true;
+            hasPaywall = true;
             window.gSubscriptionEventLabel = 'EnglishText/story/'+theid+'/'+actualLanguage;
             ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
         }
@@ -1957,7 +1957,7 @@ function displaystoryNormal(theid, language, forceTitle) {
         ceDiff = cbodyTotal - ebodyTotal;
         if (!isFTCw){
             $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
-            isHasPaywall = false;
+            hasPaywall = false;
         }else{
             if (allId.paywall === 1 || isStoryBeforeOneWeek ){
                 $('#storyview .storybody').html(getpaywallHint('story_'+theid+'_'+actualLanguage));
@@ -1966,7 +1966,7 @@ function displaystoryNormal(theid, language, forceTitle) {
             }else{
                 $('#storyview .storybody').html(getpaywallHint('story_'+theid+'_'+actualLanguage));
             }
-            isHasPaywall = true;
+            hasPaywall = true;
             window.gSubscriptionEventLabel = 'EnglishText/story/'+theid+'/'+actualLanguage;
             ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
         }
@@ -1992,23 +1992,27 @@ function displaystoryNormal(theid, language, forceTitle) {
         window.gSubscriptionEventLabel = 'ExclusiveContent/premium/' + theid;
         if (!isFTCw) {
             $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));     
-            isHasPaywall = false;
+            hasPaywall = false;
         } else {
             if (allId.paywall === 1) {
                 $('#storyview .storybody').html(storyimage).append(getpaywallHint('story_'+theid+'_'+actualLanguage));  
+                hasPaywall = true;
                 ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
             } else if (allId.paywall === 2) {
                 $('#storyview .storybody').html(storyimage).append(getdownloadHint('story_'+theid+'_'+actualLanguage));
+                hasPaywall = true;
                 ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
             } else {
                 if(isStoryBeforeOneWeek){
                     $('#storyview .storybody').html(storyimage).append(getpaywallHint('story_'+theid+'_'+actualLanguage));
                     ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
+                    hasPaywall = true;
                 }else{
                     $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));
+                    hasPaywall = false;
                 }
             }
-            isHasPaywall = true;
+            
         }
         if (allId.cbody.indexOf('inlinevideo')>=0) {
             $('#storyview .storybody .inlinevideo').each(function (){
@@ -2045,31 +2049,20 @@ function displaystoryNormal(theid, language, forceTitle) {
     }
 
 
-    //insert ad position into story page
-    //insert to the end of the target paragraph
+    // MARK: - insert ad position into story page
+    // MARK: - insert to the end of the target paragraph
 
-
-    if (isHasPaywall){
-    // if (allId.paywall === 1 || allId.paywall === 2 ){
+    if (hasPaywall){
         var adInPaywall = $('.subscribe-lock-container');
         $('<div class="adiframe mpu-phone for-phone" type="250" frame="ad300x250-story"></div>').insertAfter(adInPaywall);
-        
-    }else{
-
+    } else {
         if (insertAd > 0) {
             insertAd = insertAd - 1;
         }
         $('<div class="adiframe mpu-phone for-phone" type="250" frame="ad300x250-story"></div>').insertAfter(paraGraphs.eq(insertAd));
       
         $('<div class="adiframe mpu-phone for-phone" type="250" frame="ad300x250-story-vw"></div>').insertAfter(paraGraphs.eq(insertAd2));
-        console.log('aa:'+paraGraphs.eq(insertAd));
     }
-
-             
-
-
-
-    
 
     if (byline.replace(/ /g,'')==''){byline = '';}
     storyTag = ',' + storyTag + ',';
