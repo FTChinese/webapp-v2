@@ -101,7 +101,7 @@ function getProductHTMLCode(products, forGroup, dataObj) {
                 if(dataObj.standard===1 && dataObj.premium===0){
                     products[0].isPurchased = true;
                     products[0].state = '<button class="iap-move-left">已订阅</button>';
-                    products[1].state = '<a onclick="getBuyCode(\''+ products[1].id +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ orderNum +'\')"><button class="iap-move-left">订阅</button></a>';
+                    products[1].state = '<a onclick="getBuyCode(\''+ products[1].id +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ orderNum +'\')"><button class="iap-move-left">现在升级</button></a>';
                 }else if(dataObj.premium===1){
                     products[i].isPurchased = true;
                     products[i].state = '<button class="iap-move-left">已订阅</button>';
