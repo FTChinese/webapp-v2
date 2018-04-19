@@ -283,7 +283,7 @@ function getproductIndex(productID){
 
 // MARK: - Get url scheme for iOS buy and JS onclick code for Android
 function getBuyCode(productId, productPrice, userId, productName, orderNum){
-    // alert('aa:'+productId+productPrice+userId+productName+orderNum);
+    var userId = getCookie('USER_ID');
     if (!!userId){
 
         var productIDArr = productId.substring(2,5);
@@ -291,9 +291,6 @@ function getBuyCode(productId, productPrice, userId, productName, orderNum){
         productId = orderNum;
 
         productPrice =  productPrice.substr(1,productPrice.length);
-        // productPrice = (getCookie('TEST')) ? '0.01' : productPrice;
- 
-
         if(osVersion.indexOf('Android')>=0){
             try {
                 if(ftjavacriptapp){                   
@@ -311,6 +308,8 @@ function getBuyCode(productId, productPrice, userId, productName, orderNum){
                 alert('请求失败！');
             }
         }
+    }else{
+        turnonOverlay('loginBox');
     }
 }
 

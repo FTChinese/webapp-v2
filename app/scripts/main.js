@@ -396,18 +396,18 @@ function startpage() {
          if (window.location.hostname === 'localhost' || window.location.hostname.indexOf('192.168') === 0 || window.location.hostname.indexOf('127.0') === 0) {
             var iapAction = $(this).attr('iap-action');
             var iapTitle = $(this).attr('iap-title')|| 'FT中文网';
-            var channelType = $(this).attr('channel-type');
+            // var channelType = $(this).attr('channel-type');
             payWallUpdateSub('api/paywall.json',iapAction,iapTitle);   
          } else {
             var getUserId = getCookie('USER_ID');
-            if (!getUserId) {
-                turnonOverlay('loginBox');
-            } else {
+            // if (!getUserId) {
+            //     turnonOverlay('loginBox');
+            // } else {
                 var iapAction = $(this).attr('iap-action');
                 var iapTitle = $(this).attr('iap-title')|| 'FT中文网';
-                var channelType = $(this).attr('channel-type');
+                // var channelType = $(this).attr('channel-type');
                 var dataObj = payWallUpdateSub('/index.php/jsapi/paywall?3',iapAction,iapTitle);
-            }
+            // }
             ga('send', 'event', 'Android Privileges','Tap', window.gSubscriptionEventLabel);
          }
     });
