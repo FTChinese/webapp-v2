@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1268; //当前的版本号
+var _currentVersion = 1269; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -299,12 +299,8 @@ function startpage() {
     }
     try {
         window.tracker = new FTCTracker();
-        // console.log (tracker);
-        // console.log ('successfully tracked! ');
     }catch(err){
         trackErr(err, 'FTCTracker');
-        // console.log (err);
-        // console.log ('did not track successfully');
     }
     if (useFTScroller===0) {window.scrollTo(0, 0);}
     //从网络获取数据的情况，判断其网络连接的好坏
@@ -1780,6 +1776,7 @@ function displaystoryNormal(theid, language, forceTitle) {
     }else{
         isEditorChoiceStory = false;
     }
+    console.log('isEditorChoiceStory'+isEditorChoiceStory);
     var columnintro = ''; 
     var storyimage;
     var allId = allstories[theid];
@@ -2961,7 +2958,8 @@ function showchannel(url, channel, requireLogin, openIniFrame, channelDescriptio
     pauseallvideo();
 	removeBrokenIMG();
 
-    isEditorChoiceChannel = (channelClass==='editorchoice') ? true : false;
+    isEditorChoiceChannel = ((channelClass.indexOf('editorchoice') >= 0)||(channelClass.indexOf('EditorChoice') >= 0) ) ? true : false;
+
 }
 
 function startslides() {
@@ -3044,6 +3042,8 @@ function startslides() {
 
 //如果是从文章回退到channel，则不必调用showchannel，否则需要调用showchannel
 function histback(gesture) {
+    isEditorChoiceChannel = false;
+
     var thispage,previouspage,theid, index = 0, nonStoryIndex=-1;
     var channelTitle;
     closeOverlay();
@@ -3056,7 +3056,6 @@ function histback(gesture) {
                 hist = hist.filter(function(item){
                     return (item.url.indexOf('story') == -1);
                 });
-                // console.log("newHist:"+hist);
             } else {//如果当前页不是story
                 hist = [];
             }
@@ -3064,7 +3063,6 @@ function histback(gesture) {
 
         if(hist.length>=1){
             previouspage = hist.shift();
-            //console.log("prepageUrl:"+previouspage.url);
             if (previouspage.length === 0) {//如果上一个页面不存在，则返回首页
                 backhome();
             } else if (previouspage.url.indexOf('story') === 0) {//如果上一个页面为文章页，读取文章页
@@ -3378,7 +3376,7 @@ function register() {
     //     }
     // }
     regFormUrl = '/index.php/users/register?i=' + regFormNumber;
-    // console.log (regFormUrl);
+
     showchannel(regFormUrl, '新用户注册');
 }
 
@@ -3631,7 +3629,7 @@ function updatecalendar(theday) {
             window.scrollTo(0, 0);
         }
         loadHomePage(theday);
-        //console.log(theday);
+
         //filloneday(theday);
     });
 }
@@ -3741,7 +3739,6 @@ function addStoryScroller() {
             freezeScroll();
         });
         startTrackingAdViews('storyScroller');
-        //console.log ('story scroller tracked');
     } else {
         try {
             storyScroller.scrollTo(0, 0);
