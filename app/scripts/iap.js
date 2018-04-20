@@ -560,31 +560,16 @@ window.onload = function(){
 }
 
 
-
-
-// function getBuyCode(productId, productPrice, userId, productName, orderNum) {  
-//     if (!!userId){
-//         var buyCode = ''; 
-//         var priceForAndroid = '';
-
-//         var productIDArr = productId.substring(2,5);
-//         var productIdStr = (productIDArr == '100') ? 'ftc_premium' : 'ftc_standard';
-
-//         productId = orderNum;
-
-//         priceForAndroid = '0.01';
-
-//         if(osVersion.indexOf('Android')>=0){
-//             try {
-//                 buyCode = ' onclick="ftjavacriptapp.payzfb(\''+ productId +'\',\''+ priceForAndroid +'\',\''+ userId +'\',\''+ productName +'\')"';
-
-//                 var url = window.location.hash;
-//             } catch (ignore) {
-//                 alert('请求失败！');
-//             }
-//             postPayState(productIdStr, productPrice, userId, orderNum, 'start');
-            
-//         }
-//         return buyCode;
-//     } 
+// 测试付费成功与否的地方
+// function paySuccess(){
+//     var psySuccess = document.getElementById('pay-success-btn');
+//     psySuccess.onclick=function(){
+//         turnonOverlay('pay-way');
+//     }
 // }
+// paySuccess();
+// Mark:支付方式
+// $('body').on('click', '.one-way-container', function(){
+//     $(this).find("input[name='payWay']").attr('checked','true');
+// });
+
