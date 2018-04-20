@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1271; //当前的版本号
+var _currentVersion = 1272; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -3560,8 +3560,8 @@ function blockDailyEnglish(url){
     var content = $('.bottom-part').html();
     if (isFTCpw) {
         $('.prev-next').hide();
-        $('#scrollcontainer').html(getdownloadHint(url));
-        $('.bottom-part').html('<div channel-type='+url+' style="text-align: center;">成为付费会员，阅读FT独家内容<br>请<a href="http://www.ftacademy.cn/subscription.html" style="color:#26747a">点击此处</a> 。</div>');
+        $('#scrollcontainer').html(getpaywallHint(url));
+        $('.bottom-part').html('<div channel-type='+url+' style="text-align: center;">成为付费会员，阅读FT独家内容<br>请<a style="color:#26747a" iap-action="membership" class="iap-channel" iap-title="会员">点击此处</a> 。</div>');
         window.gSubscriptionEventLabel = getEventLabelFromUrl(url);
         ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
     } else {
