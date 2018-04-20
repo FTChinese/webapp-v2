@@ -403,13 +403,14 @@ function payWall(url){
                         updateUnlockClass();
                     }else{
                         updateLockClass();
-                    }   
+                    }  
+                    console.log('isEditorChoiceChannel:'+isEditorChoiceChannel); 
                 }
             } else {
                 isReqSuccess = false;
                 i++;
                 setTimeout(function() {
-                    payWall(); 
+                    payWall(url); 
                 }, 500); 
                 // console.log('fail to request:'+i);
             }

@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1270; //当前的版本号
+var _currentVersion = 1271; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -1770,13 +1770,8 @@ function getdownloadHint(channelType){
 
 
 function displaystoryNormal(theid, language, forceTitle) {
-    
-    if (isEditorChoiceChannel){
-        isEditorChoiceStory = true;
-    }else{
-        isEditorChoiceStory = false;
-    }
-    console.log('isEditorChoiceStory'+isEditorChoiceStory);
+    isEditorChoiceStory = (isEditorChoiceChannel) ? true : false ;
+
     var columnintro = ''; 
     var storyimage;
     var allId = allstories[theid];
@@ -3042,7 +3037,15 @@ function startslides() {
 
 //如果是从文章回退到channel，则不必调用showchannel，否则需要调用showchannel
 function histback(gesture) {
-    isEditorChoiceChannel = false;
+    // isEditorChoiceChannel = (isEditorChoiceStory) ? true : false;
+    if(isEditorChoiceStory){
+        isEditorChoiceChannel = true;
+        isEditorChoiceStory = false;
+    }else{
+        isEditorChoiceChannel = false;
+    }
+    payWall('/index.php/jsapi/paywall?histback');
+    
 
     var thispage,previouspage,theid, index = 0, nonStoryIndex=-1;
     var channelTitle;
@@ -3109,6 +3112,8 @@ function closead() {
 }
 
 function backhome() {
+    isEditorChoiceChannel = false;
+    // console.log('backhome');
     closeOverlay();
     gTagData = [];
 	document.body.className = 'fullbody';
