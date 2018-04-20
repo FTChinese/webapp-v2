@@ -10,7 +10,7 @@ function getOrderNum(memberNum){
     return orderNum;
 }
 
-window.iapProducts = [{title: '标准会员',price: '¥198.00',id: 'ftc_premium',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为标准会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 精选深度分析','- 中英双语内容','- 金融英语速读训练','- 英语原声电台','- 无限浏览7日前所有历史文章（近8万篇）'],period:'year'},{title: '高端会员',price: '¥1,998.00',id: 'ftc_standard',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为高端会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 享受“标准会员”所有权益','- 编辑精选，总编/各版块主编每周五为您推荐本周必读资讯，分享他们的思考与观点','- FT中文网2018年度论坛门票2张，价值3999元/张 （不含差旅与食宿）'],period:'year'}];
+window.iapProducts = [{title: '标准会员',price: '¥198.00',id: 'ftc_standard',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为标准会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 精选深度分析','- 中英双语内容','- 金融英语速读训练','- 英语原声电台','- 无限浏览7日前所有历史文章（近8万篇）'],period:'year'},{title: '高端会员',price: '¥1,998.00',id: 'ftc_premium',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为高端会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 享受“标准会员”所有权益','- 编辑精选，总编/各版块主编每周五为您推荐本周必读资讯，分享他们的思考与观点','- FT中文网2018年度论坛门票2张，价值3999元/张 （不含差旅与食宿）'],period:'year'}];
 
 var subscribeIntruction = {
     title: '订阅说明与注意事项',
@@ -97,7 +97,7 @@ function getProductHTMLCode(products, forGroup, dataObj) {
 
                 var memberNum = (products[i].title == '高端会员') ? '100' : '010';
                 var orderNum = getOrderNum(memberNum);
-                
+               
                 if(dataObj.standard===1 && dataObj.premium===0){
                     products[0].isPurchased = true;
                     products[0].state = '<button class="iap-move-left">已订阅</button>';
@@ -283,20 +283,21 @@ function getproductIndex(productID){
 
 // MARK: - Get url scheme for iOS buy and JS onclick code for Android
 function getBuyCode(productId, productPrice, userId, productName, orderNum){
+    
     var userId = getCookie('USER_ID');
     if (!!userId){
-
-        var productIDArr = productId.substring(2,5);
-        var productIdStr = (productIDArr == '100') ? 'ftc_premium' : 'ftc_standard';
+        
+        var productIDArr = orderNum.substring(2,5);
+        var productIdStr = (productIDArr === '100') ? 'ftc_premium' : 'ftc_standard';
         productId = orderNum;
 
-        productPrice =  productPrice.substr(1,productPrice.length);
+        productPrice =  productPrice.substr(1,productPrice.length).replace(',','');
+        
         if(osVersion.indexOf('Android')>=0){
             try {
-                if(ftjavacriptapp){                   
+                if(ftjavacriptapp){                  
                     ftjavacriptapp.payzfb(productId,productPrice,userId, productName);
                     postPayState(productIdStr, productPrice, userId, orderNum, 'start');
-                    var url = window.location.hash;
                     var eventAction = 'Buy: ' + productIdStr;
                     ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel);
                     setTimeout(function(){
@@ -313,32 +314,7 @@ function getBuyCode(productId, productPrice, userId, productName, orderNum){
     }
 }
 
-// function getBuyCode(productId, productPrice, userId, productName, orderNum) {  
-//     if (!!userId){
-//         var buyCode = ''; 
-//         var priceForAndroid = '';
 
-//         var productIDArr = productId.substring(2,5);
-//         var productIdStr = (productIDArr == '100') ? 'ftc_premium' : 'ftc_standard';
-
-//         productId = orderNum;
-
-//         priceForAndroid = '0.01';
-
-//         if(osVersion.indexOf('Android')>=0){
-//             try {
-//                 buyCode = ' onclick="ftjavacriptapp.payzfb(\''+ productId +'\',\''+ priceForAndroid +'\',\''+ userId +'\',\''+ productName +'\')"';
-
-//                 var url = window.location.hash;
-//             } catch (ignore) {
-//                 alert('请求失败！');
-//             }
-//             postPayState(productIdStr, productPrice, userId, orderNum, 'start');
-            
-//         }
-//         return buyCode;
-//     } 
-// }
 
 /**
  * 订阅界面动作
@@ -585,3 +561,29 @@ window.onload = function(){
 
 
 
+// function getBuyCode(productId, productPrice, userId, productName, orderNum) {  
+//     if (!!userId){
+//         var buyCode = ''; 
+//         var priceForAndroid = '';
+
+//         var productIDArr = productId.substring(2,5);
+//         var productIdStr = (productIDArr == '100') ? 'ftc_premium' : 'ftc_standard';
+
+//         productId = orderNum;
+
+//         priceForAndroid = '0.01';
+
+//         if(osVersion.indexOf('Android')>=0){
+//             try {
+//                 buyCode = ' onclick="ftjavacriptapp.payzfb(\''+ productId +'\',\''+ priceForAndroid +'\',\''+ userId +'\',\''+ productName +'\')"';
+
+//                 var url = window.location.hash;
+//             } catch (ignore) {
+//                 alert('请求失败！');
+//             }
+//             postPayState(productIdStr, productPrice, userId, orderNum, 'start');
+            
+//         }
+//         return buyCode;
+//     } 
+// }

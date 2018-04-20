@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1269; //当前的版本号
+var _currentVersion = 1270; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -1759,7 +1759,7 @@ function displaystory(theid, language, forceTitle) {
 
 
 function getpaywallHint(channelType){
-   var paywallHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="lock-content">如果已经是会员，请<a href="http://user.ftchinese.com/login">点击这里</a>登录</div><div class="subscribe-btn iap-channel" iap-action="membership" iap-title="会员" channel-type='+channelType+'><span style="color:white">成为会员&#x25BA;</span></div></div></div>'; 
+   var paywallHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="lock-content">如果已经是会员，请<a onclick="turnonOverlay(\'loginBox\')">点击这里</a>登录</div><div class="subscribe-btn iap-channel" iap-action="membership" iap-title="会员" channel-type='+channelType+'><span style="color:white">成为会员&#x25BA;</span></div></div></div>'; 
    return paywallHintHtml;
 }
 function getdownloadHint(channelType){
