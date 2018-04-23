@@ -362,7 +362,7 @@ function postPayState(productId, productPrice, userId, orderNum, actionType){
 
 // Mark:检查是否登录，没有登录不显示vip-center 
 function isShowVipCenter(){
-    var userId = getCookie('USER_ID') || ''
+    var userId = getCookie('USER_ID') || '';
     var vipCenterBtn = document.getElementById('vip-center-btn');
     if(!userId){
         vipCenterBtn.style.display = 'none';
