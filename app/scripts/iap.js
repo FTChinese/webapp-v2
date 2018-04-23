@@ -80,7 +80,6 @@ function isEmptyObj(dataObj){
 }
 
 function getProductHTMLCode(products, forGroup, dataObj) {
-    
     var productsHTML = '';
     var currentGroup = '';
     var productLen = products.length;
