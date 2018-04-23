@@ -299,7 +299,7 @@ function getBuyCode(productId, productPrice, userId, productName, orderNum){
         productId = orderNum;
 
         productPrice =  productPrice.substr(1,productPrice.length).replace(',','');
-        
+
         if(osVersion.indexOf('Android')>=0){
             try {
                 if(ftjavacriptapp){                  

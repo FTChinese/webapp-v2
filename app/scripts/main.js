@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1274; //当前的版本号
+var _currentVersion = 1275; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -987,7 +987,7 @@ function filloneday(onedaydate) {
     if (typeof window.ft_android_id === 'string') {
         gDeviceId = window.ft_android_id;
     }
-    $('#storytotalnum').html('版本：'+_currentVersion+gDeviceId).unbind().bind('click',function(){
+    $('#storytotalnum').html('版本：'+ _currentVersion + ' '+ gDeviceId).unbind().bind('click',function(){
         $(this).html(uaStringFillPage);
     });
     //gStartStatus = "filloneday end";
