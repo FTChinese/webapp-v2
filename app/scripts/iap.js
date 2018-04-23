@@ -190,7 +190,8 @@ function updateProductStatus(productIndex, isProductPurchased, isProductDownload
 
 // iapActions('FT0101231522033086', 'fail', '');
 // MARK: - Update DOM UI based on user actions
-function iapActions(productID, actionType, expireDate) {    
+function iapActions(productID, actionType, expireDate) { 
+    var gUserId = getCookie('USER_ID');   
     var iapButtons='';
     var iapHTMLCode = '';
     var productPrice = '';
