@@ -245,6 +245,12 @@ function iapActions(productID, actionType, expireDate) {
             updateProductStatus(productIndex, false, false); 
             break;
         default:
+            if (productType === 'membership') {  
+                turnonOverlay('iap-hint');
+                iapHTMLCode = '<a onclick="getBuyCode(\''+ productID +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ tradeNum +'\')"><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>'; 
+            } 
+            updateProductStatus(productIndex, false, false); 
+            break;
     }
     // MARK: - for each of the iap button containers that fit the criteria, update its innerHTML
     if (iapButtons.length>0){
