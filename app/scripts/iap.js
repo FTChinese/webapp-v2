@@ -234,6 +234,7 @@ function iapActions(productID, actionType, expireDate) {
                 iapHTMLCode = '<a><button class="iap-move-left">已订阅</button></a><p class="iap-teaser">'+ productPrice + '/年' + '</p>'; 
             } 
             isReqSuccess = false;
+            recordSuccessBuyInLocal();
             // payWall('/index.php/jsapi/paywall?success'); 
             updateProductStatus(productIndex, true, true);
             window.location.reload();
@@ -390,6 +391,7 @@ var isPremium = false;
 var isEditorChoiceStory = false;
 var isEditorChoiceChannel = false;
 function payWall(url){
+    grantAccessFromLocal();
     if(!isReqSuccess && i<3){ 
         deleteCookie('isFTCw'); 
         var xhrpw = new XMLHttpRequest();
@@ -421,12 +423,26 @@ function payWall(url){
                 }, 500); 
                 // console.log('fail to request:'+i);
             }
+            grantAccessFromLocal();
         };
         xhrpw.send(null);
         console.log('what times the paywall?'+i);
     }
-    
 }
+
+// MARK: - Local Subscription Record: Use a local cookie to grant access
+function grantAccessFromLocal() {
+    var isBoughtFromThisDevice = getCookie('BoughtFromThisDevice');
+    if (isBoughtFromThisDevice !== null) {
+        setCookie('isFTCw', 0, '', '/');
+    }
+}
+
+// MARK: - Record Buying Success 
+function recordSuccessBuyInLocal() {
+    setCookie('BoughtFromThisDevice', 0, '', '/');
+}
+
 /**
  * 获取url参数转化成对象
  */
