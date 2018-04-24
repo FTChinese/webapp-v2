@@ -390,9 +390,9 @@ var isPremium = false;
 var isEditorChoiceStory = false;
 var isEditorChoiceChannel = false;
 function payWall(url){ 
+    grantAccessFromLocal();
     if(!isReqSuccess && i<3){ 
         deleteCookie('isFTCw'); 
-        grantAccessFromLocal();
         var xhrpw = new XMLHttpRequest();
         xhrpw.open('get', url);
         xhrpw.setRequestHeader('Content-Type', 'application/text');
@@ -400,7 +400,7 @@ function payWall(url){
             if (xhrpw.status === 200) {  
                 var data = xhrpw.responseText;
                 var parsedData = JSON.parse(data); 
-                vipCenter(parsedData)
+                vipCenter(parsedData);
                 isReqSuccess = true;
                 setCookie('isFTCw', parsedData.paywall, '', '/');
                 if (parsedData.paywall >= 1) { 
@@ -490,16 +490,17 @@ function vipCenter(dataObj){
     var formatTime = timestampToTime(time);
     var vipTypeId = document.getElementById('vip-type');
     var warmPrompt = document.getElementById('warm-prompt');
-    if (dataObj.premium === 1){   
-        vipTypeId.innerHTML = '高端会员';
-        warmPrompt.innerHTML = '您的会员截止至<span style="color:#26747a">'+formatTime+'</span>';
-    }else if (dataObj.standard === 1){
+    if(dataObj.standard===1 && dataObj.premium===0){
         vipTypeId.innerHTML = '标准会员';
+        warmPrompt.innerHTML = '您的会员截止至<span style="color:#26747a">'+formatTime+'</span>';
+    }else if (dataObj.premium === 1){
+        vipTypeId.innerHTML = '高端会员';
         warmPrompt.innerHTML = '您的会员截止至<span style="color:#26747a">'+formatTime+'</span>';
     }else{
         vipTypeId.innerHTML = '未付费注册用户';
         warmPrompt.innerHTML = '成为付费会员，阅读FT独家内容，请<a href="#" style="color:#26747a">成为会员</a>';
     }
+
 }
 
  
@@ -610,3 +611,13 @@ window.onload = function(){
 //     $(this).find("input[name='payWay']").attr('checked','true');
 // });
 
+    // if (dataObj.premium === 1){   
+    //     vipTypeId.innerHTML = '高端会员';
+    //     warmPrompt.innerHTML = '您的会员截止至<span style="color:#26747a">'+formatTime+'</span>';
+    // }else if (dataObj.standard === 1){
+    //     vipTypeId.innerHTML = '标准会员';
+    //     warmPrompt.innerHTML = '您的会员截止至<span style="color:#26747a">'+formatTime+'</span>';
+    // }else{
+    //     vipTypeId.innerHTML = '未付费注册用户';
+    //     warmPrompt.innerHTML = '成为付费会员，阅读FT独家内容，请<a href="#" style="color:#26747a">成为会员</a>';
+    // }
