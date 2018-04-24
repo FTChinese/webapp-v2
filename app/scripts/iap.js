@@ -429,6 +429,11 @@ function payWall(url){
     }
 }
 
+// MARK: - Record Buying Success 
+function recordSuccessBuyInLocal() {
+    setCookie('BoughtFromThisDevice', 0, '', '/');
+}
+
 // MARK: - Local Subscription Record: Use a local cookie to grant access
 function grantAccessFromLocal() {
     var isBoughtFromThisDevice = getCookie('BoughtFromThisDevice');
@@ -437,10 +442,6 @@ function grantAccessFromLocal() {
     }
 }
 
-// MARK: - Record Buying Success 
-function recordSuccessBuyInLocal() {
-    setCookie('BoughtFromThisDevice', 0, '', '/');
-}
 
 /**
  * 获取url参数转化成对象
