@@ -236,7 +236,7 @@ function iapActions(productID, actionType, expireDate) {
             recordSuccessBuyInLocal();
             // payWall('/index.php/jsapi/paywall?success'); 
             updateProductStatus(productIndex, true, true);
-            window.location.reload();
+            //window.location.reload();
             break;
         case 'fail':
             if (productType === 'membership') {  
