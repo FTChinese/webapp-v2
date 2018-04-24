@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1281; //当前的版本号
+var _currentVersion = 1282; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -2953,7 +2953,11 @@ function showchannel(url, channel, requireLogin, openIniFrame, channelDescriptio
     pauseallvideo();
 	removeBrokenIMG();
 
-    isEditorChoiceChannel = ((channelClass.indexOf('editorchoice') >= 0)||(channelClass.indexOf('EditorChoice') >= 0) ) ? true : false;
+    if (typeof channelClass === 'string') {
+        isEditorChoiceChannel = ((channelClass.indexOf('editorchoice') >= 0)||(channelClass.indexOf('EditorChoice') >= 0));
+    } else {
+        isEditorChoiceChannel = false;
+    }
 
 }
 
