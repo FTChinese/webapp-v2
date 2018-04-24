@@ -404,15 +404,19 @@ function payWall(url){
                 isReqSuccess = true;
                 setCookie('isFTCw', parsedData.paywall, '', '/');
                 if (parsedData.paywall >= 1) { 
-                    updateUnlockClass();  
-                }else{  
+                    updateUnlockClass();
+                    if (isSuccessBuyInLocal()) {
+                        var userId2 = getCookie('USER_ID') || '';
+                        ga('send','event', 'CatchError', 'Local Subscription Not Validated on Server', userId2);
+                    }
+                } else {  
                     isPremium = (parsedData.premium >= 1) ? true : false ;  
                     if(!isPremium && isEditorChoiceChannel){
                         updateUnlockClass();
-                    }else{
+                    } else {
                         updateLockClass();
                     }  
-                    console.log('isEditorChoiceChannel:'+isEditorChoiceChannel); 
+                    //console.log('isEditorChoiceChannel:'+isEditorChoiceChannel); 
                 }
             } else {
                 isReqSuccess = false;
@@ -436,12 +440,18 @@ function recordSuccessBuyInLocal() {
 
 // MARK: - Local Subscription Record: Use a local cookie to grant access
 function grantAccessFromLocal() {
-    var isBoughtFromThisDevice = getCookie('BoughtFromThisDevice');
-    if (isBoughtFromThisDevice !== null) {
+    if (isSuccessBuyInLocal()) {
         setCookie('isFTCw', 0, '', '/');
     }
 }
 
+function isSuccessBuyInLocal() {
+    var isBoughtFromThisDevice = getCookie('BoughtFromThisDevice');
+    if (isBoughtFromThisDevice !== null) {
+        return true;
+    }
+    return false;
+}
 
 /**
  * 获取url参数转化成对象
