@@ -369,7 +369,6 @@ function postPayState(productId, productPrice, userId, orderNum, actionType){
 
 // Mark:检查是否登录，没有登录不显示vip-center 
 function isShowVipCenter(){
-   
     var userId = getCookie('USER_ID') || '';
     var vipCenterBtn = document.getElementById('vip-center-btn');
     if(!userId){
@@ -391,9 +390,9 @@ var isPremium = false;
 var isEditorChoiceStory = false;
 var isEditorChoiceChannel = false;
 function payWall(url){ 
+    grantAccessFromLocal();
     if(!isReqSuccess && i<3){ 
         deleteCookie('isFTCw'); 
-        grantAccessFromLocal();
         var xhrpw = new XMLHttpRequest();
         xhrpw.open('get', url);
         xhrpw.setRequestHeader('Content-Type', 'application/text');
@@ -401,7 +400,7 @@ function payWall(url){
             if (xhrpw.status === 200) {  
                 var data = xhrpw.responseText;
                 var parsedData = JSON.parse(data); 
-                vipCenter(parsedData)
+                vipCenter(parsedData);
                 isReqSuccess = true;
                 setCookie('isFTCw', parsedData.paywall, '', '/');
                 if (parsedData.paywall >= 1) { 
