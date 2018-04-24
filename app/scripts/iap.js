@@ -369,6 +369,7 @@ function postPayState(productId, productPrice, userId, orderNum, actionType){
 
 // Mark:检查是否登录，没有登录不显示vip-center 
 function isShowVipCenter(){
+   
     var userId = getCookie('USER_ID') || '';
     var vipCenterBtn = document.getElementById('vip-center-btn');
     if(!userId){
@@ -490,16 +491,17 @@ function vipCenter(dataObj){
     var formatTime = timestampToTime(time);
     var vipTypeId = document.getElementById('vip-type');
     var warmPrompt = document.getElementById('warm-prompt');
-    if (dataObj.premium === 1){   
-        vipTypeId.innerHTML = '高端会员';
-        warmPrompt.innerHTML = '您的会员截止至<span style="color:#26747a">'+formatTime+'</span>';
-    }else if (dataObj.standard === 1){
+    if(dataObj.standard===1 && dataObj.premium===0){
         vipTypeId.innerHTML = '标准会员';
+        warmPrompt.innerHTML = '您的会员截止至<span style="color:#26747a">'+formatTime+'</span>';
+    }else if (dataObj.premium === 1){
+        vipTypeId.innerHTML = '高端会员';
         warmPrompt.innerHTML = '您的会员截止至<span style="color:#26747a">'+formatTime+'</span>';
     }else{
         vipTypeId.innerHTML = '未付费注册用户';
         warmPrompt.innerHTML = '成为付费会员，阅读FT独家内容，请<a href="#" style="color:#26747a">成为会员</a>';
     }
+
 }
 
  
@@ -610,3 +612,13 @@ window.onload = function(){
 //     $(this).find("input[name='payWay']").attr('checked','true');
 // });
 
+    // if (dataObj.premium === 1){   
+    //     vipTypeId.innerHTML = '高端会员';
+    //     warmPrompt.innerHTML = '您的会员截止至<span style="color:#26747a">'+formatTime+'</span>';
+    // }else if (dataObj.standard === 1){
+    //     vipTypeId.innerHTML = '标准会员';
+    //     warmPrompt.innerHTML = '您的会员截止至<span style="color:#26747a">'+formatTime+'</span>';
+    // }else{
+    //     vipTypeId.innerHTML = '未付费注册用户';
+    //     warmPrompt.innerHTML = '成为付费会员，阅读FT独家内容，请<a href="#" style="color:#26747a">成为会员</a>';
+    // }
