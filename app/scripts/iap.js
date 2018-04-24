@@ -435,7 +435,10 @@ function payWall(url){
 
 // MARK: - Record Buying Success 
 function recordSuccessBuyInLocal() {
-    setCookie('BoughtFromThisDevice', 0, '', '/');
+    var userId1 = getCookie('USER_ID') || '';
+    if (userId1 !== '') {
+        setCookie('BoughtFromThisDevice', userId1, '', '/');
+    }
 }
 
 // MARK: - Local Subscription Record: Use a local cookie to grant access
@@ -446,8 +449,9 @@ function grantAccessFromLocal() {
 }
 
 function isSuccessBuyInLocal() {
-    var isBoughtFromThisDevice = getCookie('BoughtFromThisDevice');
-    if (isBoughtFromThisDevice !== null) {
+    var isBoughtFromThisDeviceId = getCookie('BoughtFromThisDevice') || '';
+    var userId1 = getCookie('USER_ID') || '';
+    if (isBoughtFromThisDeviceId !== '' && isBoughtFromThisDeviceId === userId1) {
         return true;
     }
     return false;
