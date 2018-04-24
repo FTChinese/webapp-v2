@@ -389,10 +389,10 @@ var i = 0;
 var isPremium = false;
 var isEditorChoiceStory = false;
 var isEditorChoiceChannel = false;
-function payWall(url){
-    grantAccessFromLocal();
+function payWall(url){ 
     if(!isReqSuccess && i<3){ 
         deleteCookie('isFTCw'); 
+        grantAccessFromLocal();
         var xhrpw = new XMLHttpRequest();
         xhrpw.open('get', url);
         xhrpw.setRequestHeader('Content-Type', 'application/text');
