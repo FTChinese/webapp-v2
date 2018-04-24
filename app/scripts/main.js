@@ -3538,19 +3538,30 @@ function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFra
         $('#slideShow').html('<iframe src="' + url + '" width="100%" height="100%" border=0 frameborder=0></iframe>');
         httpspv(gDeviceType + '/'+ interactiveTypeName +'/'+ slideUrl);
     } else {
+
+        var isFTCpw = Boolean(Number(getCookie('isFTCw')));
+        if (isFTCpw) {
+            $('#slideShow').html('<div id="bookstart" class=opening style="opacity: 0.9;"><span><div  style="text-align: center;font-size: 1.2em;padding: 20px 0px;">成为付费会员，阅读FT独家内容<br>请<a style="color:#26747a" iap-action="membership" class="iap-channel" iap-title="会员">点击此处</a> 。</div>  <p class=booklead id="loadstatus" style="font-size: 2em;">触摸<b onclick="closeOverlay()">此处</b>返回</p>  </span></div>');
+
+            window.gSubscriptionEventLabel = getEventLabelFromUrl(url);
+            ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
+        }else{
+
+            $('#slideShow').html('<div id="bookstart" class=opening><span><font id="bookname" style="font-size:2em;">'+ slideTitle + '</font><p class=booklead id="booklead">获取内容...</p><p class=booklead id="loadstatus">触摸<b onclick="closeOverlay()">此处</b>返回</p></span></div>');
+            var data1 = '';
+        
+            $.get(url, function(data) {
+                data1 = checkhttps(data);
+                $('#slideShow').html(data);
+                // setTimeout(function(){
+                //     blockDailyEnglish(url);
+                // },500);
+                httpspv(gDeviceType + '/'+ interactiveTypeName +'/'+ slideUrl);
+                console.log (gDeviceType + '/'+ interactiveTypeName +'/'+ slideUrl);
+            });
+
+        }
       
-        $('#slideShow').html('<div id="bookstart" class=opening><span><font id="bookname" style="font-size:2em;">'+ slideTitle + '</font><p class=booklead id="booklead">获取内容...</p><p class=booklead id="loadstatus">触摸<b onclick="closeOverlay()">此处</b>返回</p></span></div>');
-        var data1 = '';
-      
-        $.get(url, function(data) {
-            data1 = checkhttps(data);
-            $('#slideShow').html(data);
-            setTimeout(function(){
-                blockDailyEnglish(url);
-            },500);
-            httpspv(gDeviceType + '/'+ interactiveTypeName +'/'+ slideUrl);
-            console.log (gDeviceType + '/'+ interactiveTypeName +'/'+ slideUrl);
-        });
     }
 }
 
