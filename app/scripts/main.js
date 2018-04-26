@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1283; //当前的版本号
+var _currentVersion = 1284; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -3424,13 +3424,12 @@ function login(fromwhere) {
 }
 
 function logout() {
+    var thed = (new Date()).getTime();
     $('.logged .statusmsg').html('正在登出...');
-    $.get('/index.php/users/logout?' + thed, function() {
+    $.get('/index.php/users/logout?' + thed, function(data) {
         isReqSuccess = false;
         payWall('/index.php/jsapi/paywall?logout'); 
         deleteCookie('isFTCw');
-        deleteCookie('USER_ID');
-        deleteCookie('USER_NAME');
         $('#logincomment,#nologincomment, .logged, .notLogged').hide();
         $('#nologincomment,.notLogged').show();
         username = '';
