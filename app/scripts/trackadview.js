@@ -144,16 +144,16 @@ function getAdChannelId() {
 }
 
 
-// MARK: - 刷新广告位
+// MARK: - load or reload all the ad friendly ad iframes that are in view
 function updateAds() {
-
+    // MARK: - Get the id of the view that is currently visible. It's either home, channel or story. 
     var nowV = gNowView;
     var isColumnFlow = false;
     var currentViewPortAds;
     if (nowV !== 'storyview') {
         gSpecial = false;
     }
-    // there are two possibilities when display storyview
+    // MARK: - there are two possibilities when display storyview
     // if (nowV === 'storyview') {
     //     if ($('#storyview').hasClass('columnFlowOn')) {
     //         nowV = 'story-column-flow';
@@ -162,6 +162,8 @@ function updateAds() {
     //         nowV = 'storyScroller';
     //     }
     // }
+
+    // MARK: - Only do this is user is not offline
     if (isOnline() === 'possible') {        
         screenWidth = $(window).width();
         if (nowV === 'story-column-flow') {
@@ -170,10 +172,6 @@ function updateAds() {
             currentViewPortAds = $('#'+nowV).find('.adiframe');
         }
         nowV = nowV.replace(/\-/g, '');
-        // console.log (nowV);
-        // console.log('currentViewPortAds:');
-        // console.log(currentViewPortAds);
-        
         currentViewPortAds.each(function(index) {
             var adHeight=$(this).attr('type') || 0;
             var adFrame=$(this).attr('frame') || '';
@@ -187,7 +185,6 @@ function updateAds() {
               adwidth = '100%';
             }
             forPhone = ($(this).hasClass('for-phone') === true) ? true : false; 
-            
             if ((adHeight === 'fullwidth' && screenWidth<=490) || (adHeight>90 && screenWidth>=700 && forPhone===false) || (adHeight<90 && screenWidth<700) || (adHeight === 90 && (screenWidth===768 || screenWidth===1024)) || (forPhone === true && screenWidth<700) || adHeight ===0) {
                 if ($(this).find('iframe').length>0) {
                     FrameID = $(this).find('iframe').eq(0).attr('id');
@@ -214,7 +211,6 @@ function updateAds() {
                 }
             }
         });
-
 
       // MARK: - when ad position is updated, create the ad positions again. 
       createViewableAds();
