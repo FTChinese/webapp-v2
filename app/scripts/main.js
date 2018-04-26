@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1284; //当前的版本号
+var _currentVersion = 1285; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -3969,10 +3969,10 @@ function loadcomment(storyid, theid, type) {
                     +'<span class=viewfullcomments>查看全部<span class=highlight>' 
                     + commentnumber + '</span>条评论 </span>'
                     +'<select class=commentsortby>'
-                    +'<option value=1 selected>最新的在上方</option>'
+                    +'<option selected="selected" value=0>选择排序方式</option><option value=1>最新的在上方</option>'
                     +'<option value=2>最早的在上方</option>'
                     +'<option value=3>按热门程度</option></select></div>');
-                cfoption = (type.indexOf('storyall') >= 0) ? type.replace(/storyall/g, '') : 1;
+                cfoption = (type.indexOf('storyall') >= 0) ? type.replace(/storyall/g, '') : 0;
                 cftype = (type.indexOf('story') >= 0) ? 'story' : 'common';
                 $('.commentsortby').val(cfoption);
                 $('.viewfullcomments').click(function() {
