@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1285; //当前的版本号
+var _currentVersion = 1286; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -1520,7 +1520,7 @@ function handlelinks() {
             $(this).removeAttr('href').addClass('link').removeAttr('target').click(function() {showchannel('/index.php/ft/tag/'+storyid1+'?i=2',storyid1);});
         } else if (link.match(patt7) && gIsInSWIFT === true) {
             // do nothing
-        } else if (link.match(patt7)) {
+        } else if (link.match(patt7)|| (photoId !== '' && !gIsInSWIFT)) {
             storyid1 = $(this).attr('href').replace(/^.*\/photonews\/(.*)/g, '$1');
             $(this).removeAttr('href').addClass('link').removeAttr('target').click(function() {showSlide('/index.php/ft/photonews/'+storyid1+'?i=2',storyid1);});
         } else if (link.match(patt5)) {
@@ -3543,9 +3543,13 @@ function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFra
         $('#slideShow').html('<iframe src="' + url + '" width="100%" height="100%" border=0 frameborder=0></iframe>');
         httpspv(gDeviceType + '/'+ interactiveTypeName +'/'+ slideUrl);
     } else {
-
         var isFTCpw = Boolean(Number(getCookie('isFTCw')));
-        if (isFTCpw) {
+        var hash = location.hash;
+        var isDailyEnglish = false;
+        if(hash.indexOf('ftradio')>=0 || hash.indexOf('speedread')>=0){
+            isDailyEnglish = true;
+        }
+        if (isFTCpw && isDailyEnglish) {
             $('#slideShow').html('<div id="bookstart" class=opening style="opacity: 0.9;"><span><div  style="text-align: center;font-size: 1.2em;padding: 20px 0px;">成为付费会员，阅读FT独家内容<br>请<a style="color:#26747a" iap-action="membership" class="iap-channel" iap-title="会员">点击此处</a> 。</div>  <p class=booklead id="loadstatus" style="font-size: 2em;">触摸<b onclick="closeOverlay()">此处</b>返回</p>  </span></div>');
 
             window.gSubscriptionEventLabel = getEventLabelFromUrl(url);
