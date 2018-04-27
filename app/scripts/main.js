@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1287; //当前的版本号
+var _currentVersion = 1288; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -1520,9 +1520,11 @@ function handlelinks() {
             $(this).removeAttr('href').addClass('link').removeAttr('target').click(function() {showchannel('/index.php/ft/tag/'+storyid1+'?i=2',storyid1);});
         } else if (link.match(patt7) && gIsInSWIFT === true) {
             // do nothing
-        } else if (link.match(patt7)|| (photoId !== '' && !gIsInSWIFT)) {
-            storyid1 = $(this).attr('href').replace(/^.*\/photonews\/(.*)/g, '$1');
-            $(this).removeAttr('href').addClass('link').removeAttr('target').click(function() {showSlide('/index.php/ft/photonews/'+storyid1+'?i=2',storyid1);});
+        } else if (link.match(patt7)|| (photoId !== '' && !gIsInSWIFT) ) {
+            // storyid1 = $(this).attr('href').replace(/^.*\/photonews\/(.*)/g, '$1');
+            // $(this).removeAttr('href').addClass('link').removeAttr('target').click(function() {showSlide('/index.php/ft/photonews/'+storyid1+'?i=2',storyid1);});
+            $(this).removeAttr('href').addClass('link').removeAttr('target').click(function() {showSlide('/index.php/ft/photonews/'+photoId+'?i=2',photoId);});
+            
         } else if (link.match(patt5)) {
             $(this).find('img,div,p,a').addClass('link');
             $(this).removeAttr('href').removeAttr('target').unbind().bind('click',function(){
