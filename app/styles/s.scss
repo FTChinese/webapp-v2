@@ -406,6 +406,7 @@ margin-bottom:14px;
 		margin: auto;
 		left: 0;
 		right: 0;
+		top: 0;
 		//background-color: #E9DECF;
 	}
 	&:after {
@@ -414,16 +415,12 @@ margin-bottom:14px;
 		bottom:0;
 		right: 0;
 		left:0;
-		text-align: right;
+		text-align: center;
 	    //background: #e9decf;
 	    font-size:12px;
 	    padding:1px 5px;
 	    color: #505050;
-	}
-	&.banner{
-		:after {
-			display:none;
-		}
+	    text-indent: 0;
 	}
 }
 .hide-ad-sign {
@@ -457,7 +454,8 @@ margin-bottom:14px;
 	text-align:center;
 	line-height:100%;
 	width: 100%;
-	padding-bottom: 25%;
+	padding-top: 25%;
+	padding-bottom: 18px;
 	position: relative;
 	height:0;
 	overflow: hidden;
@@ -470,14 +468,11 @@ margin-bottom:14px;
 	height: 0!important;
 	//background-color: #E9DECF;
 }
-.banner {
-	&.full-width {
+// .banner {
+// 	&.full-width {
 
-	}
-	&:after {
-		display:none;
-	}
-}
+// 	}
+// }
 .channelview .banner, .storyview .banner {margin-top:10px;}
 .mpu,.halfpage,.wide-screen,.middle-screen,.hidden,.mobile-landscape{display:none;}
 .mpu-phone {
