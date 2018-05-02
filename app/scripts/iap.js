@@ -78,7 +78,7 @@ function isEmptyObj(dataObj){
         return true;
      }
 }
-
+var upgradePrice = '¥1,998.00';
 function getProductHTMLCode(products, forGroup, dataObj) {
     var productsHTML = '';
     var currentGroup = '';
@@ -96,23 +96,25 @@ function getProductHTMLCode(products, forGroup, dataObj) {
 
                 var memberNum = (products[i].title == '高端会员') ? '100' : '010';
                 var orderNum = getOrderNum(memberNum);
-               
+                // console.log('dataObj:'+dataObj);
                 if(dataObj.standard===1 && dataObj.premium===0){
                     products[0].isPurchased = true;
-                    products[0].state = '<button class="iap-move-left">已订阅</button>';
-                    products[1].state = '<a onclick="getBuyCode(\''+ products[1].id +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ orderNum +'\')"><button class="iap-move-left">现在升级</button></a>';
+                    products[0].state = '<button class="iap-move-left">已订阅</button><p class="iap-teaser">' + products[i].price + '/年' + '</p>';
+                    products[1].state = '<a onclick="getBuyCode(\''+ products[1].id +'\',\''+ dataObj.v +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ orderNum +'\')"><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">¥' + dataObj.v + '.00/年' + '</p>';
+                    upgradePrice = dataObj.v;
                 }else if(dataObj.premium===1){
                     products[i].isPurchased = true;
-                    products[i].state = '<button class="iap-move-left">已订阅</button>';
+                    products[i].state = '<button class="iap-move-left">已订阅</button><p class="iap-teaser">' + products[i].price + '/年' + '</p>';
                 }else{
                     products[i].isPurchased = false;
       
-                    products[i].state = '<a onclick="getBuyCode(\''+ products[i].id +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ orderNum +'\')"><button class="iap-move-left">订阅</button></a>';
+                    products[i].state = '<a onclick="getBuyCode(\''+ products[i].id +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ orderNum +'\')"><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + products[i].price + '/年' + '</p>';
+                    upgradePrice = '¥1,998.00';
 
                 }
                 if(!isEmptyObj(dataObj)){
-                    productActionButton = '<div class="iap-button" product-id="' + products[i].id + '" product-price="' + productPrice + '" product-title="' + productName + '">' + products[i].state + '<p class="iap-teaser">' + products[i].price + '/年' + '</p></div>';    
-
+                    productActionButton = '<div class="iap-button" product-id="' + products[i].id + '" product-price="' + productPrice + '" product-title="' + productName + '">' + products[i].state + '</div>';    
+                    // <p class="iap-teaser">' + products[i].price + '/年' + '</p>
                 }
                 // MARK: - use onclick to capture click rather than jQuery's body.on, which is buggy on iPhone
                 // MARK: render UI
@@ -187,6 +189,8 @@ function updateProductStatus(productIndex, isProductPurchased, isProductDownload
     }
 }
 
+
+
 // iapActions('FT0101231522033086', 'fail', '');
 // MARK: - Update DOM UI based on user actions
 function iapActions(productID, actionType, expireDate) { 
@@ -232,16 +236,22 @@ function iapActions(productID, actionType, expireDate) {
             if (productType === 'membership') {
                 iapHTMLCode = '<a><button class="iap-move-left">已订阅</button></a><p class="iap-teaser">'+ productPrice + '/年' + '</p>'; 
             } 
-            isReqSuccess = false;
+            // isReqSuccess = false;
             recordSuccessBuyInLocal();
-            // payWall('/index.php/jsapi/paywall?success'); 
             updateProductStatus(productIndex, true, true);
             //window.location.reload();
             break;
         case 'fail':
             if (productType === 'membership') {  
                 turnonOverlay('iap-hint');
-                iapHTMLCode = '<a onclick="getBuyCode(\''+ productID +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ tradeNum +'\')"><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>'; 
+                var isFTCpw = Boolean(Number(getCookie('isFTCw')));
+                if(!isPremium && !isFTCpw){
+                    iapHTMLCode = '<a onclick="getBuyCode(\''+ productID +'\',\''+ upgradePrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ tradeNum +'\')"><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">¥' + upgradePrice + '.00/年' + '</p>';  
+                }else{
+                    iapHTMLCode = '<a onclick="getBuyCode(\''+ productID +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ tradeNum +'\')"><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>';
+                }
+                // alert('isFTCpw:'+isFTCpw+'isPremium1:'+isPremium);
+                
             } 
             updateProductStatus(productIndex, false, false); 
             break;
@@ -298,7 +308,10 @@ function getBuyCode(productId, productPrice, userId, productName, orderNum){
         var productIdStr = (productIDArr === '100') ? 'ftc_premium' : 'ftc_standard';
         productId = orderNum;
 
-        productPrice =  productPrice.substr(1,productPrice.length).replace(',','');
+        if(productPrice.indexOf('¥')>=0){
+            productPrice =  productPrice.substr(1,productPrice.length);
+        }
+        productPrice =  productPrice.replace(',','');
 
         if(osVersion.indexOf('Android')>=0){
             try {
@@ -317,9 +330,13 @@ function getBuyCode(productId, productPrice, userId, productName, orderNum){
             }
         }
     }else{
-        turnonOverlay('loginBox');
+        turnonOverlay('loginBox');  
     }
 }
+
+
+
+
 
 
 
@@ -611,13 +628,4 @@ window.onload = function(){
 //     $(this).find("input[name='payWay']").attr('checked','true');
 // });
 
-    // if (dataObj.premium === 1){   
-    //     vipTypeId.innerHTML = '高端会员';
-    //     warmPrompt.innerHTML = '您的会员截止至<span style="color:#26747a">'+formatTime+'</span>';
-    // }else if (dataObj.standard === 1){
-    //     vipTypeId.innerHTML = '标准会员';
-    //     warmPrompt.innerHTML = '您的会员截止至<span style="color:#26747a">'+formatTime+'</span>';
-    // }else{
-    //     vipTypeId.innerHTML = '未付费注册用户';
-    //     warmPrompt.innerHTML = '成为付费会员，阅读FT独家内容，请<a href="#" style="color:#26747a">成为会员</a>';
-    // }
+
