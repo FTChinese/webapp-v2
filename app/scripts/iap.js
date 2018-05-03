@@ -603,7 +603,7 @@ function updatePageAction(){
     }else{
         var userId1 = getCookie('USER_ID') || '';
         if (!!userId1) {  
-            payWall('/index.php/jsapi/paywall?update');   
+            payWall('/index.php/jsapi/paywall?update&'+Math.random());   
         }else{
             setCookie('isFTCw', 1, '', '/');
         }
