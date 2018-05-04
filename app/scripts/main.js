@@ -1764,11 +1764,6 @@ function getpaywallHint(channelType){
    var paywallHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="lock-content">如果已经是会员，请<a onclick="turnonOverlay(\'loginBox\')">点击这里</a>登录</div><div class="subscribe-btn iap-channel" iap-action="membership" iap-title="会员" channel-type='+channelType+'><span style="color:white">成为会员&#x25BA;</span></div></div></div>'; 
    return paywallHintHtml;
 }
-function getdownloadHint(channelType){
-    var downloadHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">使用FT中文网 iOS应用</div><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="subscribe-btn" channel-type='+channelType+'><span><a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.ft#" target="_blank" style="color:white">下载应用&#x25BA;︎</a></span></div></div></div>';
-    return downloadHintHtml;
-}
-
 
 
 function displaystoryNormal(theid, language, forceTitle) {
@@ -1896,8 +1891,6 @@ function displaystoryNormal(theid, language, forceTitle) {
         } else {
             if ( allId.paywall === 1 || isStoryBeforeOneWeek){ 
                 $('#storyview .storybody').html(storyimage).append(getpaywallHint('story_'+theid+'_'+actualLanguage));
-            }else if (allId.paywall === 2 || isStoryBeforeOneWeek){
-                $('#storyview .storybody').html(storyimage).append(getdownloadHint('story_'+theid+'_'+actualLanguage));
             }else{
                 $('#storyview .storybody').html(storyimage).append(getpaywallHint('story_'+theid+'_'+actualLanguage));
             }
@@ -1964,8 +1957,6 @@ function displaystoryNormal(theid, language, forceTitle) {
         }else{
             if (allId.paywall === 1 || isStoryBeforeOneWeek ){
                 $('#storyview .storybody').html(getpaywallHint('story_'+theid+'_'+actualLanguage));
-            }else if (allId.paywall === 2 || isStoryBeforeOneWeek){
-                $('#storyview .storybody').html(getdownloadHint('story_'+theid+'_'+actualLanguage));
             }else{
                 $('#storyview .storybody').html(getpaywallHint('story_'+theid+'_'+actualLanguage));
             }
@@ -1998,10 +1989,6 @@ function displaystoryNormal(theid, language, forceTitle) {
         } else {
             if (allId.paywall === 1) {
                 $('#storyview .storybody').html(storyimage).append(getpaywallHint('story_'+theid+'_'+actualLanguage));  
-                hasPaywall = true;
-                ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
-            } else if (allId.paywall === 2) {
-                $('#storyview .storybody').html(storyimage).append(getdownloadHint('story_'+theid+'_'+actualLanguage));
                 hasPaywall = true;
                 ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
             } else {
@@ -3564,7 +3551,7 @@ function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFra
         
             $.get(url, function(data) {
                 data1 = checkhttps(data);
-                $('#slideShow').html(data);   
+                $('#slideShow').html(data);
                 httpspv(gDeviceType + '/'+ interactiveTypeName +'/'+ slideUrl);
                 console.log (gDeviceType + '/'+ interactiveTypeName +'/'+ slideUrl);
             });
