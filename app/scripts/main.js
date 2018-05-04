@@ -3564,10 +3564,7 @@ function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFra
         
             $.get(url, function(data) {
                 data1 = checkhttps(data);
-                $('#slideShow').html(data);
-                // setTimeout(function(){
-                //     blockDailyEnglish(url);
-                // },500);
+                $('#slideShow').html(data);   
                 httpspv(gDeviceType + '/'+ interactiveTypeName +'/'+ slideUrl);
                 console.log (gDeviceType + '/'+ interactiveTypeName +'/'+ slideUrl);
             });
@@ -3577,23 +3574,7 @@ function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFra
     }
 }
 
-function blockDailyEnglish(url){
-    var content = $('#scrollcontainer').html();
-    var isFTCpw = Boolean(Number(getCookie('isFTCw')));
-    var content = $('.bottom-part').html();
-    if (isFTCpw) {
-        $('.prev-next').hide();
-        $('#scrollcontainer').html(getpaywallHint(url));
-        $('.bottom-part').html('<div channel-type='+url+' style="text-align: center;">成为付费会员，阅读FT独家内容<br>请<a style="color:#26747a" iap-action="membership" class="iap-channel" iap-title="会员">点击此处</a> 。</div>');
-        window.gSubscriptionEventLabel = getEventLabelFromUrl(url);
-        ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
-    } else {
-        $('.prev-next').show();
-        $('#scrollcontainer').html(content);
-        $('.bottom-part').html(content);
-    }
-     
-}
+
 
 function showPicture (link) {
     turnonOverlay('watchVideo');
