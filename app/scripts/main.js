@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1291; //当前的版本号
+var _currentVersion = 1292; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -1894,8 +1894,6 @@ function displaystoryNormal(theid, language, forceTitle) {
         } else {
             if ( allId.paywall === 1 || isStoryBeforeOneWeek){ 
                 $('#storyview .storybody').html(storyimage).append(getpaywallHint());
-            }else{
-                $('#storyview .storybody').html(storyimage).append(getpaywallHint());
             }
             hasPaywall = true;
             
@@ -1948,12 +1946,14 @@ function displaystoryNormal(theid, language, forceTitle) {
         }
         ceDiff = cbodyTotal - ebodyTotal;
 
-        if(isStoryBeforeOneWeek){
+        if(isEditorChoiceStory){
+            window.gSubscriptionEventLabel = 'EditorChoice/story/'+theid+'/'+actualLanguage;
+        }else if(isStoryBeforeOneWeek){
             window.gSubscriptionEventLabel = 'Archive/story/'+theid+'/'+actualLanguage;
         }else{
             window.gSubscriptionEventLabel = 'EnglishText/story/'+theid+'/'+actualLanguage;
         }
-        
+     
         if (!isFTCw){
             if (!isPremium && isEditorChoiceStory){
                 $('#storyview .storybody').html(getpaywallHint());
@@ -1965,8 +1965,6 @@ function displaystoryNormal(theid, language, forceTitle) {
             }
         }else{
             if (allId.paywall === 1 || isStoryBeforeOneWeek ){
-                $('#storyview .storybody').html(getpaywallHint());
-            }else{
                 $('#storyview .storybody').html(getpaywallHint());
             }
             hasPaywall = true;    
