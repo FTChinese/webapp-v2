@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1290; //当前的版本号
+var _currentVersion = 1291; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -1872,7 +1872,15 @@ function displaystoryNormal(theid, language, forceTitle) {
 
         actualLanguage = 'en';
         byline = (allstories[theid].ebyline_description || 'By') + ' ' + eauthor;
-        window.gSubscriptionEventLabel = 'EnglishText/story/'+theid+'/'+actualLanguage;
+
+        if(isEditorChoiceStory){
+            window.gSubscriptionEventLabel = 'EditorChoice/story/'+theid+'/'+actualLanguage;
+        }else if(isStoryBeforeOneWeek){
+            window.gSubscriptionEventLabel = 'Archive/story/'+theid+'/'+actualLanguage;
+        }else{
+            window.gSubscriptionEventLabel = 'EnglishText/story/'+theid+'/'+actualLanguage;
+        }
+        
         if (!isFTCw){
             if (!isPremium && isEditorChoiceStory){
                 $('#storyview .storybody').html(storyimage).append(getpaywallHint());     
@@ -1939,7 +1947,13 @@ function displaystoryNormal(theid, language, forceTitle) {
             //console.log ("i: " + i + " ebodyTotal: " + ebodyTotal + ' cbodyTotal: ' + cbodyTotal);
         }
         ceDiff = cbodyTotal - ebodyTotal;
-        window.gSubscriptionEventLabel = 'EnglishText/story/'+theid+'/'+actualLanguage;
+
+        if(isStoryBeforeOneWeek){
+            window.gSubscriptionEventLabel = 'Archive/story/'+theid+'/'+actualLanguage;
+        }else{
+            window.gSubscriptionEventLabel = 'EnglishText/story/'+theid+'/'+actualLanguage;
+        }
+        
         if (!isFTCw){
             if (!isPremium && isEditorChoiceStory){
                 $('#storyview .storybody').html(getpaywallHint());
@@ -1977,7 +1991,13 @@ function displaystoryNormal(theid, language, forceTitle) {
         actualLanguage = 'ch';
         byline = (allId.cbyline_description||'').replace(/作者[：:]/g, '') + ' ' + (allId.cauthor||'').replace(/,/g, '、') + ' ' + (allId.cbyline_status || '');
         //alert (allId.cbody);
-        window.gSubscriptionEventLabel = 'ExclusiveContent/premium/' + theid;
+        
+        if(isStoryBeforeOneWeek){
+            window.gSubscriptionEventLabel = 'Archive/story/'+theid+'/'+actualLanguage;
+        }else{
+            window.gSubscriptionEventLabel = 'ExclusiveContent/premium/' + theid;
+        }
+
         if (!isFTCw) {
             $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));     
             hasPaywall = false;
