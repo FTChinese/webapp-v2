@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1289; //当前的版本号
+var _currentVersion = 1290; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -396,18 +396,13 @@ function startpage() {
          if (window.location.hostname === 'localhost' || window.location.hostname.indexOf('192.168') === 0 || window.location.hostname.indexOf('127.0') === 0) {
             var iapAction = $(this).attr('iap-action');
             var iapTitle = $(this).attr('iap-title')|| 'FT中文网';
-            // var channelType = $(this).attr('channel-type');
             payWallUpdateSub('api/paywall.json',iapAction,iapTitle);   
          } else {
             var getUserId = getCookie('USER_ID');
-            // if (!getUserId) {
-            //     turnonOverlay('loginBox');
-            // } else {
-                var iapAction = $(this).attr('iap-action');
-                var iapTitle = $(this).attr('iap-title')|| 'FT中文网';
-                // var channelType = $(this).attr('channel-type');
-                var dataObj = payWallUpdateSub('/index.php/jsapi/paywall?3',iapAction,iapTitle);
-            // }
+
+            var iapAction = $(this).attr('iap-action');
+            var iapTitle = $(this).attr('iap-title')|| 'FT中文网';
+            var dataObj = payWallUpdateSub('/index.php/jsapi/paywall?3',iapAction,iapTitle);
             ga('send', 'event', 'Android Privileges','Tap', window.gSubscriptionEventLabel);
          }
     });
@@ -987,7 +982,8 @@ function filloneday(onedaydate) {
     if (typeof window.ft_android_id === 'string') {
         gDeviceId = window.ft_android_id;
     }
-    $('#storytotalnum').html('版本：'+ _currentVersion + ' '+ gDeviceId).unbind().bind('click',function(){
+    // 2018.5.4 删除 + ' '+ gDeviceId  
+    $('#storytotalnum').html('版本：'+ _currentVersion).unbind().bind('click',function(){
         $(this).html(uaStringFillPage);
     });
     //gStartStatus = "filloneday end";
@@ -1758,10 +1754,9 @@ function displaystory(theid, language, forceTitle) {
 }
 
 
-
-
-function getpaywallHint(channelType){
-   var paywallHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">成为付费会员，阅读FT独家内容</div><div class="lock-content">如果已经是会员，请<a onclick="turnonOverlay(\'loginBox\')">点击这里</a>登录</div><div class="subscribe-btn iap-channel" iap-action="membership" iap-title="会员" channel-type='+channelType+'><span style="color:white">成为会员&#x25BA;</span></div></div></div>'; 
+function getpaywallHint(){
+   var content = (isEditorChoiceChannel) ? '购买高端会员，阅读编辑精选' : '成为付费会员，阅读FT独家内容';
+   var paywallHintHtml = '<div class="subscribe-lock-container"><div class="lock-block"><div class="lock-content">'+content+'</div><div class="lock-content">如果已经是会员，请<a onclick="turnonOverlay(\'loginBox\')">点击这里</a>登录</div><div class="subscribe-btn iap-channel" iap-action="membership" iap-title="会员"><span style="color:white">成为会员&#x25BA;</span></div></div></div>'; 
    return paywallHintHtml;
 }
 
@@ -1880,7 +1875,7 @@ function displaystoryNormal(theid, language, forceTitle) {
         window.gSubscriptionEventLabel = 'EnglishText/story/'+theid+'/'+actualLanguage;
         if (!isFTCw){
             if (!isPremium && isEditorChoiceStory){
-                $('#storyview .storybody').html(storyimage).append(getpaywallHint('story_'+theid+'_'+actualLanguage));     
+                $('#storyview .storybody').html(storyimage).append(getpaywallHint());     
                 hasPaywall = true; 
                 ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
             }else{
@@ -1890,9 +1885,9 @@ function displaystoryNormal(theid, language, forceTitle) {
 
         } else {
             if ( allId.paywall === 1 || isStoryBeforeOneWeek){ 
-                $('#storyview .storybody').html(storyimage).append(getpaywallHint('story_'+theid+'_'+actualLanguage));
+                $('#storyview .storybody').html(storyimage).append(getpaywallHint());
             }else{
-                $('#storyview .storybody').html(storyimage).append(getpaywallHint('story_'+theid+'_'+actualLanguage));
+                $('#storyview .storybody').html(storyimage).append(getpaywallHint());
             }
             hasPaywall = true;
             
@@ -1947,7 +1942,7 @@ function displaystoryNormal(theid, language, forceTitle) {
         window.gSubscriptionEventLabel = 'EnglishText/story/'+theid+'/'+actualLanguage;
         if (!isFTCw){
             if (!isPremium && isEditorChoiceStory){
-                $('#storyview .storybody').html(getpaywallHint('story_'+theid+'_'+actualLanguage));
+                $('#storyview .storybody').html(getpaywallHint());
                 hasPaywall = true; 
                 ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
             }else{
@@ -1956,9 +1951,9 @@ function displaystoryNormal(theid, language, forceTitle) {
             }
         }else{
             if (allId.paywall === 1 || isStoryBeforeOneWeek ){
-                $('#storyview .storybody').html(getpaywallHint('story_'+theid+'_'+actualLanguage));
+                $('#storyview .storybody').html(getpaywallHint());
             }else{
-                $('#storyview .storybody').html(getpaywallHint('story_'+theid+'_'+actualLanguage));
+                $('#storyview .storybody').html(getpaywallHint());
             }
             hasPaywall = true;    
             ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
@@ -1988,12 +1983,12 @@ function displaystoryNormal(theid, language, forceTitle) {
             hasPaywall = false;
         } else {
             if (allId.paywall === 1) {
-                $('#storyview .storybody').html(storyimage).append(getpaywallHint('story_'+theid+'_'+actualLanguage));  
+                $('#storyview .storybody').html(storyimage).append(getpaywallHint());  
                 hasPaywall = true;
                 ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
             } else {
                 if(isStoryBeforeOneWeek){
-                    $('#storyview .storybody').html(storyimage).append(getpaywallHint('story_'+theid+'_'+actualLanguage));
+                    $('#storyview .storybody').html(storyimage).append(getpaywallHint());
                     ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
                     hasPaywall = true;
                 }else{
