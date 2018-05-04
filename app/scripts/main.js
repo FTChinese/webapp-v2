@@ -3531,7 +3531,7 @@ function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFra
         var isFTCpw = Boolean(Number(getCookie('isFTCw')));
         var hash = location.hash;
         var isDailyEnglish = false;
-        if(hash.indexOf('ftradio')>=0 || hash.indexOf('speedread')>=0){
+        if(hash.indexOf('ftradio')>=0 || hash.indexOf('speedread')>=0 || hash.indexOf('english')>=0){
             isDailyEnglish = true;
         }
         if (isFTCpw && isDailyEnglish) {
