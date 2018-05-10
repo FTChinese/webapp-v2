@@ -614,6 +614,21 @@ window.onload = function(){
     updatePageAction();
 }
 
+function getSystemVersion(){
+    try {
+        if(ftjavacriptapp){
+            if(typeof ftjavacriptapp.get_systemversion === 'function'){
+                var version = ftjavacriptapp.get_systemversion();
+                $('#app_version').html(version);
+            }else{
+                $('#app_version').html('24');
+            }
+        }
+    } catch (err) {
+        console.log('get system version error');
+    }
+}
+getSystemVersion();
 
 // 测试付费成功与否的地方
 // function paySuccess(){
