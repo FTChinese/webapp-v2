@@ -409,13 +409,13 @@ function payWall(url){
                         var userId2 = getCookie('USER_ID') || '';
                         ga('send','event', 'CatchError', 'Local Subscription Not Validated on Server', userId2);
                     }
-                } else {  
+                } else {
                     isPremium = (parsedData.premium >= 1) ? true : false ;  
                     if(!isPremium && isEditorChoiceChannel){
                         updateUnlockClass();
                     } else {
                         updateLockClass();
-                    }  
+                    }
                     //console.log('isEditorChoiceChannel:'+isEditorChoiceChannel); 
                 }
             } else {
