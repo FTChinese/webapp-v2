@@ -193,7 +193,6 @@ function updateAds() {
                     if (useFTScroller===1 || nowV === 'story-column-flow') {
                         adOverlay = '<a target=_blank class="ad-overlay"></a>';
                     }
-                    //console.log('hereherehere');
                     var testDBParam = '';
                     if (window.location.search.indexOf('testDB=yes') > 0) {
                       testDBParam = '&testDB=yes';
