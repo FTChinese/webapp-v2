@@ -826,15 +826,15 @@ function fillContent(loadType) {
     // 特别报导
     // 这段代码直接放到模版里面了
     gSpecialAnchors = [];
-    if ($(".specialanchor").length>0) {
+    if ($('.specialanchor').length>0) {
         $('.specialanchor').each(function(){
             var adId = $(this).attr('adid') || '';
             var sTag = $(this).attr('tag') || '';
             var sTitle = $(this).attr('title') || '';
             gSpecialAnchors.push({
-                "tag": sTag,
-                "title": sTitle,
-                "adid": adId
+                'tag': sTag,
+                'title': sTitle,
+                'adid': adId
             });
         });
     }
