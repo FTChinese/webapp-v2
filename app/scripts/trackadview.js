@@ -172,6 +172,7 @@ function updateAds() {
             currentViewPortAds = $('#'+nowV).find('.adiframe');
         }
         nowV = nowV.replace(/\-/g, '');
+
         currentViewPortAds.each(function(index) {
             var adHeight=$(this).attr('type') || 0;
             var adFrame=$(this).attr('frame') || '';
@@ -179,6 +180,11 @@ function updateAds() {
             var FrameID;
             var adOverlay='';
             var forPhone;
+            // MARK: make sure the ad container shows in case it is hiden by previous ads
+            if (adFrame.indexOf('paid-post')<0) {
+              // MARK: - Paid Post iframe is supposed to be hidden
+              $(this).show();
+            }
             if (adHeight !== 'fullwidth' && adHeight !== '50') {
               adHeight = parseInt(adHeight,10);
             } else {

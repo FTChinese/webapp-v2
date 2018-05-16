@@ -37,46 +37,45 @@ img {border:0;max-width:100%;}
     }
 
     function findTop(obj) {
-    var curtop = 0;
-    if (obj.offsetParent) {
-    do {
-        curtop += obj.offsetTop;
-    } while ((obj = obj.offsetParent));
-    return curtop;
-    }
-    }
-
-
-    function adReachability() {
-    var thirdPartyVendors = {
-        'dcR': '_dc',
-        'mmR': '_mm',
-        'szR': '_sz',
-        'amR': '_am'
-    };
-    var adParameter = '';
-    var adReachabilityStatus;
-    for (var k in thirdPartyVendors) {
-        if (thirdPartyVendors.hasOwnProperty(k)) {
-            //user[k] = data[k];
-            //console.log (k + ': ' + thirdPartyVendors[k]);
-            adReachabilityStatus = GetCookie(k);
-            if (adReachabilityStatus === 'reachable') {
-            adParameter += '&' + thirdPartyVendors[k] + '=1';
-            } else if (window.gIsSpider === true && (k === 'dcR' || k === 'amR')) {
-            // MARK: - If it's spam. Don't use DoubleClick and AdMaster to serve
-            adParameter += '&' + thirdPartyVendors[k] + '=0';
-            } else if (adReachabilityStatus === null) {
-            adParameter += '&' + thirdPartyVendors[k] + '=2';
-            }
+        var curtop = 0;
+        if (obj.offsetParent) {
+            do {
+                curtop += obj.offsetTop;
+            } while ((obj = obj.offsetParent));
+            return curtop;
         }
     }
-    if (typeof window.gUserType !== 'string') {
-        window.gUserType = 'visitor';
-    }
-    adParameter += '&' + '_ut=' + window.gUserType;
-    //console.log (adParameter);
-    return adParameter;
+
+    function adReachability() {
+        var thirdPartyVendors = {
+            'dcR': '_dc',
+            'mmR': '_mm',
+            'szR': '_sz',
+            'amR': '_am'
+        };
+        var adParameter = '';
+        var adReachabilityStatus;
+        for (var k in thirdPartyVendors) {
+            if (thirdPartyVendors.hasOwnProperty(k)) {
+                //user[k] = data[k];
+                //console.log (k + ': ' + thirdPartyVendors[k]);
+                adReachabilityStatus = GetCookie(k);
+                if (adReachabilityStatus === 'reachable') {
+                adParameter += '&' + thirdPartyVendors[k] + '=1';
+                } else if (window.gIsSpider === true && (k === 'dcR' || k === 'amR')) {
+                // MARK: - If it's spam. Don't use DoubleClick and AdMaster to serve
+                adParameter += '&' + thirdPartyVendors[k] + '=0';
+                } else if (adReachabilityStatus === null) {
+                adParameter += '&' + thirdPartyVendors[k] + '=2';
+                }
+            }
+        }
+        if (typeof window.gUserType !== 'string') {
+            window.gUserType = 'visitor';
+        }
+        adParameter += '&' + '_ut=' + window.gUserType;
+        //console.log (adParameter);
+        return adParameter;
     }
 
 
@@ -122,7 +121,6 @@ img {border:0;max-width:100%;}
     }
 
     slotString = '&slot=' + slotNumber;
-
     // MARK: - 检查parent里面的gSpecialAnchors，根据这个来确定当前的页面是不是要投放赞助的adid
     if (parent.window.gSpecialAnchors && parent.window.gSpecialAnchors.length > 0 && parent.window.gTagData.length >0) {
         for (var i=0; i < parent.window.gSpecialAnchors.length && matchSpecial === false; i++) {
@@ -336,6 +334,9 @@ if (gSearchVars && gSearchVars.testDB === 'yes') {
 } else {
     dolphineInlineScript = '<div class="'+adType+'" id="ad-content"><scr'+'ipt type="text/javascript" src="http://dualstack.adsame-1421766300.ap-southeast-1.elb.amazonaws.com/s?z=ft&c=' + c + adReachability() + slotString + '&t='+Math.round(Math.random() * 1000000)+'" charset="gbk" onerror="removeAd()" onload="loaded()"></scr'+'ipt><div id="ad-bottom"></div></div>';
 }
+
+
+
 
 if(gSearchVars.debugad && gSearchVars.debugad=="yes" ) {
     //console.log("debugad");

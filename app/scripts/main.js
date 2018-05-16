@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1295; //当前的版本号
+var _currentVersion = 1300; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -825,7 +825,6 @@ function fillContent(loadType) {
 
     // 特别报导
     // 这段代码直接放到模版里面了
-    /*
     gSpecialAnchors = [];
     if ($(".specialanchor").length>0) {
         $('.specialanchor').each(function(){
@@ -839,7 +838,7 @@ function fillContent(loadType) {
             });
         });
     }
-    */
+    
 }
 
 
