@@ -115,7 +115,7 @@ function startTrackingAdViews(scrollerId) {
 
 function getAdChannelId() {
   //var matchSpecial = false;
-
+  //console.log ('adid: checking');
   if (window.gSpecialAnchors && window.gSpecialAnchors.length > 0 && window.gTagData.length >0) {
     for (var i=0; i < window.gSpecialAnchors.length; i++) {
         // MARK: - this is added per request of ad sales

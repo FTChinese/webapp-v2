@@ -138,16 +138,23 @@ img {border:0;max-width:100%;}
             }
             var keywordsOfCurrentPage = parent.window.gTagData;
             var keywordForCheck = parent.window.gSpecialAnchors[i].tag;
-            if (keywordForCheck.indexOf('http') >= 0 && parent.window.gSpecialAnchors[i].channel) {
-                keywordForCheck = parent.window.gSpecialAnchors[i].channel;
-            }
 
+            if (keywordForCheck.indexOf('http') >= 0) {
+                if (parent.window.gSpecialAnchors[i].title) {
+                    keywordForCheck = parent.window.gSpecialAnchors[i].title;
+                } else if (parent.window.gSpecialAnchors[i].channel) {
+                    keywordForCheck = parent.window.gSpecialAnchors[i].channel;
+                }
+            }
             if (useSpecialCode === true && keywordsOfCurrentPage.indexOf(keywordForCheck) >=0) {
                 gSpecialAdId = parent.window.gSpecialAnchors[i].adid;
                 matchSpecial = true;
+                break;
             }
         }
     }
+
+
     // New Ad
     // MARK: determin device type 
     
@@ -272,7 +279,7 @@ img {border:0;max-width:100%;}
         adchannelId = gSpecialAdId;
     }
     c = deviceId + adchannelId + adPatternId;
-    //console.log('computed c:',c);
+    console.log('computed c:',c);
     var adName = 'db-'+ c;
     var deviceWidth = window.parent.innerWidth || window.parent.document.documentElement.clientWidth || window.parent.document.body.clientWidth;
     var bannerW = deviceWidth;

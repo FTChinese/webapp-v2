@@ -17,6 +17,8 @@
             <ul class="navigation">
                 <li class=home onclick="backhome()">首页</li>
                 <li class="channel china" url="/index.php/ft/channel/phonetemplate.html?channel=china">中国</li>
+                <li class="channel exclusive" url="/index.php/ft/channel/phonetemplate.html?channel=exclusive">独家</li>
+                <li class="channel editorchoice" url="/index.php/ft/channel/phonetemplate.html?channel=editorchoice">编辑精选</li>
                 <li class="channel global" url="/index.php/ft/channel/phonetemplate.html?channel=global">全球</li>
                 <li class="channel opinion" url="/index.php/ft/channel/phonetemplate.html?channel=opinion">观点</li>
                 <li class="channel column" url="/index.php/ft/channel/phonetemplate.html?channel=column">专栏</li>
@@ -29,7 +31,7 @@
                 <li class="channel management" url="/index.php/ft/channel/phonetemplate.html?channel=management">管理</li>
                 <li class="channel lifestyle" url="/index.php/ft/channel/phonetemplate.html?channel=lifestyle">生活时尚</li>
                 <li class="channel photo" url="/index.php/ft/channel/phonetemplate.html?channel=video">视频</li>
-                <li class="channel specialreport" url="/index.php/ft/channel/phonetemplate.html?channel=specialreport">���别报导</li>
+                <li class="channel specialreport" url="/index.php/ft/channel/phonetemplate.html?channel=specialreport">特别报导</li>
                 <li class="channel management" url="/index.php/ft/channel/phonetemplate.html?channel=datanews">数据新闻</li>
                 <li class="channel vd" url="/index.php/ft/channel/phonetemplate.html?channel=photo">图辑</li>
                 <li class="channel vd" url="/index.php/ft/channel/phonetemplate.html?channel=newsquiz">互动小测</li>
@@ -102,7 +104,7 @@
             <b>&copy; 英国金融时报</b> 有限公司 2018&nbsp;&nbsp;
             <span><acronym title="Financial Times">FT中文网</acronym>为英国金融时报的注册商标</span>
         </div>
-        
+
     </div>
 </div>
 
@@ -110,7 +112,7 @@
 <div id=storyview class=fullbodyView>
     <div id=storyScroller>
                 <div class="adiframe banner" type="50" frame="ad300"></div>
-        
+
         <div class=layout-a_region-3>
             <div class=inner>
                 <div class="storycontainer container">
@@ -152,7 +154,7 @@
                         <input type="text"  autocorrect="off" name="username" id="username1" class="user_id textinput user-name"/>
                         <div class="password-label">密码</div>
                         <input type="password" name="password"  class="user_id textinput password" id="password1"/>
-                        <input type="submit" value="登录后发表评论" class="comment_btn submitbutton button ui-light-btn" onclick="login(1)"/> 
+                        <input type="submit" value="登录后发表评论" class="comment_btn submitbutton button ui-light-btn" onclick="login(1)"/>
                         <div class="topmargin statusmsg"></div>
                     </div>
                 </div>
@@ -234,7 +236,7 @@
 #contentRail button>i,#contentRail button>i:after{
     display: block;
     font-weight: normal;
-    font-size:15px;    
+    font-size:15px;
     line-height: 1;
 }
 #contentRail button>i{
@@ -358,14 +360,14 @@ background-color: rgba(0,0,0,0.14) !important;
                 </div>
                 <div class="fontSelect" onclick="setFontSize()">
                     <div id=currentFont>默认</div>
-                    <strong>字号大小</strong>					
+                    <strong>字号大小</strong>
 				</div>
-                <div class="standalonebutton"><button class="ui-light-btn" onclick="turnonOverlay('loginBox')">登录</button></div>                
-                <div class="standalonebutton"><button class="ui-light-btn channel" url="/index.php/ft/channel/phonetemplate.html?channel=myftsetup">设置我的<font class=english>FT</font></button></div>                                
+                <div class="standalonebutton"><button class="ui-light-btn" onclick="turnonOverlay('loginBox')">登录</button></div>
+                <div class="standalonebutton"><button class="ui-light-btn channel" url="/index.php/ft/channel/phonetemplate.html?channel=myftsetup">设置我的<font class=english>FT</font></button></div>
                 <div class="standalonebutton nativeButton"><a href="https://itunes.apple.com/cn/app/ft-zhong-wen-wang-zhi-neng/id443870811?mt=8" target=_blank><button class="ui-light-btn">到<span class=english>App Store</span>上推荐这个应用</button></a></div>
                 <div class="standalonebutton"><button class="ui-light-btn channel" url="/index.php/ft/channel/phonetemplate.html?channel=help">帮助与反馈</button></div>
                 <div class="currentVersion" id="storytotalnum"></div>
-				<div id="testMessage"></div>                
+				<div id="testMessage"></div>
 			</div>
 		</div>
 	</div>
@@ -405,7 +407,7 @@ background-color: rgba(0,0,0,0.14) !important;
                     <div class="padding" id=introContent></div>
                     <div class="standalonebutton last-child"><button class="ui-light-btn channel" id="checkColumn">查看最新文章</button></div>
                 </div>
-                
+
 			</div>
 		</div>
 	</div>
@@ -445,7 +447,7 @@ background-color: rgba(0,0,0,0.14) !important;
 					<p>小提示</p>
 				</div>
                 <div class="padding">
-                    <div class=centerButton>亲爱的读者，您的手机系统版本偏低。如果使用这个应用的体验比较卡，请尝试用其他方式来阅读FT中文网。</div>
+                    <div class=centerButton>亲���的读者，您的手机系统版本偏低。如果使用这个应用的体验比较卡，请尝试用其他方式来阅读FT中文网。</div>
                     <div class=centerButton><button class="ui-light-btn channel" onclick="location.href='/m/index.html'">旧版本的应用程序</button></div>
                     <div class=centerButton><button class="ui-light-btn channel" onclick="location.href='http://m.ftchinese.com/'">FT中文网手机站</button></div>
                 </div>
@@ -626,7 +628,7 @@ background-color: rgba(0,0,0,0.14) !important;
 				<div class=overlay-header>
 					<div class="nutmeg-content_right rightmargin"><button onclick="closeOverlay()" class="overlay_close-btn" aria-label="Settings"></button></div>
 					分享到新浪微博
-				</div>           
+				</div>
 				<div class="padding">
 					<div>1. 全选并复制下方文字</div>
 					<textarea class="commentTextArea paste" rows=4 type="text" id="shareSinaWeibo"></textarea>

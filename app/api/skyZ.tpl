@@ -12,6 +12,8 @@
             <ul class="navigation">
                 <li class=home onclick="backhome()">首页</li>
                 <li class="channel china" url="/index.php/ft/channel/phonetemplate.html?channel=china">中国</li>
+                <li class="channel exclusive" url="/index.php/ft/channel/phonetemplate.html?channel=exclusive">独家</li>
+                <li class="channel editorchoice" url="/index.php/ft/channel/phonetemplate.html?channel=editorchoice">编辑精选</li>
                 <li class="channel global" url="/index.php/ft/channel/phonetemplate.html?channel=global">全球</li>
                 <li class="channel opinion" url="/index.php/ft/channel/phonetemplate.html?channel=opinion">观点</li>
                 <li class="channel column" url="/index.php/ft/channel/phonetemplate.html?channel=column">专栏</li>
@@ -87,7 +89,7 @@
 <div url="/index.php/ft/column/007000038?i=2" class="channel oneStory more">中外对话</div>
 <div url="/index.php/ft/column/007000058?i=2" class="channel oneStory more">中西两半录</div>
 <div url="/index.php/ft/column/007000052?i=2" class="channel oneStory more">切问近思录</div>
-<div url="/index.php/ft/column/007000056?i=2" class="channel oneStory more">投资���的敌人</div>
+<div url="/index.php/ft/column/007000056?i=2" class="channel oneStory more">投资者的敌人</div>
 <div url="/index.php/ft/column/007000055?i=2" class="channel oneStory more">名利场</div>
 <div url="/index.php/ft/column/007000053?i=2" class="channel oneStory more">纽约范儿</div>
 <div url="/index.php/ft/column/007000069?i=2" class="channel oneStory more">流动的盛宴</div>
@@ -120,7 +122,7 @@
 <div url="/index.php/ft/column/007000017?i=2" class="channel oneStory more">钱眼太太</div>
 <div url="/index.php/ft/column/007000050?i=2" class="channel oneStory more">简氏酒庄</div>
 <div url="/index.php/ft/column/007000065?i=2" class="channel oneStory more">安德鲁•希尔</div>
-<div url="/index.php/ft/column/007000067?i=2" class="channel oneStory more">斯卡平克</div>
+<div url="/index.php/ft/column/007000067?i=2" class="channel oneStory more">���卡平克</div>
 <div url="/index.php/ft/column/007000066?i=2" class="channel oneStory more">西蒙•库柏</div>
 </div>
 
