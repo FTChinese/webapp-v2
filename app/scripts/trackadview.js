@@ -180,11 +180,6 @@ function updateAds() {
             var FrameID;
             var adOverlay='';
             var forPhone;
-            // MARK: make sure the ad container shows in case it is hiden by previous ads
-            if (adFrame.indexOf('paid-post')<0) {
-              // MARK: - Paid Post iframe is supposed to be hidden
-              $(this).show();
-            }
             if (adHeight !== 'fullwidth' && adHeight !== '50') {
               adHeight = parseInt(adHeight,10);
             } else {

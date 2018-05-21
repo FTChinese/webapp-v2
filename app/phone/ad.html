@@ -27,7 +27,7 @@ video::-webkit-media-controls-panel {width: calc(100% + 30px);}
     }
 
     var gUserType = window.parent.gUserType || 'visitor';
-    
+
     
     function GetCookie(name){
         var start = document.cookie.indexOf(name+"="),
@@ -264,6 +264,9 @@ video::-webkit-media-controls-panel {width: calc(100% + 30px);}
 
         }
     }
+
+
+
     //New Ad Add: 旧的逻辑中Pad和Phone的两个mpu是同样的两个位置，但新逻辑中Phone的mpu是MPU-Middle1和MPU-Middle2(即0401和0402),pad中的mpu是MPU-Right1和MPU-Right2(即0411和0412)
     if(deviceId=="6000") {
         if(adPatternId=="0401") {
@@ -313,7 +316,7 @@ video::-webkit-media-controls-panel {width: calc(100% + 30px);}
 <body style="background-color:#f7e8d7;">
 <script>
 
-    
+
 
 if (c == '400050480302') {
     var adDiv = window.parent.document.querySelector('[data-adid="400050480302"]');//iframe的父div
@@ -444,6 +447,12 @@ try {
         parent.updateViewableAdId(adId, c);
         parent.updateViewableAdSize()
         parent.adViewUpdate();
+        // MARK: make sure the ad container shows in case it is hiden by previous ads
+        // MARK: this has to be here, not in the main.js code so that only code that are supposed to be executed should be displayed. 
+        if (adCode.indexOf('paid-post')<0 && adCode.indexOf('fullScreen')<0 ) {
+            // MARK: - Paid Post iframe is supposed to be hidden
+            gParentDom.style.display = 'block';
+        }
     } catch (ignore) {
 
     }
@@ -452,6 +461,9 @@ try {
         gVideoTag = 1;
         window.overlayLink = '';
     }
+
+
+
 
 
 
