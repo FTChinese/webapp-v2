@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1300; //当前的版本号
+var _currentVersion = 1301; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -1989,15 +1989,23 @@ function displaystoryNormal(theid, language, forceTitle) {
         byline = (allId.cbyline_description||'').replace(/作者[：:]/g, '') + ' ' + (allId.cauthor||'').replace(/,/g, '、') + ' ' + (allId.cbyline_status || '');
         //alert (allId.cbody);
         
-        if(isStoryBeforeOneWeek){
+        if(isEditorChoiceStory){
+            window.gSubscriptionEventLabel = 'EditorChoice/story/'+theid+'/'+actualLanguage;
+        }else if(isStoryBeforeOneWeek){
             window.gSubscriptionEventLabel = 'Archive/story/'+theid+'/'+actualLanguage;
         }else{
             window.gSubscriptionEventLabel = 'ExclusiveContent/premium/' + theid;
         }
 
         if (!isFTCw) {
-            $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));     
-            hasPaywall = false;
+            if (!isPremium && isEditorChoiceStory){
+                $('#storyview .storybody').html(storyimage).append(getpaywallHint());
+                hasPaywall = true; 
+                ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
+            }else{
+                $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));     
+                hasPaywall = false;  
+            }
         } else {
             if (allId.paywall === 1) {
                 $('#storyview .storybody').html(storyimage).append(getpaywallHint());  
