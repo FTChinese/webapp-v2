@@ -51,7 +51,6 @@ function getProductHTMLCode(products, forGroup) {
                 var productBenefits = '';
                 var benefitsArray = [];
                 var productName = products[i].title || '';
-                // MARK: If the forGroup is set to all, display all products in groups
                 if (forGroup === 'all' && currentGroup !== products[i].group) {
                     currentGroup = products[i].group;
                     productsHTML += '<div class="section"><a class="iap-channel" iap-action="' + currentGroup + '" iap-title="' + products[i].groupTitle + '"><span>' + products[i].groupTitle + '</span></a><a href="restorepurchases://"><button class="floatright">恢复</button></a></div>';
@@ -373,7 +372,6 @@ function updateDownloadPauseButton(productID, action) {
 // MARK: - Get url scheme for iOS buy and JS onclick code for Android
 function getBuyCode(productId, productPrice, userId, productName) {
     var buyCode = '';
-    // var priceForAndroid = productPrice.replace(/[^(0-9\.)]/g,'');
     var priceForAndroid = '0.01';
     if(osVersion.indexOf('Android')<0){
         buyCode = ' href="buy://' + productId + '"';
@@ -383,4 +381,3 @@ function getBuyCode(productId, productPrice, userId, productName) {
     return buyCode;
 }
 
-// MARK: - Test paywall for Android

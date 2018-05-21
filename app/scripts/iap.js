@@ -623,18 +623,171 @@ function getSystemVersion(){
 getSystemVersion();
 
 // 测试付费成功与否的地方
+// $(this).find("input[name='payWay']").attr('checked','true');
+// ftc_premium 1800 高端会员 FT1006001526873479
+// iapActions('ftc_premium_FT0101522812152', 'success', '');
+// var payWrapData = {};
 // function paySuccess(){
 //     var psySuccess = document.getElementById('pay-success-btn');
-// iapActions('ftc_premium_FT0101522812152', 'success', '');
 //     psySuccess.onclick=function(){
 //         turnonOverlay('pay-way');
 //     }
 // }
 // paySuccess();
-// Mark:支付方式
-// $('body').on('click', '.one-way-container', function(){
-//     $(this).find("input[name='payWay']").attr('checked','true');
+// // Mark:支付方式
+// var payWay = '';
+// $('body').on('click', '.one-way-container', function(){   
+//     payWay = $(this).find("input[name='payWay']").val();   
 // });
+
+// $('body').on('click', '#to-pay', function(){
+//     var userId = getCookie('USER_ID') || '';
+//     if(payWay==='wxpay'){
+//         console.log('wx pay way is:'+payWay);
+//         getBuyCode('ftc_premium', '1800', 'userId', '高端会员', 'FT1006001526873479');
+//     }else if(payWay==='alipay'){
+//         console.log('ali pay way is:'+payWay);
+
+//         // getBuyCode('ftc_premium', '1800', 'userId', '高端会员', 'FT1006001526873479');
+//         getBuyCode(payWrapData['productsId'], payWrapData['productPrice'],'userId',payWrapData['productName'],payWrapData['orderNum']);
+//     }
+// });
+
+// $('body').on('click', '.iap-button', function(){
+//      var productName = $(this).attr('product-title');
+//      var memberNum = (productName == '高端会员') ? '100' : '010';
+//      var orderNum = getOrderNum(memberNum);
+//      payWrapData['productsId'] =  $(this).attr('product-id');
+//      payWrapData['productPrice'] =  $(this).attr('product-price');
+//      payWrapData['productName'] =  productName;
+//      payWrapData['orderNum'] =  orderNum;
+
+//      turnonOverlay('pay-way');
+//     //  console.log(payWrapData);
+// });
+
+// function getWxBuyCode(productId, productPrice, userId, productName, orderNum){
+//     console.log(productId+' '+ productPrice +' '+productName+' '+orderNum);
+    
+//     var userId = getCookie('USER_ID');
+//     if (!!userId){
+        
+//         var productIDArr = orderNum.substring(2,5);
+//         var productIdStr = (productIDArr === '100') ? 'ftc_premium' : 'ftc_standard';
+//         productId = orderNum;
+
+//         if(productPrice.indexOf('¥')>=0){
+//             productPrice =  productPrice.substr(1,productPrice.length);
+//         }
+//         productPrice =  productPrice.replace(',','');
+
+//         if(osVersion.indexOf('Android')>=0){
+//             try {
+//                 if(ftjavacriptapp){                  
+//                     ftjavacriptapp.payweixin(productId,productPrice,userId, productName);
+//                     postPayState(productIdStr, productPrice, userId, orderNum, 'start');
+//                     var eventAction = 'Buy: ' + productIdStr;
+//                     ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel);
+//                     setTimeout(function(){
+//                         postPayState(productIdStr, productPrice, userId, orderNum, 'start pending');
+//                     },15000);
+//                 }
+//             } catch (ignore) {
+//                 postPayState(productIdStr, productPrice, userId, orderNum, 'start fail');
+//                 alert('请求失败！');
+//             }
+//         }
+//     }else{
+//         turnonOverlay('loginBox');  
+//     }
+// }
+
+
+// function wxpayActions(productID, actionType) { 
+//     var gUserId = getCookie('USER_ID');   
+//     var iapButtons='';
+//     var iapHTMLCode = '';
+//     var productPrice = '';
+//     var productIndex = 0;
+//     var productName ='';
+//     var tradeNum = '';
+//     // MARK: get iapButtons based on the current view
+//     var currentView = 'fullbody';
+//     if (gNowView.indexOf('storyview') >= 0) {
+//         currentView = 'storyview';
+//     } else if (gNowView.indexOf('channelview') >= 0) {
+//         currentView = 'channelview';
+//     }
+//     tradeNum = productID;
+//     var productIDArr = productID.substring(2,5);
+//     productID = (productIDArr == '100') ? 'ftc_premium' : 'ftc_standard';
+    
+//     iapButtons = document.getElementById(currentView).querySelectorAll('.iap-button');
+
+//     productIndex = getproductIndex(productID);
+
+//     // MARK: - get product price here
+//     productPrice = window.iapProducts[productIndex].price || '0￥';
+//     productName = window.iapProducts[productIndex].title || '';
+
+//     // MARK: - Get product type based on its identifiers
+//     var productType = '';
+//     if (/premium$|standard$|trial$/.test(productID)) {
+//         productType = 'membership';
+//     }else {
+//         productType = 'eBook';
+//     }
+
+ 
+//     postPayState(productID, productPrice, gUserId, tradeNum, actionType);
+
+//     switch (actionType) { 
+//         case 'success':
+//             if (productType === 'membership') {
+//                 iapHTMLCode = '<a><button class="iap-move-left">已订阅</button></a><p class="iap-teaser">'+ productPrice + '/年' + '</p>'; 
+//             } 
+//             recordSuccessBuyInLocal();
+//             updateProductStatus(productIndex, true, true);
+//             break;
+//         case 'fail':
+//             if (productType === 'membership') {  
+//                 turnonOverlay('iap-hint');
+//                 var isFTCpw = Boolean(Number(getCookie('isFTCw')));
+//                 if(!isPremium && !isFTCpw){
+//                     iapHTMLCode = '<a onclick="getWxBuyCode(\''+ productID +'\',\''+ upgradePrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ tradeNum +'\')"><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">¥' + upgradePrice + '.00/年' + '</p>';  
+//                 }else{
+//                     iapHTMLCode = '<a onclick="getWxBuyCode(\''+ productID +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ tradeNum +'\')"><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>';
+//                 }
+                
+                
+//             } 
+//             updateProductStatus(productIndex, false, false); 
+//             break;
+//         default:
+//             if (productType === 'membership') {  
+//                 turnonOverlay('iap-hint');
+//                 iapHTMLCode = '<a onclick="getBuyCode(\''+ productID +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ tradeNum +'\')"><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>'; 
+//             } 
+//             updateProductStatus(productIndex, false, false); 
+//             break;
+//     }
+//     // MARK: - for each of the iap button containers that fit the criteria, update its innerHTML
+//     if (iapButtons.length>0){
+//         for (var i = 0,len=iapButtons.length; i < len; i++) {
+//             if (productID === iapButtons[i].getAttribute('product-id')) {
+//                 iapButtons[i].innerHTML = iapHTMLCode; 
+//             } else if (productID === '') {
+//                 iapHTMLCode = '<a><button class="iap-move-left">正在请求</button></a>';
+//                 iapButtons[i].innerHTML = iapHTMLCode;
+//             }
+//         }
+//     }
+
+//     // MARK: - Send Event to GA and Other Analytics
+//     var eventAction = 'Buy ' + actionType + ': ' + productID;
+//     ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel);
+
+// }
 
 
 
