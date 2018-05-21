@@ -348,14 +348,6 @@ $('body').on('click', '.openPayment', function(){
     // getBuyCode(productId, productPrice, userId, productName, orderNum) 
 });
 
-// 测试付费成功与否的地方
-// function paySuccess(){
-//     var psySuccess = document.getElementById('pay-success-btn');
-//     psySuccess.onclick=function(){
-//         iapActions('ftc_premium_FT0101522812152', 'success', '');
-//     }
-// }
-// paySuccess();
 
 // MARK: - Test paywall for Android
 function postPayState(productId, productPrice, userId, orderNum, actionType){
@@ -597,7 +589,7 @@ function removeClass(ele, cls) {
 }
 function updatePageAction(){
     if (window.location.hostname === 'localhost' || window.location.hostname.indexOf('192.168') === 0 || window.location.hostname.indexOf('127.0') === 0) {
-        var dataObj = parseUrlSearch();//(2) ["premium=0", "standard=1"]
+        var dataObj = parseUrlSearch();
         vipCenter(dataObj);
         payWall('api/paywall.json');
     }else{
@@ -633,6 +625,7 @@ getSystemVersion();
 // 测试付费成功与否的地方
 // function paySuccess(){
 //     var psySuccess = document.getElementById('pay-success-btn');
+// iapActions('ftc_premium_FT0101522812152', 'success', '');
 //     psySuccess.onclick=function(){
 //         turnonOverlay('pay-way');
 //     }
@@ -642,5 +635,6 @@ getSystemVersion();
 // $('body').on('click', '.one-way-container', function(){
 //     $(this).find("input[name='payWay']").attr('checked','true');
 // });
+
 
 
