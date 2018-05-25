@@ -641,17 +641,20 @@ getSystemVersion();
 // });
 
 // $('body').on('click', '#to-pay', function(){
-//     var productName = '标准会员';
+//     var productName = '高端会员';
 //     var memberNum = (productName == '高端会员') ? '100' : '010';
 //     var orderNum = getOrderNum(memberNum);
 //     var userId = getCookie('USER_ID') || '';
-//     if(payWay==='wxpay'){
-//         getWxBuyCode('ftc_premium', '1', 'userId', productName, orderNum);
-//     }else if(payWay==='alipay'){
-//         console.log('ali pay way is:'+payWay);
-
-//         getBuyCode('ftc_premium', '0.1', 'userId', '高端会员', 'FT1006001526873479');
-//         // getBuyCode(payWrapData['productsId'], payWrapData['productPrice'],'userId',payWrapData['productName'],payWrapData['orderNum']);
+//     if (!!userId){
+//         if(payWay==='wxpay'){
+//             // getWxBuyCode('ftc_premium', '1', userId, productName, orderNum);
+//             getBuyCode(payWrapData['productsId'], payWrapData['productPrice'],userId,payWrapData['productName'],payWrapData['orderNum']);
+//         }else if(payWay==='alipay'){
+//             // getWxBuyCode('ftc_premium', '0.01', userId, productName, orderNum);
+//             getBuyCode(payWrapData['productsId'], payWrapData['productPrice'],userId,payWrapData['productName'],payWrapData['orderNum']);
+//         }
+//     }else{
+//         turnonOverlay('loginBox');  
 //     }
 // });
 
@@ -670,7 +673,6 @@ getSystemVersion();
 // function getWxBuyCode(productId, productPrice, userId, productName, orderNum){ 
 //     var userId = getCookie('USER_ID');
 //     if (!!userId){
-        
 //         var productIDArr = orderNum.substring(2,5);
 //         var productIdStr = (productIDArr === '100') ? 'ftc_premium' : 'ftc_standard';
 //         productId = orderNum;
@@ -682,8 +684,12 @@ getSystemVersion();
 //         if(osVersion.indexOf('Android')>=0){
 //             try {
 //                 if(ftjavacriptapp){   
-//                     // alert(productId+' '+ productPrice +' '+productName+' '+orderNum);               
-//                     ftjavacriptapp.payweixin(productId,productPrice,userId, productName);
+//                     // alert(productId+' '+ productPrice +' '+productName+' '+orderNum);  
+//                     if(payWay==='wxpay'){
+//                         ftjavacriptapp.payweixin(productId,productPrice,userId, productName);
+//                     }else if(payWay==='alipay'){
+//                         ftjavacriptapp.payzfb(productId,productPrice,userId, productName);
+//                     }
 
 //                      alert(productId+':'+ productPrice +':'+productName+':'+orderNum);
 //                     // postPayState(productIdStr, productPrice, userId, orderNum, 'start');
@@ -791,3 +797,4 @@ getSystemVersion();
 //     ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel);
 
 // }
+
