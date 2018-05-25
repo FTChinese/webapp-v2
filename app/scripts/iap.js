@@ -619,24 +619,24 @@ getSystemVersion();
 //     }
 // }
 // paySuccess();
-// // Mark:支付方式
+// Mark:支付方式
 // var payWay = '';
 // $('body').on('click', '.one-way-container', function(){   
 //     payWay = $(this).find('input[name=\'payWay\']').val();   
 // });
 
 // $('body').on('click', '#to-pay', function(){
-//     var productName = '高端会员';
-//     var memberNum = (productName == '高端会员') ? '100' : '010';
-//     var orderNum = getOrderNum(memberNum);
+//     // var productName = '高端会员';
+//     // var memberNum = (productName == '高端会员') ? '100' : '010';
+//     // var orderNum = getOrderNum(memberNum);
 //     var userId = getCookie('USER_ID') || '';
 //     if (!!userId){
 //         if(payWay==='wxpay'){
-//             // getWxBuyCode('ftc_premium', '1', userId, productName, orderNum);
-//             getBuyCode(payWrapData['productsId'], payWrapData['productPrice'],userId,payWrapData['productName'],payWrapData['orderNum']);
+//             // getWxBuyCode('ftc_premium', '1998.00', userId, productName, orderNum);
+//             getWxBuyCode(payWrapData['productsId'], payWrapData['productPrice'],userId,payWrapData['productName'],payWrapData['orderNum']);
 //         }else if(payWay==='alipay'){
 //             // getWxBuyCode('ftc_premium', '0.01', userId, productName, orderNum);
-//             getBuyCode(payWrapData['productsId'], payWrapData['productPrice'],userId,payWrapData['productName'],payWrapData['orderNum']);
+//             getWxBuyCode(payWrapData['productsId'], payWrapData['productPrice'],userId,payWrapData['productName'],payWrapData['orderNum']);
 //         }
 //     }else{
 //         turnonOverlay('loginBox');  
@@ -651,9 +651,19 @@ getSystemVersion();
 //      payWrapData['productPrice'] =  $(this).attr('product-price');
 //      payWrapData['productName'] =  productName;
 //      payWrapData['orderNum'] =  orderNum;
-//      turnonOverlay('pay-way');
+     
+//      $('#to-pay-price').html($(this).attr('product-price')+'/年');
 
+//      var iapBtnHtml= $(this).find('.iap-move-left').html();
+//      if(iapBtnHtml === '已订阅'){
+//         alert('您已经是会员了');
+//      }else{
+//         turnonOverlay('pay-way');
+//      }
+//      console.log('iapBtnHtml'+iapBtnHtml);
+     
 // });
+
 
 // function getWxBuyCode(productId, productPrice, userId, productName, orderNum){ 
 //     var userId = getCookie('USER_ID');
@@ -669,14 +679,14 @@ getSystemVersion();
 //         if(osVersion.indexOf('Android')>=0){
 //             try {
 //                 if(ftjavacriptapp){   
-//                     // alert(productId+' '+ productPrice +' '+productName+' '+orderNum);  
 //                     if(payWay==='wxpay'){
+//                         productPrice = parseInt(productPrice)*100+'';
 //                         ftjavacriptapp.payweixin(productId,productPrice,userId, productName);
 //                     }else if(payWay==='alipay'){
 //                         ftjavacriptapp.payzfb(productId,productPrice,userId, productName);
 //                     }
 
-//                      alert(productId+':'+ productPrice +':'+productName+':'+orderNum);
+//                     //  alert(productId+':'+ productPrice +':'+productName+':'+orderNum);
 //                     // postPayState(productIdStr, productPrice, userId, orderNum, 'start');
 //                     setTimeout(function(){
 //                         // postPayState(productIdStr, productPrice, userId, orderNum, 'start pending');
@@ -698,7 +708,7 @@ getSystemVersion();
 // }
 
 // function payFinishAction(productID, actionType){
-//         var gUserId = getCookie('USER_ID');   
+//     var gUserId = getCookie('USER_ID');   
 //     var iapButtons='';
 //     var iapHTMLCode = '';
 //     var productPrice = '';
@@ -731,7 +741,7 @@ getSystemVersion();
 //     }else {
 //         productType = 'eBook';
 //     }
-//     alert(productID +'-:-'+'-:-'+productPrice+'-:-'+gUserId+'-:-'+tradeNum+'-:-'+actionType);
+//     // alert(productID +'-1-'+'-1-'+productPrice+'-1-'+gUserId+'-:-'+tradeNum+'-:-'+actionType);
  
 //     // postPayState(productID, productPrice, gUserId, tradeNum, actionType);
 
@@ -748,9 +758,9 @@ getSystemVersion();
 //                 turnonOverlay('iap-hint');
 //                 var isFTCpw = Boolean(Number(getCookie('isFTCw')));
 //                 if(!isPremium && !isFTCpw){
-//                     iapHTMLCode = '<a onclick="getWxBuyCode(\''+ productID +'\',\''+ upgradePrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ tradeNum +'\')"><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">¥' + upgradePrice + '.00/年' + '</p>';  
+//                     iapHTMLCode = '<a><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">¥' + upgradePrice + '.00/年' + '</p>';  
 //                 }else{
-//                     iapHTMLCode = '<a onclick="getWxBuyCode(\''+ productID +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ tradeNum +'\')"><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>';
+//                     iapHTMLCode = '<a><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>';
 //                 }
                 
                 
@@ -782,4 +792,3 @@ getSystemVersion();
 //     ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel);
 
 // }
-
