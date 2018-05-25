@@ -637,19 +637,21 @@ getSystemVersion();
 // // Mark:支付方式
 // var payWay = '';
 // $('body').on('click', '.one-way-container', function(){   
-//     payWay = $(this).find("input[name='payWay']").val();   
+//     payWay = $(this).find('input[name=\'payWay\']').val();   
 // });
 
 // $('body').on('click', '#to-pay', function(){
+//     var productName = '标准会员';
+//     var memberNum = (productName == '高端会员') ? '100' : '010';
+//     var orderNum = getOrderNum(memberNum);
 //     var userId = getCookie('USER_ID') || '';
 //     if(payWay==='wxpay'){
-//         console.log('wx pay way is:'+payWay);
-//         getBuyCode('ftc_premium', '1800', 'userId', '高端会员', 'FT1006001526873479');
+//         getWxBuyCode('ftc_premium', '1', 'userId', productName, orderNum);
 //     }else if(payWay==='alipay'){
 //         console.log('ali pay way is:'+payWay);
 
-//         // getBuyCode('ftc_premium', '1800', 'userId', '高端会员', 'FT1006001526873479');
-//         getBuyCode(payWrapData['productsId'], payWrapData['productPrice'],'userId',payWrapData['productName'],payWrapData['orderNum']);
+//         getBuyCode('ftc_premium', '0.1', 'userId', '高端会员', 'FT1006001526873479');
+//         // getBuyCode(payWrapData['productsId'], payWrapData['productPrice'],'userId',payWrapData['productName'],payWrapData['orderNum']);
 //     }
 // });
 
@@ -661,21 +663,17 @@ getSystemVersion();
 //      payWrapData['productPrice'] =  $(this).attr('product-price');
 //      payWrapData['productName'] =  productName;
 //      payWrapData['orderNum'] =  orderNum;
-
 //      turnonOverlay('pay-way');
-//     //  console.log(payWrapData);
+
 // });
 
-// function getWxBuyCode(productId, productPrice, userId, productName, orderNum){
-//     console.log(productId+' '+ productPrice +' '+productName+' '+orderNum);
-    
+// function getWxBuyCode(productId, productPrice, userId, productName, orderNum){ 
 //     var userId = getCookie('USER_ID');
 //     if (!!userId){
         
 //         var productIDArr = orderNum.substring(2,5);
 //         var productIdStr = (productIDArr === '100') ? 'ftc_premium' : 'ftc_standard';
 //         productId = orderNum;
-
 //         if(productPrice.indexOf('¥')>=0){
 //             productPrice =  productPrice.substr(1,productPrice.length);
 //         }
@@ -683,13 +681,14 @@ getSystemVersion();
 
 //         if(osVersion.indexOf('Android')>=0){
 //             try {
-//                 if(ftjavacriptapp){                  
+//                 if(ftjavacriptapp){   
+//                     // alert(productId+' '+ productPrice +' '+productName+' '+orderNum);               
 //                     ftjavacriptapp.payweixin(productId,productPrice,userId, productName);
-//                     postPayState(productIdStr, productPrice, userId, orderNum, 'start');
-//                     var eventAction = 'Buy: ' + productIdStr;
-//                     ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel);
+
+//                      alert(productId+':'+ productPrice +':'+productName+':'+orderNum);
+//                     // postPayState(productIdStr, productPrice, userId, orderNum, 'start');
 //                     setTimeout(function(){
-//                         postPayState(productIdStr, productPrice, userId, orderNum, 'start pending');
+//                         // postPayState(productIdStr, productPrice, userId, orderNum, 'start pending');
 //                     },15000);
 //                 }
 //             } catch (ignore) {
@@ -704,7 +703,11 @@ getSystemVersion();
 
 
 // function wxpayActions(productID, actionType) { 
-//     var gUserId = getCookie('USER_ID');   
+//     payFinishAction(productID, actionType);
+// }
+
+// function payFinishAction(productID, actionType){
+//         var gUserId = getCookie('USER_ID');   
 //     var iapButtons='';
 //     var iapHTMLCode = '';
 //     var productPrice = '';
@@ -737,9 +740,9 @@ getSystemVersion();
 //     }else {
 //         productType = 'eBook';
 //     }
-
+//     alert(productID +'-:-'+'-:-'+productPrice+'-:-'+gUserId+'-:-'+tradeNum+'-:-'+actionType);
  
-//     postPayState(productID, productPrice, gUserId, tradeNum, actionType);
+//     // postPayState(productID, productPrice, gUserId, tradeNum, actionType);
 
 //     switch (actionType) { 
 //         case 'success':
@@ -788,6 +791,3 @@ getSystemVersion();
 //     ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel);
 
 // }
-
-
-
