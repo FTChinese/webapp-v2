@@ -96,7 +96,6 @@ function getProductHTMLCode(products, forGroup, dataObj) {
 
                 var memberNum = (products[i].title == '高端会员') ? '100' : '010';
                 var orderNum = getOrderNum(memberNum);
-                // console.log('dataObj:'+dataObj);
                 if(dataObj.standard===1 && dataObj.premium===0){
                     products[0].isPurchased = true;
                     products[0].state = '<button class="iap-move-left">已订阅</button><p class="iap-teaser">' + products[i].price + '/年' + '</p>';
@@ -113,8 +112,12 @@ function getProductHTMLCode(products, forGroup, dataObj) {
 
                 }
                 if(!isEmptyObj(dataObj)){
+                    if(dataObj.standard===1 && dataObj.premium===0 && i!==0){
+                        productPrice = dataObj.v;
+                    }else{
+                        productPrice = productPrice;
+                    }
                     productActionButton = '<div class="iap-button" product-id="' + products[i].id + '" product-price="' + productPrice + '" product-title="' + productName + '">' + products[i].state + '</div>';    
-                    // <p class="iap-teaser">' + products[i].price + '/年' + '</p>
                 }
                 // MARK: - use onclick to capture click rather than jQuery's body.on, which is buggy on iPhone
                 // MARK: render UI
@@ -236,10 +239,8 @@ function iapActions(productID, actionType, expireDate) {
             if (productType === 'membership') {
                 iapHTMLCode = '<a><button class="iap-move-left">已订阅</button></a><p class="iap-teaser">'+ productPrice + '/年' + '</p>'; 
             } 
-            // isReqSuccess = false;
             recordSuccessBuyInLocal();
             updateProductStatus(productIndex, true, true);
-            //window.location.reload();
             break;
         case 'fail':
             if (productType === 'membership') {  
@@ -249,9 +250,7 @@ function iapActions(productID, actionType, expireDate) {
                     iapHTMLCode = '<a onclick="getBuyCode(\''+ productID +'\',\''+ upgradePrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ tradeNum +'\')"><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">¥' + upgradePrice + '.00/年' + '</p>';  
                 }else{
                     iapHTMLCode = '<a onclick="getBuyCode(\''+ productID +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ tradeNum +'\')"><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>';
-                }
-                // alert('isFTCpw:'+isFTCpw+'isPremium1:'+isPremium);
-                
+                }            
             } 
             updateProductStatus(productIndex, false, false); 
             break;
@@ -333,20 +332,6 @@ function getBuyCode(productId, productPrice, userId, productName, orderNum){
         turnonOverlay('loginBox');  
     }
 }
-
-
-
-
-
-
-
-/**
- * 订阅界面动作
- */
-
-$('body').on('click', '.openPayment', function(){
-    // getBuyCode(productId, productPrice, userId, productName, orderNum) 
-});
 
 
 // MARK: - Test paywall for Android
