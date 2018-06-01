@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1304; //当前的版本号
+var _currentVersion = 1305; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -1898,6 +1898,12 @@ function displaystoryNormal(theid, language, forceTitle) {
             
             ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
         }
+
+        if(allId.whitelist && allId.whitelist === 1){
+            $('#storyview .storybody').html(storyimage).append(allId.ebody);
+            hasPaywall = false;   
+        }
+
         $('.enbutton').addClass('nowreading');
         storyHeadline = allId.eheadline;
     } else if (language == 'ce' && allId.ebody && allId.ebody.length > 30) {
@@ -1970,6 +1976,10 @@ function displaystoryNormal(theid, language, forceTitle) {
             ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
         }
 
+        if(allId.whitelist && allId.whitelist === 1){
+            $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
+            hasPaywall = false;  
+        }
         
 
         $('#storyview .storybody').prepend('<div id="ceTwoColumn" class=centerButton><button class="ui-light-btn">中英文并排</button></div>');
@@ -2021,8 +2031,12 @@ function displaystoryNormal(theid, language, forceTitle) {
                     hasPaywall = false;
                 }
             }
-            
         }
+        if(allId.whitelist && allId.whitelist === 1){
+            $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));     
+            hasPaywall = false;  
+        }
+
         if (allId.cbody.indexOf('inlinevideo')>=0) {
             $('#storyview .storybody .inlinevideo').each(function (){
                 // if FT Scroller is used, add an overlay to the iframe
