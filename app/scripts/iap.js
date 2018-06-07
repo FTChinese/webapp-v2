@@ -383,6 +383,8 @@ var i = 0;
 var isPremium = false;
 var isEditorChoiceStory = false;
 var isEditorChoiceChannel = false;
+var testObj = {};
+var isLoginReq = false;
 function payWall(url){ 
     grantAccessFromLocal();
     if(!isReqSuccess && i<3){ 
@@ -395,6 +397,7 @@ function payWall(url){
                 var data = xhrpw.responseText;
                 var parsedData = JSON.parse(data); 
                 vipCenter(parsedData);
+                testObj = parsedData;
                 isReqSuccess = true;
                 setCookie('isFTCw', parsedData.paywall, '', '/');
                 if (parsedData.paywall >= 1) { 
@@ -792,3 +795,12 @@ getSystemVersion();
 //     ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel);
 
 // }
+
+$('#setHelp').unbind().bind('click', function() {
+    var userId = getCookie('USER_ID') || '';
+    var random = Math.random();
+    isReqSuccess = false;
+    payWall('/index.php/jsapi/paywall?test'+random);
+    alert(JSON.stringify(testObj));
+    alert(userId);
+});
