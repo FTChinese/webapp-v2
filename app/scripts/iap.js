@@ -623,20 +623,22 @@ $('#setHelp').unbind().bind('click', function() {
 // $(this).find("input[name='payWay']").attr('checked','true');
 // ftc_premium 1800 高端会员 FT1006001526873479
 // iapActions('ftc_premium_FT0101522812152', 'success', '');
-// var payWrapData = {};
+
+//Mark:此函数是测试微信付费，如果测试成功后期需要删除
 // function paySuccess(){
 //     var psySuccess = document.getElementById('pay-success-btn');
 //     psySuccess.onclick=function(){
 //         turnonOverlay('pay-way');
 //     }
 // }
-// paySuccess();
-// Mark:支付方式
+// paySuccess();  
+
+// // Mark:支付方式
 // var payWay = '';
 // $('body').on('click', '.one-way-container', function(){   
 //     payWay = $(this).find('input[name=\'payWay\']').val();   
 // });
-
+// var payWrapData = {};
 // $('body').on('click', '#to-pay', function(){
 //     // var productName = '高端会员';
 //     // var memberNum = (productName == '高端会员') ? '100' : '010';
@@ -699,9 +701,9 @@ $('#setHelp').unbind().bind('click', function() {
 //                     }
 
 //                     //  alert(productId+':'+ productPrice +':'+productName+':'+orderNum);
-//                     // postPayState(productIdStr, productPrice, userId, orderNum, 'start');
+//                     postPayState(productIdStr, productPrice, userId, orderNum, 'start');
 //                     setTimeout(function(){
-//                         // postPayState(productIdStr, productPrice, userId, orderNum, 'start pending');
+//                         postPayState(productIdStr, productPrice, userId, orderNum, 'start pending');
 //                     },15000);
 //                 }
 //             } catch (ignore) {
@@ -755,7 +757,7 @@ $('#setHelp').unbind().bind('click', function() {
 //     }
 //     // alert(productID +'-1-'+'-1-'+productPrice+'-1-'+gUserId+'-:-'+tradeNum+'-:-'+actionType);
  
-//     // postPayState(productID, productPrice, gUserId, tradeNum, actionType);
+//     postPayState(productID, productPrice, gUserId, tradeNum, actionType);
 
 //     switch (actionType) { 
 //         case 'success':
