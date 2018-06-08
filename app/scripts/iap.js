@@ -610,6 +610,15 @@ function getSystemVersion(){
 }
 getSystemVersion();
 
+$('#setHelp').unbind().bind('click', function() {
+    var userId = getCookie('USER_ID') || '';
+    var random = Math.random();
+    isReqSuccess = false;
+    payWall('/index.php/jsapi/paywall?test'+random);
+    alert(JSON.stringify(testObj));
+    alert(userId);
+});
+
 // 测试付费成功与否的地方
 // $(this).find("input[name='payWay']").attr('checked','true');
 // ftc_premium 1800 高端会员 FT1006001526873479
@@ -796,11 +805,4 @@ getSystemVersion();
 
 // }
 
-$('#setHelp').unbind().bind('click', function() {
-    var userId = getCookie('USER_ID') || '';
-    var random = Math.random();
-    isReqSuccess = false;
-    payWall('/index.php/jsapi/paywall?test'+random);
-    alert(JSON.stringify(testObj));
-    alert(userId);
-});
+
