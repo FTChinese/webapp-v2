@@ -385,6 +385,7 @@ var isEditorChoiceStory = false;
 var isEditorChoiceChannel = false;
 var testObj = {};
 var testVar = '';
+var parsedDataForCenter = {};
 var isLoginReq = false;
 function payWall(url){ 
     grantAccessFromLocal();
@@ -393,13 +394,16 @@ function payWall(url){
         var xhrpw = new XMLHttpRequest();
         xhrpw.open('get', url);
         xhrpw.setRequestHeader('Content-Type', 'application/text');
+        xhrpw.setRequestHeader('If-Modified-Since', '0'); 
+        xhrpw.setRequestHeader('Cache-Control','no-cache'); 
         xhrpw.onload = function() {
             if (xhrpw.status === 200) {  
                 var data = xhrpw.responseText;
-                var parsedData = JSON.parse(data); 
-                vipCenter(parsedData);
+                parsedDataForCenter = JSON.parse(data);
+                var parsedData = parsedDataForCenter;
+                vipCenter(parsedDataForCenter);
                 testVar = 'execute here';
-                testObj = parsedData;
+                testObj = parsedDataForCenter;
                 isReqSuccess = true;
                 setCookie('isFTCw', parsedData.paywall, '', '/');
                 if (parsedData.paywall >= 1) { 
@@ -492,7 +496,7 @@ function vipCenter(dataObj){
     if(dataObj.standard===1 && dataObj.premium===0){
         vipTypeId.innerHTML = '标准会员';
         warmPrompt.innerHTML = '您的会员截止至<span style="color:#26747a">'+formatTime+'</span>';
-    }else if (dataObj.premium === 1){
+    }else if (dataObj.premium === 1 && dataObj.standard===1){
         vipTypeId.innerHTML = '高端会员';
         warmPrompt.innerHTML = '您的会员截止至<span style="color:#26747a">'+formatTime+'</span>';
     }else{
