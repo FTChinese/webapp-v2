@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1310; //当前的版本号
+var _currentVersion = 1311; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -3464,6 +3464,9 @@ function logout() {
         isReqSuccess = false;
         payWall('/index.php/jsapi/paywall?logout'+ thed); 
         deleteCookie('isFTCw');
+        // deleteCookie('USER_ID');
+        // deleteCookie('USER_KV');
+        // deleteCookie('USER_NAME');
         $('#logincomment,#nologincomment, .logged, .notLogged').hide();
         $('#nologincomment,.notLogged').show();
         username = '';
