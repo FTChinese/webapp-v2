@@ -384,6 +384,7 @@ var isPremium = false;
 var isEditorChoiceStory = false;
 var isEditorChoiceChannel = false;
 var testObj = {};
+var testVar = '';
 var isLoginReq = false;
 function payWall(url){ 
     grantAccessFromLocal();
@@ -397,6 +398,7 @@ function payWall(url){
                 var data = xhrpw.responseText;
                 var parsedData = JSON.parse(data); 
                 vipCenter(parsedData);
+                testVar = 'execute here';
                 testObj = parsedData;
                 isReqSuccess = true;
                 setCookie('isFTCw', parsedData.paywall, '', '/');
@@ -617,6 +619,11 @@ $('#setHelp').unbind().bind('click', function() {
     payWall('/index.php/jsapi/paywall?test'+random);
     alert(JSON.stringify(testObj));
     alert(userId);
+});
+
+$('#testHelp').unbind().bind('click', function() {
+    alert(testVar);
+    alert(JSON.stringify(testObj));
 });
 
 // 测试付费成功与否的地方
