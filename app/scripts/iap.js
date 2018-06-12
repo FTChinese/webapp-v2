@@ -618,9 +618,9 @@ getSystemVersion();
 
 $('#setHelp').unbind().bind('click', function() {
     var userId = getCookie('USER_ID') || '';
-    var random = Math.random();
+    // var random = Math.random();
     isReqSuccess = false;
-    payWall('/index.php/jsapi/paywall?test'+random);
+    payWall('/index.php/jsapi/paywall?test');
     alert(JSON.stringify(testObj));
     alert(userId);
 });
