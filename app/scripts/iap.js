@@ -220,7 +220,7 @@ function iapActions(productID, actionType, expireDate) {
     productIndex = getproductIndex(productID);
 
     // MARK: - get product price here
-    productPrice = window.iapProducts[productIndex].price || '0￥';
+    productPrice = window.iapProducts[productIndex].price || '￥0';
     productName = window.iapProducts[productIndex].title || '';
 
     // MARK: - Get product type based on its identifiers
@@ -280,6 +280,8 @@ function iapActions(productID, actionType, expireDate) {
     ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel);
     // FIXME: Is this useful? 
     actionType = '';
+
+    ecommerceTrack(tradeNum,window.gSubscriptionEventLabel,productPrice.substring(1),productID);
 }
 
  // MARK: - Get the index number of the current product for window.iapProducts
@@ -819,3 +821,24 @@ $('#testHelp').unbind().bind('click', function() {
 // }
 
 
+function ecommerceTrack(id,affiliation,price,productName){
+    ga('ecommerce:addTransaction', {
+    'id': id,                     // Transaction ID. Required.
+    'affiliation': affiliation,   // Affiliation or store name.
+    'revenue': price,               // Grand Total.
+    'shipping': '0',                  // Shipping.
+    'tax': '0' ,
+    'currency': 'CNY'                     // Tax.
+    });
+
+    ga('ecommerce:addItem', {
+    'id': id,                     // Transaction ID. Required.
+    'name': productName,    // Product name. Required.
+    'sku': productName,                 // SKU/code.
+    'category': 'Android Subscription',         // Category or variation.
+    'price': price,                 // Unit price.
+    'quantity': '1'                   // Quantity.
+    });
+
+    ga('ecommerce:send');
+}
