@@ -681,13 +681,18 @@ $('#testHelp').unbind().bind('click', function() {
      
 //      $('#to-pay-price').html($(this).attr('product-price')+'/年');
 
-//      var iapBtnHtml= $(this).find('.iap-move-left').html();
-//      if(iapBtnHtml === '已订阅'){
-//         alert('您已经是会员了');
-//      }else{
-//         turnonOverlay('pay-way');
-//      }
-//      console.log('iapBtnHtml'+iapBtnHtml);
+//     var userId = getCookie('USER_ID');
+//     if (!!userId){
+//         var iapBtnHtml= $(this).find('.iap-move-left').html();
+//         if(iapBtnHtml === '已订阅'){
+//             alert('您已经是会员了');
+//         }else{
+//             turnonOverlay('pay-way');
+//         }
+//         console.log('iapBtnHtml'+iapBtnHtml);
+//     }else{
+//         turnonOverlay('loginBox');  
+//     }
      
 // });
 
@@ -712,9 +717,12 @@ $('#testHelp').unbind().bind('click', function() {
 //                     }else if(payWay==='alipay'){
 //                         ftjavacriptapp.payzfb(productId,productPrice,userId, productName);
 //                     }
+//                     // FT100-- 183900 -- 高端会员 -- FT100
+//                     alert(productId+':'+ productPrice +':'+productName+':'+orderNum);
 
-//                     //  alert(productId+':'+ productPrice +':'+productName+':'+orderNum);
 //                     postPayState(productIdStr, productPrice, userId, orderNum, 'start');
+//                     var eventAction = 'Buy: ' + productIdStr;
+//                     ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel);
 //                     setTimeout(function(){
 //                         postPayState(productIdStr, productPrice, userId, orderNum, 'start pending');
 //                     },15000);
@@ -733,7 +741,7 @@ $('#testHelp').unbind().bind('click', function() {
 // function wxpayActions(productID, actionType) { 
 //     payFinishAction(productID, actionType);
 // }
-
+// // payFinishAction('FT0101522812152', 'success');
 // function payFinishAction(productID, actionType){
 //     var gUserId = getCookie('USER_ID');   
 //     var iapButtons='';
@@ -768,7 +776,8 @@ $('#testHelp').unbind().bind('click', function() {
 //     }else {
 //         productType = 'eBook';
 //     }
-//     // alert(productID +'-1-'+'-1-'+productPrice+'-1-'+gUserId+'-:-'+tradeNum+'-:-'+actionType);
+//     // ftc_premium ￥1,998.00 userid FT100 fail
+//     alert(productID +'-1-'+'-1-'+productPrice+'-1-'+gUserId+'-:-'+tradeNum+'-:-'+actionType);
  
 //     postPayState(productID, productPrice, gUserId, tradeNum, actionType);
 
@@ -785,7 +794,7 @@ $('#testHelp').unbind().bind('click', function() {
 //                 turnonOverlay('iap-hint');
 //                 var isFTCpw = Boolean(Number(getCookie('isFTCw')));
 //                 if(!isPremium && !isFTCpw){
-//                     iapHTMLCode = '<a><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">¥' + upgradePrice + '.00/年' + '</p>';  
+//                     iapHTMLCode = '<a><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">' + upgradePrice + '/年' + '</p>';  
 //                 }else{
 //                     iapHTMLCode = '<a><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>';
 //                 }
@@ -797,7 +806,7 @@ $('#testHelp').unbind().bind('click', function() {
 //         default:
 //             if (productType === 'membership') {  
 //                 turnonOverlay('iap-hint');
-//                 iapHTMLCode = '<a onclick="getBuyCode(\''+ productID +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ tradeNum +'\')"><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>'; 
+//                 iapHTMLCode = '<a><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>'; 
 //             } 
 //             updateProductStatus(productIndex, false, false); 
 //             break;
