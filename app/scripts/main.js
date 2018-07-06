@@ -777,7 +777,8 @@ function fillContent(loadType) {
                 saveLocalStorage('mostcomment', hotdata);
             }
         }).fail(function(jqXHR){
-            trackErr(message.head.transactiontype, 'Most Commented');
+            // MARK: - Stop Tracking for lack of GA quota
+            //trackErr(message.head.transactiontype, 'Most Commented');
         });
     }
     
@@ -1055,20 +1056,23 @@ function loadStoryData(data) {
         if (jsonHeadPosition>0) {//如果返回的数据前有服务器返回的乱码（参见jsoneerror.html），则先去除它
             jsonWrong = thedata.substring(0,100);
             thedata = thedata.slice(jsonHeadPosition);
-            if (gOnlineAPI === true) {
-                trackErr(jsonWrong, 'wrong jsondata live');
-            } else {
-                trackErr(jsonWrong, 'wrong jsondata cache');
-            }
+            // MARK: - Stop Tracking for lack of GA Quota
+            // if (gOnlineAPI === true) {
+            //     trackErr(jsonWrong, 'wrong jsondata live');
+            // } else {
+            //     trackErr(jsonWrong, 'wrong jsondata cache');
+            // }
         }
         jsondata = $.parseJSON(thedata);
     } catch(err) {
         thedata = thedata.substring(0,22);
         if (gOnlineAPI === true) {
-            trackErr(err + '.' + thedata, 'fillPage jsondata');
+            // MARK: - Remove Event for not enough GA quota
+            //trackErr(err + '.' + thedata, 'fillPage jsondata');
             dataStatus = 'online error';
         } else {
-            trackErr(err + '.' + thedata, 'fillPage jsondata cache');
+            // MARK: - Remove Event for not enough GA quota
+            //trackErr(err + '.' + thedata, 'fillPage jsondata cache');
             dataStatus = 'cache error';
         }
     }
@@ -1158,7 +1162,8 @@ function downloadStories(downloadType) {
             gOnlineAPI = false;
             gHomeAPIFail = new Date().getTime();
             var timeSpent = gHomeAPIFail - gHomeAPIRequest;
-            trackFail(message.head.transactiontype + ':' + jqXHR.status + ',' + jqXHR.statusText + ',' + timeSpent, 'Latest News');
+            // MARK: Stop tracking for lack of GA quota
+            //trackFail(message.head.transactiontype + ':' + jqXHR.status + ',' + jqXHR.statusText + ',' + timeSpent, 'Latest News');
         });
     }
 }
@@ -2511,7 +2516,8 @@ function pauseallvideo() {
 
 //错误追踪
 function trackErr(err, err_location) {
-    var k=err.toString() + '. ua string: ' + uaString + '. url: ' + location.href + '. version: ' + _currentVersion;
+    //var k = err.toString() + '. ua string: ' + uaString + '. url: ' + location.href + '. version: ' + _currentVersion;
+    var k = err.toString() + _currentVersion;
     if (_localStorage===1) {
         ga('send','event', 'CatchError', err_location, k);
         //fa('send','event', 'CatchError', err_location, k);
@@ -2522,7 +2528,8 @@ function trackErr(err, err_location) {
 
 //服务器请求失败追踪
 function trackFail(err, err_location) {
-    var k=err.toString() + '. url: ' + location.href + '. version: ' + _currentVersion;
+    //var k=err.toString() + '. url: ' + location.href + '. version: ' + _currentVersion;
+    var k = err.toString() + _currentVersion;
     if (_localStorage===1) {
         ga('send','event', 'CatchError', err_location, k);
         //fa('send','event', 'CatchError', err_location, k);
