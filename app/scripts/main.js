@@ -1223,7 +1223,8 @@ function loadHomePage(loadType) {
         $('#homeload .loadingStatus').html('加载最新主页...');
         //$(".loadingStory").html('<div id="homeload"><div class="cell loadingStatus">' + loadcontent + '</div><div class="cell right">' + loadingBarContent + '</div></div>');
     }
-    ga('send', 'event', 'App Home Page', 'Request', connectionType);
+    // MARK: Stop Tracking for lack of GA Quota
+    //ga('send', 'event', 'App Home Page', 'Request', connectionType);
     requests.push(
         $.ajax({
             // url with events and date
@@ -1253,12 +1254,14 @@ function loadHomePage(loadType) {
                     $('#screenstart').remove();
                 });
                 $('html').removeClass('is-refreshing');
-                ga('send', 'event', 'App Home Page', 'Success', connectionType);
-                ga('send', 'timing', 'App', 'Home Page Request', timeSpent, connectionType);
+                // MARK: Stop Tracking for lack of GA Quota
+                //ga('send', 'event', 'App Home Page', 'Success', connectionType);
+                //ga('send', 'timing', 'App', 'Home Page Request', timeSpent, connectionType);
             },
             error: function () {
                 gStartStatus = 'startFromOnline error';
-                ga('send', 'event', 'App Home Page', 'Fail', connectionType);
+                // MARK: Stop Tracking for lack of GA Quota
+                //ga('send', 'event', 'App Home Page', 'Fail', connectionType);
                 if (loadType === 'start') {
                     $('#startstatus').html('服务器开小差了');
                     try {
