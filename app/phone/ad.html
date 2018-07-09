@@ -97,14 +97,16 @@ video::-webkit-media-controls-panel {width: calc(100% + 30px);}
 
     function removeAd() {
         //alert ('removeAd');
-        window.parent.ga('send', 'event', 'Ad Impression: Error', c.substring(0,4), c.substring(4,8), {'nonInteraction':1});
+        // MARK: - Stop Tracking for Lack of GA Quota
+        //window.parent.ga('send', 'event', 'Ad Impression: Error', c.substring(0,4), c.substring(4,8), {'nonInteraction':1});
     }
 
     function loaded() {
         //alert ('loaded');
-        if (window.isHouseAd === true) {
-            window.parent.ga('send', 'event', 'Ad Impression: House Ad', c.substring(0,4), c.substring(4,8), {'nonInteraction':1});
-        }
+        // MARK: - Stop Tracking for Lack of GA Quota
+        // if (window.isHouseAd === true) {
+        //     window.parent.ga('send', 'event', 'Ad Impression: House Ad', c.substring(0,4), c.substring(4,8), {'nonInteraction':1});
+        // }
     }
 
 
