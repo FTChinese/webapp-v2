@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1315; //当前的版本号
+var _currentVersion = 1317; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -431,15 +431,16 @@ function startpage() {
     });
     //gStartStatus = "startpage end";
     //Delegate Click on Home Page
-    $('body').on('click','.track-click',function(){
-        var eventCategory,eventAction,eventLabel;
-        eventCategory = 'Phone App';
-        eventAction = 'Click';
-        eventLabel = $(this).attr('eventLabel') || '';
-        if (eventLabel !== '') {
-            ga('send','event',eventCategory, eventAction, eventLabel);
-        }
-    });
+    // MARK: - Stop Tracking for Lack of GA Quota
+    // $('body').on('click','.track-click',function(){
+    //     var eventCategory,eventAction,eventLabel;
+    //     eventCategory = 'Phone App';
+    //     eventAction = 'Click';
+    //     eventLabel = $(this).attr('eventLabel') || '';
+    //     if (eventLabel !== '') {
+    //         ga('send','event',eventCategory, eventAction, eventLabel);
+    //     }
+    // });
     
     //Window Oriention Change event
     try {
@@ -1124,7 +1125,8 @@ function downloadStories(downloadType) {
         message.body.ielement = {};
         message.body.ielement.num = 30;
         gHomeAPIRequest = new Date().getTime();
-        ga('send', 'event', 'App API 10001', 'Request', connectionType);
+        // MARK: - Stop Tracking for Lack of GA Quota
+        //ga('send', 'event', 'App API 10001', 'Request', connectionType);
         $.ajax({
             method: gApi001Method,
             url: apiurl + '?' + themi,
@@ -1134,8 +1136,9 @@ function downloadStories(downloadType) {
         .done(function(data) {
             gHomeAPISuccess = new Date().getTime();
             var timeSpent = gHomeAPISuccess - gHomeAPIRequest;
-            ga('send', 'event', 'App API 10001', 'Success', connectionType);
-            ga('send', 'timing', 'App', 'API Request', timeSpent, 'Home Stories');
+            // MARK: - Stop Tracking for Lack of GA Quota
+            // ga('send', 'event', 'App API 10001', 'Success', connectionType);
+            // ga('send', 'timing', 'App', 'API Request', timeSpent, 'Home Stories');
             if (data.length <= 300) {
                 return;
             }
@@ -1153,7 +1156,8 @@ function downloadStories(downloadType) {
                 },10000);
             }
         }).fail(function(jqXHR){
-            ga('send', 'event', 'App API 10001', 'Fail', connectionType);
+            // MARK: - Stop Tracking for Lack of GA Quota
+            //ga('send', 'event', 'App API 10001', 'Fail', connectionType);
             todaystamp = unixtochinese(lateststory, 0);
             $('#homeload .loadingStatus').html('未能下载成功');
             setTimeout(function(){
