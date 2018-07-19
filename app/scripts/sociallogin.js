@@ -35,3 +35,9 @@ function socialLogin(socialName, socialInfo) {
     //$('#yourDevice .overlay-header p').html(socialName);
     //$('#yourDevice .padding').html(socialInfo);
 }
+
+function weixinLogin(){
+    if(ftjavacriptapp){ 
+        ftjavacriptapp.weixinlogin();
+    }
+}
