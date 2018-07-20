@@ -1,4 +1,5 @@
 function socialLogin(socialName, socialInfo) {
+    alert(socialInfo);
 	var socialLoginUrl = '/index.php/users/socialLogin/' + socialName;
     $('#yourDevice .padding').html(socialLoginUrl);
     $.ajax({
@@ -6,6 +7,7 @@ function socialLogin(socialName, socialInfo) {
         url: socialLoginUrl,
         data: {'socialInfo': socialInfo},
         success: function(data) {
+            alert(data);
             if (data === 'yes') {
                 // show this in the interface so that users know login is successful
                 username = getCookie('USER_NAME') || '';
