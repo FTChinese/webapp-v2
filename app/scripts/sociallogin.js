@@ -1,13 +1,13 @@
 function socialLogin(socialName, socialInfo) {
-    alert(socialInfo);
+    // alert(socialInfo);
 	var socialLoginUrl = '/index.php/users/socialLogin/' + socialName;
     $('#yourDevice .padding').html(socialLoginUrl);
     $.ajax({
         type: 'POST',
         url: socialLoginUrl,
-        data: {'socialInfo': socialInfo},
+        data: 'socialInfo='+encodeURIComponent(socialInfo),
         success: function(data) {
-            alert(data);
+            // alert(data);
             if (data === 'yes') {
                 // show this in the interface so that users know login is successful
                 username = getCookie('USER_NAME') || '';

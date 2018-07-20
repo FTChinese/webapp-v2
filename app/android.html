@@ -224,7 +224,7 @@ function commonProblem() {
 		<input type="submit" value="登录后发表评论" class="comment_btn submitbutton button ui-light-btn" onclick="login(1)"/> 
 		<div class="topmargin statusmsg"></div>
 		<div class="centerButton"><button class="ui-light-btn" onclick='register()'>免费注册</button></div>
-		<a class="social-login-wechat" href="weixinlogin://www.ftchinese.com/" style="display:none;"><div class="centerButton"><button class="ui-light-btn">微信登录</button></div></a>
+		<!--<div class="centerButton"><button class="ui-light-btn" onclick="weixinLogin()">微信登录</button></div>-->
 	</div>
 </div>
 </div>
@@ -339,7 +339,7 @@ function commonProblem() {
 <div class=inner>
 <div class=cell>
 <div class=settingbox>
-<div class=overlay-header >
+<div class=overlay-header onclick="weixinLogin()">
 <div class="nutmeg-content_right rightmargin"><button onclick="closeOverlay()" class="overlay_close-btn" aria-label="Settings"></button></div>
 设置与帮助
 </div>
@@ -358,7 +358,6 @@ function commonProblem() {
 <strong>字号大小</strong>                   
 </div>
 <div class="standalonebutton"><button class="ui-light-btn" onclick="turnonOverlay('loginBox')">登录</button></div>
-<!--<div class="standalonebutton"><button class="ui-light-btn" onclick="weixinLogin()">微信登录</button></div>-->
 <div class="standalonebutton" id="vip-center-btn"><button class="ui-light-btn" onclick="turnonOverlay('vip-center')">会员中心</button></div>
 <!--<div class="standalonebutton" id="pay-success-btn"><button class="ui-light-btn">测试付费</button></div>-->
 <div class="standalonebutton"><button class="ui-light-btn channel" url="/index.php/ft/channel/phonetemplate.html?channel=myftsetup">设置我的<font class=english>FT</font></button></div>                                
@@ -551,7 +550,7 @@ function commonProblem() {
 <div class="centerButton"><input type="submit" value="登录" class="comment_btn submitbutton button ui-light-btn" onclick="login()"/></div>
 <div class="statusmsg"></div>
 <div class="centerButton"><button class="ui-light-btn" onclick='register()'>免费注册</button></div>
-<a class="social-login-wechat" href="weixinlogin://www.ftchinese.com/" style="display:none;"><div class="centerButton"><button class="ui-light-btn">微信登录</button></div></a>
+<!--<div class="centerButton"><button class="ui-light-btn" onclick="weixinLogin()">微信登录</button></div>-->
 </div>
 <div class="padding logged">
 <div>欢迎您，<span class=user_Name></span></div>
