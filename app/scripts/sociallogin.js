@@ -40,6 +40,17 @@ function socialLogin(socialName, socialInfo) {
 
 function weixinLogin(){
     if(ftjavacriptapp){ 
-        ftjavacriptapp.weixinlogin();
+        ftjavacriptapp.weixlogin();
     }
+}
+
+
+if(typeof ftjavacriptapp == 'object'){  
+    if(ftjavacriptapp.weixlogin){   
+        $('.weiXinLogin').show();
+    }else{
+        $('.weiXinLogin').hide();
+    }        
+}else{
+    $('.weiXinLogin').hide();
 }
