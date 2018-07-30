@@ -712,7 +712,11 @@ $('#testHelp').unbind().bind('click', function() {
 //             try {
 //                 if(ftjavacriptapp){   
 //                     if(payWay==='wxpay'){
-//                         productPrice = parseInt(productPrice)*100+'';
+//                         if(productPrice<1){
+                        //    productPrice = productPrice*100+''; 
+                        // }else{
+                        //     productPrice = parseInt(productPrice)*100+'';
+                        // } 
 //                         ftjavacriptapp.payweixin(productId,productPrice,userId, productName);
 //                     }else if(payWay==='alipay'){
 //                         ftjavacriptapp.payzfb(productId,productPrice,userId, productName);
