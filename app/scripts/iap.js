@@ -637,14 +637,7 @@ $('#testHelp').unbind().bind('click', function() {
 // ftc_premium 1800 高端会员 FT1006001526873479
 // iapActions('ftc_premium_FT0101522812152', 'success', '');
 
-//Mark:此函数是测试微信付费，如果测试成功后期需要删除
-// function paySuccess(){
-//     var psySuccess = document.getElementById('pay-success-btn');
-//     psySuccess.onclick=function(){
-//         turnonOverlay('pay-way');
-//     }
-// }
-// paySuccess();  
+
 
 // // Mark:支付方式
 // var payWay = '';
