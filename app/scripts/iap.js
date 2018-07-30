@@ -281,7 +281,8 @@ function iapActions(productID, actionType, expireDate) {
     // FIXME: Is this useful? 
     actionType = '';
 
-    ecommerceTrack(tradeNum,window.gSubscriptionEventLabel,productPrice.substring(1),productID);
+    // ecommerceTrack(tradeNum,window.gSubscriptionEventLabel,productPrice.substring(1),productID);
+    addTransaction(tradeNum, productID, productPrice.substring(1), window.gSubscriptionEventLabel);
 }
 
  // MARK: - Get the index number of the current product for window.iapProducts
@@ -307,6 +308,7 @@ function getBuyCode(productId, productPrice, userId, productName, orderNum){
         
         var productIDArr = orderNum.substring(2,5);
         var productIdStr = (productIDArr === '100') ? 'ftc_premium' : 'ftc_standard';
+        var productPosition = (productIDArr === '100') ? 2 : 1;
         productId = orderNum;
 
         if(productPrice.indexOf('¥')>=0){
@@ -333,6 +335,9 @@ function getBuyCode(productId, productPrice, userId, productName, orderNum){
     }else{
         turnonOverlay('loginBox');  
     }
+
+    onProductClick(productIdStr,productPosition) ;
+    onPromoClick(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel,productIdStr);
 }
 
 
@@ -701,6 +706,7 @@ $('body').on('click', '#to-pay', function(){
 // $('body').on('click', '.iap-button', function(){
 //      var productName = $(this).attr('product-title');
 //      var memberNum = (productName == '高端会员') ? '100' : '010';
+//      var productPosition = (memberNum === '100') ? 2 : 1;
 //      var orderNum = getOrderNum(memberNum);
 //      payWrapData['productsId'] =  $(this).attr('product-id');
 //      payWrapData['productPrice'] =  $(this).attr('product-price');
@@ -721,7 +727,8 @@ $('body').on('click', '#to-pay', function(){
 //     }else{
 //         turnonOverlay('loginBox');  
 //     }
-     
+//  onProductClick(productName,productPosition) ;
+//  onPromoClick(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel,productName);
 // });
 
 
@@ -868,29 +875,13 @@ function payFinishAction(productID, actionType){
     // MARK: - Send Event to GA and Other Analytics
     var eventAction = 'Buy ' + actionType + ': ' + productID;
     ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel);
-    ecommerceTrack(tradeNum,window.gSubscriptionEventLabel,productPrice.substring(1),productID);
+    // ecommerceTrack(tradeNum,window.gSubscriptionEventLabel,productPrice.substring(1),productID);
+
+    addTransaction(tradeNum, productID, productPrice.substring(1), window.gSubscriptionEventLabel);
 }
 
 
 
-function ecommerceTrack(id,affiliation,price,productName){
-    ga('ecommerce:addTransaction', {
-    'id': id,                     // Transaction ID. Required.
-    'affiliation': affiliation,   // Affiliation or store name.
-    'revenue': price,               // Grand Total.
-    'shipping': '0',                  // Shipping.
-    'tax': '0' ,
-    'currency': 'CNY'                     // Tax.
-    });
 
-    ga('ecommerce:addItem', {
-    'id': id,                     // Transaction ID. Required.
-    'name': productName,    // Product name. Required.
-    'sku': productName,                 // SKU/code.
-    'category': 'Android Subscription',         // Category or variation.
-    'price': price,                 // Unit price.
-    'quantity': '1'                   // Quantity.
-    });
 
-    ga('ecommerce:send');
-}
+
