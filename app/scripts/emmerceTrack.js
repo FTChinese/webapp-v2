@@ -80,7 +80,7 @@ function addPromotion(id,name){
     'id': id,             // Promotion ID. Required (string).
     'name': name,          // Promotion name (string).
     'creative': category,   // Creative (string).
-    'position': ''      // Position  (string).
+    'position': 'android side'      // Position  (string).
     });
 }
 
@@ -103,7 +103,7 @@ function onPromoClick(id,name) {
     'id': id,
     'name': name,
     'creative': category,
-    'position': ''
+    'position': 'android side'
   });
 
   // Send the promo_click action with an event.
