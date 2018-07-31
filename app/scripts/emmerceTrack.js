@@ -98,7 +98,7 @@ function onProductClick(name,position) {
 
 
 // 当点击立即订阅时，调用此
-function onPromoClick(id,name,clickName) {
+function onPromoClick(id,name) {
   ga('ec:addPromo', {
     'id': id,
     'name': name,
@@ -108,7 +108,7 @@ function onPromoClick(id,name,clickName) {
 
   // Send the promo_click action with an event.
   ga('ec:setAction', 'promo_click');
-  ga('send', 'event', 'Internal Promotions', 'click', clickName);
+  ga('send', 'event', 'Internal Promotions', 'click', name);
 }
 
 function addTransaction(tradeId, name, price, affiliation){
