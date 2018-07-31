@@ -114,7 +114,7 @@ function onPromoClick(id,name,clickName) {
 function addTransaction(tradeId, name, price, affiliation){
     ga('set', 'currencyCode', 'CNY'); // Set tracker currency to Euros.
     ga('ec:addProduct', {
-    'id': tradeId,
+    'id': name,
     'name': name,
     'category': category,
     'brand': 'FTC',
