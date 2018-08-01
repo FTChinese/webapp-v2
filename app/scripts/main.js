@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1322; //当前的版本号
+var _currentVersion = 1323; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -838,10 +838,12 @@ function fillContent(loadType) {
             var adId = $(this).attr('adid') || '';
             var sTag = $(this).attr('tag') || $(this).attr('title') || '';
             var sTitle = $(this).attr('title') || $(this).attr('tag') || '';
+            var pageId = $(this).attr('pageid') || '';
             gSpecialAnchors.push({
                 'tag': sTag,
                 'title': sTitle,
-                'adid': adId
+                'adid': adId,
+                'pageId':pageId
             });
         });
     }
