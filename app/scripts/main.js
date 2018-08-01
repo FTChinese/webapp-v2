@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1323; //当前的版本号
+var _currentVersion = 1324; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -3100,7 +3100,7 @@ function histback(gesture) {
         payWall('/index.php/jsapi/paywall?histback');
         isLoginReq = false;
     }
-    
+    trackEndPageTime();
     
 
     var thispage,previouspage,theid, index = 0, nonStoryIndex=-1;

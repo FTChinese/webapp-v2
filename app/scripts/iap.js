@@ -881,7 +881,59 @@ function payFinishAction(productID, actionType){
 }
 
 
+// Mark:跟踪用户时长
+function postTimeToServer(obj) {
+    var userId = GetCookie('USER_ID') || '';
+    if (!!userId) {
+        var xhrpw = new XMLHttpRequest();
+        xhrpw.open('post', '/engagement.php');
+        xhrpw.setRequestHeader('Content-Type', 'application/text');
+        xhrpw.onload = function () {
+            
+        };
+        xhrpw.send(JSON.stringify(obj));
+    }
+}
 
+var timeIn = '';
+function trackStartPageTime() {
+    
+    if(document.addEventListener){
+        function DOMContentLoaded(){
+            timeIn = (new Date()).getTime();
+        }
+        document.addEventListener( "DOMContentLoaded", DOMContentLoaded, false );
+    }else if (document.attachEvent) {
+        document.attachEvent('onreadystatechange', function () {
+              timeIn = (new Date()).getTime();  
+        });
+    }
 
+    window.onload = function () {
+        var timeOut = new Date().getTime();
+        var dataArr = {
+            'url': location.href,
+            'timeIn': timeIn,
+            'timeOut': timeOut,
+            'userId': GetCookie('USER_ID') || null,
+            'functionName': 'trackStartPageTime'
+        };
+        
+        postTimeToServer(dataArr);
+        
+    };
+}
+trackStartPageTime();
+
+function trackEndPageTime() {
+    var dataArr = {
+        'url': location.href,
+        'timeIn': timeIn,
+        'timeOut': new Date().getTime(),
+        'userId': GetCookie('USER_ID') || null,
+        'functionName': 'trackEndPageTime'
+    };
+    postTimeToServer(dataArr);
+};
 
 
