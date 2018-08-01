@@ -835,10 +835,12 @@ function fillContent(loadType) {
             var adId = $(this).attr('adid') || '';
             var sTag = $(this).attr('tag') || $(this).attr('title') || '';
             var sTitle = $(this).attr('title') || $(this).attr('tag') || '';
+            var pageId = $(this).attr('pageId') || '';
             gSpecialAnchors.push({
                 'tag': sTag,
                 'title': sTitle,
-                'adid': adId
+                'adid': adId,
+                'pageId':pageId
             });
         });
     }

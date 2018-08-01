@@ -85,6 +85,7 @@ video::-webkit-media-controls-panel {width: calc(100% + 30px);}
     var uaString=navigator.userAgent || navigator.vendor || "",deviceType="",k=window.location.href,c,adchannelId,adPositionId,adType,adType,adId,adLink;//bodyWidth=document.body.offsetWidth || 0;
     var matchSpecial = false;
     var gSpecialAdId = '';
+    var gSpecialPageId = '';
     var parentLink = window.parent.location.href;
     var testFullPage = false;
     var slotNumber = '';
@@ -94,6 +95,10 @@ video::-webkit-media-controls-panel {width: calc(100% + 30px);}
     var adChannelTitle = '';
     var adPatternId = '';
     var adPattern ='';
+    var zone = '';// for newdb
+    var pos = ''; // for newdb
+    var format = '';// for newdb
+    var name = '';//for newdb
 
     function removeAd() {
         //alert ('removeAd');
@@ -152,15 +157,20 @@ video::-webkit-media-controls-panel {width: calc(100% + 30px);}
             if (useSpecialCode === true && keywordsOfCurrentPage.indexOf(keywordForCheck) >=0) {
                 gSpecialAdId = parent.window.gSpecialAnchors[i].adid;
                 matchSpecial = true;
+                gSpecialPageId = parent.window.gSpecialAnchors[i].pageId;
                 break;
             }
         }
     }
 
+    // for newdb
+    if (gSpecialPageId) {
+        zone = 'home/special/'+ gSpecialPageId;
+    } else {
+        zone = 'home';
+    }
 
-    // New Ad
     // MARK: determin device type 
-    
     if (uaString.toLowerCase().indexOf("android")> -1 && uaString.toLowerCase().indexOf("mobile") < 0) {
         deviceId = '6000';
         deviceType = 'PadApp';
@@ -180,41 +190,52 @@ video::-webkit-media-controls-panel {width: calc(100% + 30px);}
         adPatternId = "0402";
         adType="mpu";
         adPattern = "MPU-Middle2";
+        pos = 'middle2';
     } else if (adCode=="ad300x600-SP" || (parent.window.gSpecial === true && adCode==="ad300x600")) {
         adchannelId = "5000";
         adChannelTitle = '其他频道及内容页-首页';
         adPatternId = "0401";
         adType="halfpage";
         adPattern = "MPU-Middle1";
+        pos = 'middle2';
+
     } else if (adCode=="ad300x600") {
         adPatternId="0401";
         //c="20210003";
         adType="halfpage";
         adPattern = "MPU-Middle1";
+        pos = 'middle1';
 
     } else if (adCode=="ad300x600-2") {
         adPatternId="0402";
         adType="halfpage";
         adPattern = "MPU-Middle2";
+        pos = 'middle2';
+
     } else if (adCode=="ad300x250") {
         adPatternId="0401";
         adType="mpu";
         adPattern = "MPU-Middle1";
+        pos = 'middle1';
 
     } else if (adCode=="ad300x250-2") {
         adPatternId="0402";
         adType="mpu";
         adPattern = "MPU-Middle2";
+        pos = 'middle2';
 
     } else if (adCode=="ad300x250-e") {
         adPatternId="0401";
         adType="mpu";
         adPattern = "MPU-Middle1";
+        pos = 'middle1';
 
     } else if (adCode=="ad300x250-story-bottom") {
         adPatternId="0402";
         adType="mpu-phone";
         adPattern = "MPU-Middle2";
+        pos = 'middle2';
+
     } else {
 
         if (adCode === 'fullScreen') {
@@ -222,47 +243,61 @@ video::-webkit-media-controls-panel {width: calc(100% + 30px);}
             adType = 'hidden';
                 // TODO: - 全屏广告应该只加载一次
             adPattern = "FullScreen-Web";
+            pos = 'fullscreen';
 
         } else if (adCode=="ad300x90") {
             adPatternId="0301";//banner-num1
             adType="ad90";
             adPattern = "Banner-Num1";
+            pos = 'top1';
+
         } else if (adCode=="ad300x250-home") {
             adPatternId="0401";
             adType="mpu-phone";
             adPattern = "MPU-Middle1";
+            pos = 'middle1';
+
         } else if (adCode=="ad300x250-story") {
             adPatternId="0401";
             adType="mpu-phone";
             adPattern = "MPU-Middle1";
+            pos = 'middle1';
+
         } else if (adCode=="ad300x250-story-vw") {
             adPatternId="0402";
             adType="mpu-phone";
             adPattern = "MPU-Middle2";
+            pos = 'middle2';
+
         } else if (adCode=="banner-bottom-home") {
             adPatternId="0302";
             adType="ad50";
             adPattern = "Banner-Num2";
+            pos = 'top2';
 
         } else if (adCode=="banner-bottom-story") {
             adPatternId="0302";
             adType="ad50";
             adPattern = "Banner-Num2";
+            pos = 'top2';
 
         } else if (adCode=="banner-top-story") {
             adPatternId="0301";
             adType="ad50";
             adPattern = "Banner-Num1";
+            pos = 'top1';
 
         } else if (adCode=="banner-paid-post-home") {
             adPatternId="0801";
             adType="full-width";
             adPattern = "Information-Num1";
+            pos = 'info1';
 
         } else if (adCode=="banner-paid-post-home-2") {
             adPatternId="0802";
             adType="full-width";
             adPattern = "Information-Num2";
+            pos = 'info2';
 
         }
     }
@@ -274,13 +309,21 @@ video::-webkit-media-controls-panel {width: calc(100% + 30px);}
         if(adPatternId=="0401") {
             adPatternId="0411";
             adPattern = "MPU-Right1";
-
         } else if(adPatternId=="0402") {
             adPatternId="0412";
             adPattern = "MPU-Right2";
-
         }
     }
+    
+    // for newdb
+    if (deviceType == 'PadApp') {
+        if (pos == 'middle1') {
+            pos = 'right1';
+        } else if (pos == 'middle2') {
+            pos = 'right2';
+        }
+    }
+
     if(gSpecialAdId) {
         adchannelId = gSpecialAdId;
     }
@@ -290,7 +333,7 @@ video::-webkit-media-controls-panel {width: calc(100% + 30px);}
     var deviceWidth = window.parent.innerWidth || window.parent.document.documentElement.clientWidth || window.parent.document.body.clientWidth;
     var bannerW = deviceWidth;
     var bannerH = Math.round(bannerW/4);
-    
+    /*
     var adSizeArr;
     if(adPattern === 'Banner-Num1' || adPattern === 'Banner-Num2') {
         adSizeArr = [[bannerW,bannerH],[414, 104]];
@@ -301,18 +344,77 @@ video::-webkit-media-controls-panel {width: calc(100% + 30px);}
     } else {
         adSizeArr = [];
     }
+    */
+    // for newdb
+    if (gSearchVars && gSearchVars.newdb === 'yes') {
+        var adFormats = { 
+            "FtcMobileBanner": [[414, 104]],
+            "FtcMpu":[[300, 250], [300, 600]],
+            "FtcInfoFlow":[[400, 300]],
+            "FtcMobileFullscreen":[[414, 736]]
+        }
+
+        switch(pos) {
+            case 'top1':
+                format = adFormats.FtcMobileBanner;
+                name = 'banner1';
+                break;
+            case 'top2':
+                format = adFormats.FtcMobileBanner;
+                name = 'banner2';
+                break;
+            case 'middle1':
+                format = adFormats.FtcMpu;
+                name = 'mpu-middle1';
+                break;
+            case 'middle2':
+                format = adFormats.FtcMpu;
+                name = 'mpu-middle2';
+                break;
+            case 'right1':
+                format = adFormats.FtcMpu;
+                name = 'mpu-right1';
+                break;
+            case 'right2':
+                format = adFormats.FtcMpu;
+                name = 'mpu-right2';
+                break;
+            case 'info1':
+                format = adFormats.FtcInfoFlow;
+                name = 'infoflow1';
+                break;
+            case 'info2':
+                format = adFormats.FtcInfoFlow;
+                name = 'infoflow2';
+                break;
+            case 'fullscreen':
+                format = adFormats.FtcMobileFullscreen;
+                name = 'fullscreen-mobile';
+                break;
+            default:
+                format = adFormats.FtcMobileBanner;
+                name = 'banner1';
+                
+        }
+    }
+ 
 </script>
+<script src="https://www.ft.com/__origami/service/build/v2/bundles/js?modules=o-ads@8.3.0"></script>
  <script src='https://www.googletagservices.com/tag/js/gpt.js'></script>
 <script>
-    if (gSearchVars && gSearchVars.testDB === 'yes') {
+    
+    if (gSearchVars && gSearchVars.newdb === 'yes') {
         googletag.cmd.push(function() {
-            googletag.defineSlot('/80682004/AndroidApp-4000/' + c,adSizeArr, adName). addService(googletag.pubads())
+            googletag.defineSlot('/80682004/ftchinese/' + zone, format , name). addService(googletag.pubads())
             googletag.pubads().enableSingleRequest();
             googletag.pubads().enableSyncRendering();
+            googletag.pubads().setTargeting('pos',[pos]);
             googletag.enableServices();
         });
     }
+
 </script>
+
 </head>
 
 <body style="background-color:#f7e8d7;">
@@ -326,19 +428,11 @@ if (c == '400050480302') {
 }
 
 var dolphineInlineScript = '';
-if (gSearchVars && gSearchVars.testDB === 'yes') {
-    /*
-    var adClass = 'db-ad';
-    if(adPattern === 'Banner-Num1' || adPattern === 'Banner-Num2') {
-        adClass += ' db-mobile-banner';
-    } else if(adPattern === 'Information-Num1' || adPattern === 'Information-Num2') {
-        adClass += ' db-mobile-information';
-    }
-    */
+if (gSearchVars && gSearchVars.newdb === 'yes') {
     if(deviceId == "6000" && adType === 'mpu') {//MARK:当既是PadApp又是MPU时就是6000xxxx04xx
         document.body.style.backgroundColor = '#f6e9d8';
     }
-    var dolphineInlineScript = '<div id="'+ adName + '"style="padding-top:0;"><scr' + 'ipt>googletag.cmd.push(function() { googletag.display("' + adName + '")})</scr' + 'ipt></div>';
+    var dolphineInlineScript = '<div id="'+ name + '"style="padding-top:0;"><scr' + 'ipt>googletag.cmd.push(function() { googletag.display("' + name + '")})</scr' + 'ipt></div>';
 } else {
     dolphineInlineScript = '<div class="'+adType+'" id="ad-content"><scr'+'ipt type="text/javascript" src="http://dualstack.adsame-1421766300.ap-southeast-1.elb.amazonaws.com/s?z=ft&c=' + c + adReachability() + slotString + '&t='+Math.round(Math.random() * 1000000)+'" charset="gbk" onerror="removeAd()" onload="loaded()"></scr'+'ipt><div id="ad-bottom"></div></div>';
 }
