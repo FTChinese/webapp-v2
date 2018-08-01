@@ -496,8 +496,11 @@ function timestampToTime(timestamp) {
 }
 
 function vipCenter(dataObj){
-    var time = dataObj.expire;
-    var formatTime = timestampToTime(time);
+    var formatTime = '';
+    if(dataObj.expire){
+        var time = dataObj.expire;
+        formatTime = timestampToTime(time);
+    }
     var vipTypeId = document.getElementById('vip-type');
     var warmPrompt = document.getElementById('warm-prompt');
     if(dataObj.standard===1 && dataObj.premium===0){
@@ -883,7 +886,7 @@ function payFinishAction(productID, actionType){
 
 // Mark:跟踪用户时长
 function postTimeToServer(obj) {
-    var userId = GetCookie('USER_ID') || '';
+    var userId = getCookie('USER_ID') || '';
     if (!!userId) {
         var xhrpw = new XMLHttpRequest();
         xhrpw.open('post', '/engagement.php');
@@ -902,7 +905,7 @@ function trackStartPageTime() {
         function DOMContentLoaded(){
             timeIn = (new Date()).getTime();
         }
-        document.addEventListener( "DOMContentLoaded", DOMContentLoaded, false );
+        document.addEventListener( 'DOMContentLoaded', DOMContentLoaded, false );
     }else if (document.attachEvent) {
         document.attachEvent('onreadystatechange', function () {
               timeIn = (new Date()).getTime();  
@@ -915,7 +918,7 @@ function trackStartPageTime() {
             'url': location.href,
             'timeIn': timeIn,
             'timeOut': timeOut,
-            'userId': GetCookie('USER_ID') || null,
+            'userId': getCookie('USER_ID') || null,
             'functionName': 'trackStartPageTime'
         };
         
@@ -930,7 +933,7 @@ function trackEndPageTime() {
         'url': location.href,
         'timeIn': timeIn,
         'timeOut': new Date().getTime(),
-        'userId': GetCookie('USER_ID') || null,
+        'userId': getCookie('USER_ID') || null,
         'functionName': 'trackEndPageTime'
     };
     postTimeToServer(dataArr);
