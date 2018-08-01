@@ -25,6 +25,7 @@ video::-webkit-media-controls-panel {width: calc(100% + 30px);}
         var oneKeyValueArr = searchStrArr[index].split("=");
         gSearchVars[oneKeyValueArr[0]] = oneKeyValueArr.length > 1 ? oneKeyValueArr[1] : "";
     }
+    console.log(gSearchVars);
 
     var gUserType = window.parent.gUserType || 'visitor';
 
@@ -122,7 +123,7 @@ video::-webkit-media-controls-panel {width: calc(100% + 30px);}
     adCode=k.replace(/^.*adtype=([0-9A-Za-z\-]+).*$/,"$1"); //Old Ad
 
     adId=k.replace(/^.*adid=([0-9A-Za-z]+).*$/,"$1") || '';
-    var parentId = adId;
+    //var parentId = adId;
     if (typeof parent.window.gSlotNumber === 'string') {
         slotNumber = parent.window.gSlotNumber;
     } else {
