@@ -10,6 +10,7 @@ var windowHeight = w.innerHeight|| e.clientHeight|| g.clientHeight;
 var gAdImpressionExpose = 0.5;
 var gScrollerHeight = windowHeight - gBottomBarHeight;
 var gUserType = 'visitor';
+var searchVars = getSearchVars();
 
 function adViewUpdate() {
   var scrollTop = document.getElementById(gCurrentScroller).scrollTop;
@@ -144,9 +145,119 @@ function getAdChannelId() {
   return '1000';
 }
 
+function getSearchVars() {
+  var searchVars = {};
+  var searchStr = window.location.search;
+  for (var index = 0, searchStrArr = searchStr.substr(1).split('&'); index < searchStrArr.length; index++) {
+    var oneKeyValueArr = searchStrArr[index].split('=');
+    searchVars[oneKeyValueArr[0]] = oneKeyValueArr.length > 1 ? oneKeyValueArr[1] : '';
+  }
+  return searchVars;
+}
+
+function getZone() {
+   // Get zone
+  // MARK: - 检查parent里面的gSpecialAnchors，根据这个来确定当前的页面是不是要投放赞助的adid 
+  var matchSpecial = false;
+  var gSpecialPageId = '';
+  if (gSpecialAnchors && gSpecialAnchors.length > 0 && gTagData.length >0) {
+    for (var i=0; i < gSpecialAnchors.length && matchSpecial === false; i++) {
+        // MARK: - this is added per request of ad sales
+        // MARK: - to exclude situations where ad sales don't want to invoke sponsored special report code
+     
+        var useSpecialCode = true;
+        try {
+            if (gNowView === 'storyview' && gSpecialAnchors[i].adid === '2062') {
+                useSpecialCode = false;
+            }
+        } catch (ignore) {
+            
+        }
+        
+        var keywordsOfCurrentPage = gTagData;
+        var keywordForCheck = gSpecialAnchors[i].tag;
+        console.log('keywordForCheck:'+keywordForCheck);
+        if (keywordForCheck.indexOf('http') >= 0) {
+            if (gSpecialAnchors[i].title) {
+                keywordForCheck = gSpecialAnchors[i].title;
+            } else if (gSpecialAnchors[i].channel) {
+                keywordForCheck = gSpecialAnchors[i].channel;
+            }
+        }
+        if (useSpecialCode === true && keywordsOfCurrentPage.indexOf(keywordForCheck) >=0) {
+            matchSpecial = true;
+            gSpecialPageId = gSpecialAnchors[i].pageId;
+            console.log(gSpecialAnchors[i]);
+            console.log('gSpecialPageId:'+gSpecialPageId);
+            break;
+        }
+    }
+  }
+  var zone='home';
+  if (gSpecialPageId) {
+    zone = 'home/special/'+ gSpecialPageId;
+  }
+  return zone;
+}
+
+/**
+ * @depend getZone
+ */
+function updateAdConfig() {
+  var zone = getZone();
+
+  //set config
+  var configJson = JSON.stringify({
+    'gpt': {
+        'network': 80682004,
+        'site': 'ftchinese',
+        'zone': zone
+    },
+    'formats': {
+      'FtcMobileBanner': {
+          'sizes': [[414, 104]]
+      },
+      'FtcMpu':{
+          'sizes':[[300, 250], [300, 600]]
+      },
+      'FtcInfoFlow':{
+          'sizes':[[400, 300]]
+      },
+      'FtcMobileFullscreen': {
+          'sizes':[[414, 736]]
+      }
+    }
+  });
+  console.log(configJson);
+  var adConfigScript;
+  if (document.getElementById('adConfig')) {
+    adConfigScript = document.getElementById('adConfig');
+    adConfigScript.innerHTML = '';
+  } else {
+    adConfigScript = document.createElement('script');
+    adConfigScript.id = 'adConfig';
+    adConfigScript.type = 'application/json';
+    adConfigScript.setAttribute('data-o-ads-config','');
+  }
+  
+  try {
+    adConfigScript.appendChild(document.createTextNode(configJson));
+  } catch(ex) {
+    adConfigScript.text = configJson;
+  }
+  console.log(adConfigScript);
+  
+  if (!document.getElementById('adConfig')) {
+    document.getElementsByTagName('head')[0].appendChild(adConfigScript);
+  }
+}
 
 // MARK: - load or reload all the ad friendly ad iframes that are in view
 function updateAds() {
+    if(searchVars.newdb === 'yes') {
+      console.log('updateAdConfig');
+      updateAdConfig();
+    }
     // MARK: - Get the id of the view that is currently visible. It's either home, channel or story. 
     var nowV = gNowView;
     var isColumnFlow = false;
@@ -195,11 +306,8 @@ function updateAds() {
                     if (useFTScroller===1 || nowV === 'story-column-flow') {
                         adOverlay = '<a target=_blank class="ad-overlay"></a>';
                     }
-                    var newDBParam = '';
-                    if (window.location.search.indexOf('newdb=yes') > 0) {
-                      newDBParam = '&newdb=yes';
-                    } 
-                    $(this).html('<iframe id="' + nowV + index + '" src="/phone/ad.html?isad=0&v=' + _currentVersion + '&adtype=' + adFrame + '&adid=' + nowV + index + newDBParam + '" frameborder=0  marginheight="0" marginwidth="0" frameborder="0" scrolling="no" width="'+adwidth+'" height="100%"></iframe>' + adOverlay);
+ 
+                    $(this).html('<iframe id="' + nowV + index + '" src="/phone/ad.html?isad=0&v=' + _currentVersion + '&adtype=' + adFrame + '&adid=' + nowV + index + '" frameborder=0  marginheight="0" marginwidth="0" frameborder="0" scrolling="no" width="'+adwidth+'" height="100%"></iframe>' + adOverlay);
                     //console.log ($(this).html());
                     $(this).attr('id','ad-' + nowV + index);
                 }
