@@ -406,7 +406,7 @@ function startpage() {
             ga('send', 'event', 'Android Privileges','Tap', window.gSubscriptionEventLabel);
 
             productImpression();
-            addPromotion(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
+           
          }
     });
 

@@ -337,7 +337,7 @@ function getBuyCode(productId, productPrice, userId, productName, orderNum){
     }
 
     onProductClick(productIdStr,productPosition) ;
-    onPromoClick(window.gSubscriptionEventLabel,productIdStr);
+
 }
 
 
@@ -731,7 +731,7 @@ $('body').on('click', '#to-pay', function(){
 //         turnonOverlay('loginBox');  
 //     }
 //  onProductClick(productName,productPosition) ;
-//  onPromoClick(window.gSubscriptionEventLabel,productName);
+
 // });
 
 
