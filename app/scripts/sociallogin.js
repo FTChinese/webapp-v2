@@ -14,7 +14,7 @@ function socialLogin(socialName, socialInfo) {
                 checkLogin();
                 isLoginReq = true;
                 isReqSuccess = false;
-                payWall('/index.php/jsapi/paywall?login'+ (new Date()).getTime());
+                payWall('/index.php/jsapi/paywall?sociallogin'+ (new Date()).getTime());
             // print the result for review
             $('#yourDevice .overlay-header p').html('登录成功');
             $('#yourDevice .padding').html('亲爱的用户，您已经成功登录。');

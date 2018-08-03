@@ -315,7 +315,7 @@ function getBuyCode(productId, productPrice, userId, productName, orderNum){
             productPrice =  productPrice.substr(1,productPrice.length);
         }
         productPrice =  productPrice.replace(',','');
-
+        // productPrice =  '0.01';
         if(osVersion.indexOf('Android')>=0){
             try {
                 if(ftjavacriptapp){                  
@@ -598,9 +598,9 @@ function updatePageAction(){
         payWall('api/paywall.json');
     }else{
         var userId1 = getCookie('USER_ID') || '';
-        if (!!userId1) { 
-            vipCenter(dataObj); 
-            payWall('/index.php/jsapi/paywall?update');   
+        if (!!userId1) {   
+            vipCenter(parsedDataForCenter); 
+            payWall('/index.php/jsapi/paywall?update');       
         }else{
             setCookie('isFTCw', 1, '', '/');
         }
