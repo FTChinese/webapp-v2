@@ -277,7 +277,7 @@ function iapActions(productID, actionType, expireDate) {
 
     // MARK: - Send Event to GA and Other Analytics
     var eventAction = 'Buy ' + actionType + ': ' + productID;
-    ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel);
+    ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
     // FIXME: Is this useful? 
     actionType = '';
 
@@ -877,7 +877,7 @@ function payFinishAction(productID, actionType){
 
     // MARK: - Send Event to GA and Other Analytics
     var eventAction = 'Buy ' + actionType + ': ' + productID;
-    ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel);
+    ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
     // ecommerceTrack(tradeNum,window.gSubscriptionEventLabel,productPrice.substring(1),productID);
 
     addTransaction(tradeNum, productID, productPrice.substring(1), window.gSubscriptionEventLabel);
