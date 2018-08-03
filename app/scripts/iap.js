@@ -379,6 +379,12 @@ function isShowVipCenter(){
     }
 }
 
+$('body').on('click', '#vip-center-btn', function(){
+    turnonOverlay('vip-center');
+    vipCenter(parsedDataForCenter);
+});
+
+
 //MARK: - 交易失败时，显示的页面
 $('body').on('click', '#iap-know', function(){
     $('#iap-hint').removeClass('on');
@@ -496,6 +502,7 @@ function timestampToTime(timestamp) {
 }
 
 function vipCenter(dataObj){
+
     var formatTime = '';
     if(dataObj.expire){
         var time = dataObj.expire;
@@ -510,6 +517,10 @@ function vipCenter(dataObj){
         vipTypeId.innerHTML = '高端会员';
         warmPrompt.innerHTML = '您的会员截止至<span style="color:#26747a">'+formatTime+'</span>';
     }else{
+        vipTypeId.innerHTML = '未付费注册用户';
+        warmPrompt.innerHTML = '成为付费会员，阅读FT独家内容，请<a href="#" style="color:#26747a">成为会员</a>';
+    }
+    if(isEmptyObj(dataObj)){
         vipTypeId.innerHTML = '未付费注册用户';
         warmPrompt.innerHTML = '成为付费会员，阅读FT独家内容，请<a href="#" style="color:#26747a">成为会员</a>';
     }
@@ -599,7 +610,6 @@ function updatePageAction(){
     }else{
         var userId1 = getCookie('USER_ID') || '';
         if (!!userId1) {   
-            vipCenter(parsedDataForCenter); 
             payWall('/index.php/jsapi/paywall?update');       
         }else{
             setCookie('isFTCw', 1, '', '/');
