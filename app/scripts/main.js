@@ -3484,9 +3484,6 @@ function logout() {
         isReqSuccess = false;
         payWall('/index.php/jsapi/paywall?logout'+ thed); 
         deleteCookie('isFTCw');
-        // deleteCookie('USER_ID');
-        // deleteCookie('USER_KV');
-        // deleteCookie('USER_NAME');
         $('#logincomment,#nologincomment, .logged, .notLogged').hide();
         $('#nologincomment,.notLogged').show();
         username = '';
