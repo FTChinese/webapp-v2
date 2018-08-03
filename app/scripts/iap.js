@@ -277,7 +277,7 @@ function iapActions(productID, actionType, expireDate) {
 
     // MARK: - Send Event to GA and Other Analytics
     var eventAction = 'Buy ' + actionType + ': ' + productID;
-    ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel);
+    ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
     // FIXME: Is this useful? 
     actionType = '';
 
@@ -315,7 +315,7 @@ function getBuyCode(productId, productPrice, userId, productName, orderNum){
             productPrice =  productPrice.substr(1,productPrice.length);
         }
         productPrice =  productPrice.replace(',','');
-
+        // productPrice =  '0.01';
         if(osVersion.indexOf('Android')>=0){
             try {
                 if(ftjavacriptapp){                  
@@ -337,7 +337,7 @@ function getBuyCode(productId, productPrice, userId, productName, orderNum){
     }
 
     onProductClick(productIdStr,productPosition) ;
-    onPromoClick(window.gSubscriptionEventLabel,productIdStr);
+
 }
 
 
@@ -598,9 +598,9 @@ function updatePageAction(){
         payWall('api/paywall.json');
     }else{
         var userId1 = getCookie('USER_ID') || '';
-        if (!!userId1) { 
-            vipCenter(dataObj); 
-            payWall('/index.php/jsapi/paywall?update');   
+        if (!!userId1) {   
+            vipCenter(parsedDataForCenter); 
+            payWall('/index.php/jsapi/paywall?update');       
         }else{
             setCookie('isFTCw', 1, '', '/');
         }
@@ -731,7 +731,7 @@ $('body').on('click', '#to-pay', function(){
 //         turnonOverlay('loginBox');  
 //     }
 //  onProductClick(productName,productPosition) ;
-//  onPromoClick(window.gSubscriptionEventLabel,productName);
+
 // });
 
 
@@ -877,7 +877,7 @@ function payFinishAction(productID, actionType){
 
     // MARK: - Send Event to GA and Other Analytics
     var eventAction = 'Buy ' + actionType + ': ' + productID;
-    ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel);
+    ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
     // ecommerceTrack(tradeNum,window.gSubscriptionEventLabel,productPrice.substring(1),productID);
 
     addTransaction(tradeNum, productID, productPrice.substring(1), window.gSubscriptionEventLabel);
