@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1328; //当前的版本号
+var _currentVersion = 1329; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -1838,7 +1838,7 @@ function displaystoryNormal(theid, language, forceTitle) {
         isStoryBeforeOneWeek = true;
         // console.log(Number(allId.last_publish_time)+604800);
     }
-
+// isFTCw为false时，就没有付费墙。当getCookie('isFTCw')为"0"时，就没有付费墙。注意getCookie('isFTCw')得到的是字符串"0"或者"1"，而不是0或者1，这样下面写的逻辑就没有问题。getCookie('isFTCw')可能为null。
 
     var isFTCw = (!getCookie('isFTCw')) ? true : Boolean(Number(getCookie('isFTCw')));
     var hasPaywall = false;

@@ -628,27 +628,27 @@ function getSystemVersion(){
 getSystemVersion();
 
 $('#setHelp').unbind().bind('click', function() {
-    // var userId = getCookie('USER_ID') || '';
-    // isReqSuccess = false;
-    // payWall('/index.php/jsapi/paywall?test');
-    // alert(JSON.stringify(testObj));
-    // alert(userId);
-
-    payWay='alipay';
-    var productName = '高端会员'; 
-    var memberNum = (productName == '高端会员') ? '100' : '010';
-    var orderNum = getOrderNum(memberNum);
-
     var userId = getCookie('USER_ID') || '';
-    if (!!userId){
-        if(payWay==='wxpay'){
-            getWxBuyCode('ftc_premium', '0.01', userId, productName, orderNum);
-        }else if(payWay==='alipay'){
-            getWxBuyCode('ftc_premium', '0.01', userId, productName, orderNum);
-        }
-    }else{
-        turnonOverlay('loginBox');  
-    }
+    isReqSuccess = false;
+    payWall('/index.php/jsapi/paywall?test');
+    alert(JSON.stringify(testObj));
+    alert(userId);
+    alert(getCookie('isFTCw'));
+    // payWay='alipay';
+    // var productName = '高端会员'; 
+    // var memberNum = (productName == '高端会员') ? '100' : '010';
+    // var orderNum = getOrderNum(memberNum);
+
+    // var userId = getCookie('USER_ID') || '';
+    // if (!!userId){
+    //     if(payWay==='wxpay'){
+    //         getWxBuyCode('ftc_premium', '0.01', userId, productName, orderNum);
+    //     }else if(payWay==='alipay'){
+    //         getWxBuyCode('ftc_premium', '0.01', userId, productName, orderNum);
+    //     }
+    // }else{
+    //     turnonOverlay('loginBox');  
+    // }
 });
 
 $('#testHelp').unbind().bind('click', function() {
