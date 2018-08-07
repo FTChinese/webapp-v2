@@ -3458,6 +3458,7 @@ function login(fromwhere) {
             $('#logincomment, #logincommentc, #nologincomment, #nologincommentc, .logged, .notLogged').hide();
             $('#nick_name,.user_id,.user_Name').val(u).html(u);
             $('#logincomment, #logincommentc, .logged').show();
+            $('.password').val(p).html(p);
             // $('#loginButton').removeClass("blue");
             $('#setting').find('.standalonebutton').eq(0).find('button').html('登出');
             username = u;
@@ -3478,6 +3479,7 @@ function login(fromwhere) {
 }
 
 function logout() {
+    // alert('1:'+document.cookie);
     var thed = (new Date()).getTime();
     $('.logged .statusmsg').html('正在登出...');
     $.get('/index.php/users/logout?' + thed, function(data) {
@@ -3489,6 +3491,7 @@ function logout() {
         username = '';
         closeOverlay();
         $('#setting').find('.standalonebutton').eq(0).find('button').html('登录');
+        // alert('2:'+document.cookie);
     });
 }
 
