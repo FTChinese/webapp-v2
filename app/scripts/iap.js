@@ -381,7 +381,8 @@ function isShowVipCenter(){
 
 $('body').on('click', '#vip-center-btn', function(){
     turnonOverlay('vip-center');
-    vipCenter(parsedDataForCenter);
+    payWall('/index.php/jsapi/paywall?vipcenter');   
+    // vipCenter(parsedDataForCenter);
 });
 
 

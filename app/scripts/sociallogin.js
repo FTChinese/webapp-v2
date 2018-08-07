@@ -49,7 +49,7 @@ function weixinLogin(){
 
 
 if(typeof ftjavacriptapp == 'object'){  
-    if(ftjavacriptapp.weixlogin){   
+    if(typeof ftjavacriptapp.weixlogin == 'function'){   
         $('.weiXinLogin').show();
     }else{
         $('.weiXinLogin').hide();
