@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1331; //当前的版本号
+var _currentVersion = 1332; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -404,8 +404,9 @@ function startpage() {
             var iapTitle = $(this).attr('iap-title')|| 'FT中文网';
             var dataObj = payWallUpdateSub('/index.php/jsapi/paywall?3',iapAction,iapTitle);
             ga('send', 'event', 'Android Privileges','Tap', window.gSubscriptionEventLabel);
-
+            
             productImpression();
+            onPromoClick(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
            
          }
     });
@@ -1904,6 +1905,7 @@ function displaystoryNormal(theid, language, forceTitle) {
                 $('#storyview .storybody').html(storyimage).append(getpaywallHint());     
                 hasPaywall = true; 
                 ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
+                addPromotion(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
             }else{
                 $('#storyview .storybody').html(storyimage).append(allId.ebody);
                 hasPaywall = false;   
@@ -1916,6 +1918,7 @@ function displaystoryNormal(theid, language, forceTitle) {
             hasPaywall = true;
             
             ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
+            addPromotion(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
         }
 
         if(allId.whitelist && allId.whitelist === 1){
@@ -1983,6 +1986,7 @@ function displaystoryNormal(theid, language, forceTitle) {
                 $('#storyview .storybody').html(getpaywallHint());
                 hasPaywall = true; 
                 ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
+                addPromotion(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
             }else{
                 $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
                 hasPaywall = false;  
@@ -1993,6 +1997,7 @@ function displaystoryNormal(theid, language, forceTitle) {
             }
             hasPaywall = true;    
             ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
+            addPromotion(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
         }
 
         if(allId.whitelist && allId.whitelist === 1){
@@ -2031,6 +2036,7 @@ function displaystoryNormal(theid, language, forceTitle) {
                 $('#storyview .storybody').html(storyimage).append(getpaywallHint());
                 hasPaywall = true; 
                 ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
+                addPromotion(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
             }else{
                 $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));     
                 hasPaywall = false;  
@@ -2040,10 +2046,12 @@ function displaystoryNormal(theid, language, forceTitle) {
                 $('#storyview .storybody').html(storyimage).append(getpaywallHint());  
                 hasPaywall = true;
                 ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
+                addPromotion(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
             } else {
                 if(isStoryBeforeOneWeek){
                     $('#storyview .storybody').html(storyimage).append(getpaywallHint());
                     ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
+                    addPromotion(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
                     hasPaywall = true;
                 }else{
                     $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));
@@ -3611,6 +3619,7 @@ function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFra
 
             window.gSubscriptionEventLabel = getEventLabelFromUrl(url);
             ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
+            addPromotion(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
         }else{
 
             $('#slideShow').html('<div id="bookstart" class=opening><span><font id="bookname" style="font-size:2em;">'+ slideTitle + '</font><p class=booklead id="booklead">获取内容...</p><p class=booklead id="loadstatus">触摸<b onclick="closeOverlay()">此处</b>返回</p></span></div>');
