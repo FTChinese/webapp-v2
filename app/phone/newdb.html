@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Page Title</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src='https://www.googletagservices.com/tag/js/gpt.js'></script>
+  <script src='https://www.googletagservices.com/tag/js/gpt.js'></script> <!--TODO:该资源网络不好的时候会获取不到-->
   <script>
     var zone = getZone();
     var searchVars = getSearchVars();
@@ -183,12 +183,12 @@
 </head>
 <body style="width:100%;margin: 0px;padding: 0px;background-color:#fff1e0;">
   <script>
-    if(['top1','top2','middle1','middle2','right1','right2'].indexOf(adProps.pos)>=0) {
+    //if(['top1','top2','middle1','middle2','right1','right2'].indexOf(adProps.pos)>=0) {
       var dbCode = '<div id="'+ adProps.name +'" style="padding-top:0;"><scr' + 'ipt>googletag.cmd.push(function() { googletag.display("'+ adProps.name +'")})</scr' + 'ipt></div>';
 
       //var dbCode = '<div id="banner1" style="padding-top:0;"><scr' + 'ipt>googletag.cmd.push(function() { googletag.display("banner1")})</scr' + 'ipt></div>'
       document.write(dbCode);
-    }
+    //}
   </script>
 </body>
 </html>
