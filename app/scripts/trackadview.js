@@ -11,6 +11,7 @@ var gAdImpressionExpose = 0.5;
 var gScrollerHeight = windowHeight - gBottomBarHeight;
 var gUserType = 'visitor';
 var searchVars = getSearchVars();
+var newdbShow = newdbShowByRand(999);
 
 function adViewUpdate() {
   var scrollTop = document.getElementById(gCurrentScroller).scrollTop;
@@ -155,6 +156,21 @@ function getSearchVars() {
   return searchVars;
 }
 
+function getRandomInt(min, max) {
+  // * @dest 生成min~max之间的随机整数，如果min和max都为整数，那么生成区间包含min,不包含max
+
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random()*(max-min)) + min;
+}
+
+function newdbShowByRand(thresholdValue) {
+  var newdbRand = Math.random(0, 1000);
+  if (newdbRand<thresholdValue) {
+    return true;
+  }
+  return false;
+}
 // MARK: - load or reload all the ad friendly ad iframes that are in view
 function updateAds() {
     // MARK: - Get the id of the view that is currently visible. It's either home, channel or story. 
@@ -205,7 +221,7 @@ function updateAds() {
                     if (useFTScroller===1 || nowV === 'story-column-flow') {
                         adOverlay = '<a target=_blank class="ad-overlay"></a>';
                     }
-                    if( searchVars.newdb === 'yes') {
+                    if( searchVars.newdb === 'yes' && newdbShow) {
                       /*
                       if(adFrame === 'banner-paid-post-home' || adFrame === 'banner-paid-post-home-2') {
                         console.log('here paid-post home');
