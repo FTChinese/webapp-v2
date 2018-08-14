@@ -10,7 +10,7 @@ function getOrderNum(memberNum){
     return orderNum;
 }
 
-window.iapProducts = [{title: '标准会员',price: '¥198.00',id: 'ftc_standard',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为标准会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 专享订阅内容每日仅需0.5元','- 精选深度分析','- 中英双语内容','- 金融英语速读训练','- 英语原声电台','- 无限浏览7日前所有历史文章（近8万篇）'],period:'year'},{title: '高端会员',price: '¥1,998.00',id: 'ftc_premium',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为高端会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 专享订阅内容每日仅需5.5元','- 享受“标准会员”所有权益','- 编辑精选，总编/各版块主编每周五为您推荐本周必读资讯，分享他们的思考与观点','- 2018年8月26日前开通会员，可获得：FT中文网2018年度论坛门票2张，价值3999元/张 （不含差旅与食宿）','- 2018年8月26日后开通会员，可获得：FT中文网2019年系列活动优先参与权益，提供价值3999元活动入场券（所有线下活动参与权益均不可折算现金、不能转让、入场券均不含差旅与食宿）。同时提供2019年FT中文网高端读者活动现场精彩实录、演讲嘉宾观点精华内容分享，花钱买不到的内部分享资料！'],period:'year'}];
+window.iapProducts = [{title: '标准会员',price: '¥198.00',id: 'ftc_standard',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为标准会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 专享订阅内容每日仅需0.5元','- 精选深度分析','- 中英双语内容','- 金融英语速读训练','- 英语原声电台','- 无限浏览7日前所有历史文章（近8万篇）'],period:'year'},{title: '高端会员',price: '¥1,998.00',id: 'ftc_premium',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为高端会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 专享订阅内容每日仅需5.5元','- 享受“标准会员”所有权益','- 编辑精选，总编/各版块主编每周五为您推荐本周必读资讯，分享他们的思考与观点','- 2018年8月26日前开通会员，可获得：FT中文网2018年度论坛门票2张，价值3999元/张 （不含差旅与食宿）','- 2018年8月26日后开通会员，可获得：FT中文网2019年度论坛门票两张（活动门票不可折算现金、不能转让、门票不含差旅与食宿）。'],period:'year'}];
 
 var subscribeIntruction = {
     title: '订阅说明与注意事项',
