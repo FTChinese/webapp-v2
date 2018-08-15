@@ -89,7 +89,7 @@
       } else if (adCode=="ad300x250-story-bottom") {
         pos = 'middle2';
       } else if (adCode === 'fullScreen') {
-        pos = 'fullscreen';
+        pos = '';
       } else if (adCode=="ad300x90") {
         pos = 'top1';
       } else if (adCode=="ad300x250-home") {
@@ -184,11 +184,12 @@
 <body style="width:100%;margin: 0px;padding: 0px;background-color:#fff1e0;">
   <script>
     //if(['top1','top2','middle1','middle2','right1','right2'].indexOf(adProps.pos)>=0) {
+    if(adProps.pos) {
       var dbCode = '<div id="'+ adProps.name +'" style="padding-top:0;"><scr' + 'ipt>googletag.cmd.push(function() { googletag.display("'+ adProps.name +'")})</scr' + 'ipt></div>';
 
       //var dbCode = '<div id="banner1" style="padding-top:0;"><scr' + 'ipt>googletag.cmd.push(function() { googletag.display("banner1")})</scr' + 'ipt></div>'
       document.write(dbCode);
-    //}
+    }
   </script>
 </body>
 </html>
