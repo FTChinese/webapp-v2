@@ -816,8 +816,15 @@ setTimeout(function() { if(cache && navigator.online==true) cache.update();},100
 <script type="text/javascript">var FTAdch = "NP_Home";</script>
 <script type="text/javascript">
 {{googleanalytics}}
-ga('create', 'UA-1608715-1');ga('require', 'displayfeatures');
-// ga('require', 'ecommerce');
+</script>
+<script type="text/javascript">
+var userIdForGA = GetCookie('USER_ID');
+if (userIdForGA !== null) {
+	ga('create', 'UA-1608715-1', 'auto', {userId: userIdForGA});
+} else {
+	ga('create', 'UA-1608715-1', 'auto');
+}
+ga('require', 'displayfeatures');
 ga('require', 'ec');
 var deviceName;
 if (/ipad/i.test(uaForMail)) {
