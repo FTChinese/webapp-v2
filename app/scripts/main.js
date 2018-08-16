@@ -1,5 +1,6 @@
 //申明各种Global变量
-var _currentVersion = 1328; //当前的版本号
+
+var _currentVersion = 1336; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -404,9 +405,10 @@ function startpage() {
             var iapTitle = $(this).attr('iap-title')|| 'FT中文网';
             var dataObj = payWallUpdateSub('/index.php/jsapi/paywall?3',iapAction,iapTitle);
             ga('send', 'event', 'Android Privileges','Tap', window.gSubscriptionEventLabel);
-
+            
             productImpression();
-            addPromotion(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
+            onPromoClick(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
+           
          }
     });
 
@@ -1838,7 +1840,7 @@ function displaystoryNormal(theid, language, forceTitle) {
         isStoryBeforeOneWeek = true;
         // console.log(Number(allId.last_publish_time)+604800);
     }
-
+// isFTCw为false时，就没有付费墙。当getCookie('isFTCw')为"0"时，就没有付费墙。注意getCookie('isFTCw')得到的是字符串"0"或者"1"，而不是0或者1，这样下面写的逻辑就没有问题。getCookie('isFTCw')可能为null。
 
     var isFTCw = (!getCookie('isFTCw')) ? true : Boolean(Number(getCookie('isFTCw')));
     var hasPaywall = false;
@@ -1903,7 +1905,8 @@ function displaystoryNormal(theid, language, forceTitle) {
             if (!isPremium && isEditorChoiceStory){
                 $('#storyview .storybody').html(storyimage).append(getpaywallHint());     
                 hasPaywall = true; 
-                ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
+                ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
+                addPromotion(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
             }else{
                 $('#storyview .storybody').html(storyimage).append(allId.ebody);
                 hasPaywall = false;   
@@ -1915,7 +1918,8 @@ function displaystoryNormal(theid, language, forceTitle) {
             }
             hasPaywall = true;
             
-            ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
+            ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
+            addPromotion(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
         }
 
         if(allId.whitelist && allId.whitelist === 1){
@@ -1982,7 +1986,8 @@ function displaystoryNormal(theid, language, forceTitle) {
             if (!isPremium && isEditorChoiceStory){
                 $('#storyview .storybody').html(getpaywallHint());
                 hasPaywall = true; 
-                ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
+                ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
+                addPromotion(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
             }else{
                 $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
                 hasPaywall = false;  
@@ -1992,7 +1997,8 @@ function displaystoryNormal(theid, language, forceTitle) {
                 $('#storyview .storybody').html(getpaywallHint());
             }
             hasPaywall = true;    
-            ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
+            ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
+            addPromotion(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
         }
 
         if(allId.whitelist && allId.whitelist === 1){
@@ -2030,7 +2036,8 @@ function displaystoryNormal(theid, language, forceTitle) {
             if (!isPremium && isEditorChoiceStory){
                 $('#storyview .storybody').html(storyimage).append(getpaywallHint());
                 hasPaywall = true; 
-                ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
+                ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
+                addPromotion(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
             }else{
                 $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));     
                 hasPaywall = false;  
@@ -2039,11 +2046,13 @@ function displaystoryNormal(theid, language, forceTitle) {
             if (allId.paywall === 1) {
                 $('#storyview .storybody').html(storyimage).append(getpaywallHint());  
                 hasPaywall = true;
-                ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
+                ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
+                addPromotion(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
             } else {
                 if(isStoryBeforeOneWeek){
                     $('#storyview .storybody').html(storyimage).append(getpaywallHint());
-                    ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
+                    ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
+                    addPromotion(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
                     hasPaywall = true;
                 }else{
                     $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));
@@ -3458,6 +3467,7 @@ function login(fromwhere) {
             $('#logincomment, #logincommentc, #nologincomment, #nologincommentc, .logged, .notLogged').hide();
             $('#nick_name,.user_id,.user_Name').val(u).html(u);
             $('#logincomment, #logincommentc, .logged').show();
+            $('.password').val(p).html(p);
             // $('#loginButton').removeClass("blue");
             $('#setting').find('.standalonebutton').eq(0).find('button').html('登出');
             username = u;
@@ -3478,20 +3488,19 @@ function login(fromwhere) {
 }
 
 function logout() {
+    // alert('1:'+document.cookie);
     var thed = (new Date()).getTime();
     $('.logged .statusmsg').html('正在登出...');
     $.get('/index.php/users/logout?' + thed, function(data) {
         isReqSuccess = false;
         payWall('/index.php/jsapi/paywall?logout'+ thed); 
         deleteCookie('isFTCw');
-        // deleteCookie('USER_ID');
-        // deleteCookie('USER_KV');
-        // deleteCookie('USER_NAME');
         $('#logincomment,#nologincomment, .logged, .notLogged').hide();
         $('#nologincomment,.notLogged').show();
         username = '';
         closeOverlay();
         $('#setting').find('.standalonebutton').eq(0).find('button').html('登录');
+        // alert('2:'+document.cookie);
     });
 }
 
@@ -3610,7 +3619,8 @@ function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFra
             $('#slideShow').html('<div id="bookstart" class=opening style="opacity: 0.9;"><span><div  style="text-align: center;font-size: 1.2em;padding: 20px 0px;">成为付费会员，阅读FT独家内容<br>请<a style="color:#26747a" iap-action="membership" class="iap-channel" iap-title="会员">点击此处</a> 。</div>  <p class=booklead id="loadstatus" style="font-size: 2em;">触摸<b onclick="closeOverlay()">此处</b>返回</p>  </span></div>');
 
             window.gSubscriptionEventLabel = getEventLabelFromUrl(url);
-            ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
+            ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
+            addPromotion(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
         }else{
 
             $('#slideShow').html('<div id="bookstart" class=opening><span><font id="bookname" style="font-size:2em;">'+ slideTitle + '</font><p class=booklead id="booklead">获取内容...</p><p class=booklead id="loadstatus">触摸<b onclick="closeOverlay()">此处</b>返回</p></span></div>');

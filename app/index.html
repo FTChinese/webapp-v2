@@ -94,13 +94,12 @@ window.columnFlowKeyWords = 'lifestyle,technology,managment,business,china,中�
 <link rel="stylesheet" href="styles/main.css">
 <!-- endbuild -->
 
-<!-- DB Ad Head-->
-    <script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>
-    <script>
-        var googletag = googletag || {};
-        googletag.cmd = googletag.cmd || [];
-    </script>
-<!-- End DB Ad Head-->
+<!-- DB Ad Head
+<script src="https://www.ft.com/__origami/service/build/v2/bundles/js?modules=o-ads@8.3.0"></script>
+ <script src='https://www.googletagservices.com/tag/js/gpt.js'></script>
+ <script id="adConfig" type="application/json" data-o-ads-config="">{"gpt":{"network":80682004,"site":"ftchinese","zone":"home"},"formats":{"FtcMobileBanner":{"sizes":[[414,104]]},"FtcMpu":{"sizes":[[300,250],[300,600]]},"FtcInfoFlow":{"sizes":[[400,300]]},"FtcMobileFullscreen":{"sizes":[[414,736]]}}}</script>
+
+End DB Ad Head-->
 </head>
 
 <body class=fullbody>
@@ -155,6 +154,9 @@ window.columnFlowKeyWords = 'lifestyle,technology,managment,business,china,中�
 </ul>
 </div>
 </div>
+<!--
+<div class="o-ads o-ads--center" data-o-ads-name="banner1-ad-0" data-o-ads-center="true" data-o-ads-formats-small="FtcMobileBanner" data-o-ads-formats-medium="false" data-o-ads-formats-large="false" data-o-ads-targeting="pos=top1;"></div>
+-->
 
 <div id="homecontent"></div>
 <div id="o-connection-status"></div>
@@ -388,7 +390,7 @@ window.columnFlowKeyWords = 'lifestyle,technology,managment,business,china,中�
 <strong>字号大小</strong>                   
 </div>
 <div class="standalonebutton"><button class="ui-light-btn" onclick="turnonOverlay('loginBox')">登录</button></div>
-<div class="standalonebutton" id="vip-center-btn"><button class="ui-light-btn" onclick="turnonOverlay('vip-center')">会员中心</button></div>
+<div class="standalonebutton" id="vip-center-btn"><button class="ui-light-btn">会员中心</button></div>
 <!--<div class="standalonebutton" id="pay-success-btn"><button class="ui-light-btn">测试付费</button></div>-->
 <div class="standalonebutton"><button class="ui-light-btn channel" url="/index.php/ft/channel/phonetemplate.html?channel=myftsetup">设置我的<font class=english>FT</font></button></div>                                
 <div class="standalonebutton nativeButton"><a href="https://itunes.apple.com/cn/app/ft-zhong-wen-wang-zhi-neng/id443870811?mt=8" target=_blank><button class="ui-light-btn">到<span class=english>App Store</span>上推荐这个应用</button></a></div>
@@ -973,12 +975,12 @@ fa('create','UA-XXXX-Y',{'alwaysSendReferrer':true});fa('send','pageview');
 <script src="../bower_components/ftcolumnflow/src/FTColumnflow.js"></script>
 <script type="text/javascript" src="scripts/autoPrefix.js"></script>
 <script type="text/javascript" src="scripts/swipe.js"></script>
-<script type="text/javascript" src="scripts/sociallogin.js"></script>
 <script type="text/javascript" src="../bower_components/ftcnext/app/scripts/ad-third-party.js"></script>
 <script type="text/javascript" src="scripts/emmerceTrack.js"></script>
 <script type="text/javascript" src="scripts/trackadview.js"></script>
 <script type="text/javascript" src="scripts/main.js"></script>
 <script type="text/javascript" src="scripts/iap.js"></script>
+<script type="text/javascript" src="scripts/sociallogin.js"></script>
 <script type="text/javascript" src="scripts/listen.js"></script>
 <script type="text/javascript" src="scripts/audio.js"></script>
 <!-- endbuild -->

@@ -10,7 +10,7 @@ function getOrderNum(memberNum){
     return orderNum;
 }
 
-window.iapProducts = [{title: '标准会员',price: '¥198.00',id: 'ftc_standard',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为标准会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 精选深度分析','- 中英双语内容','- 金融英语速读训练','- 英语原声电台','- 无限浏览7日前所有历史文章（近8万篇）'],period:'year'},{title: '高端会员',price: '¥1,998.00',id: 'ftc_premium',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为高端会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 享受“标准会员”所有权益','- 编辑精选，总编/各版块主编每周五为您推荐本周必读资讯，分享他们的思考与观点','- FT中文网2018年度论坛门票2张，价值3999元/张 （不含差旅与食宿）'],period:'year'}];
+window.iapProducts = [{title: '标准会员',price: '¥198.00',id: 'ftc_standard',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为标准会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 专享订阅内容每日仅需0.5元','- 精选深度分析','- 中英双语内容','- 金融英语速读训练','- 英语原声电台','- 无限浏览7日前所有历史文章（近8万篇）'],period:'year'},{title: '高端会员',price: '¥1,998.00',id: 'ftc_premium',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为高端会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 专享订阅内容每日仅需5.5元','- 享受“标准会员”所有权益','- 编辑精选，总编/各版块主编每周五为您推荐本周必读资讯，分享他们的思考与观点','- 2018年8月26日前开通会员，可获得：FT中文网2018年度论坛门票2张，价值3999元/张 （不含差旅与食宿）','- 2018年8月26日后开通会员，可获得：FT中文网2019年度论坛门票2张','- 注：所有活动门票不可折算现金、不能转让、门票不含差旅与食宿'],period:'year'}];
 
 var subscribeIntruction = {
     title: '订阅说明与注意事项',
@@ -277,7 +277,7 @@ function iapActions(productID, actionType, expireDate) {
 
     // MARK: - Send Event to GA and Other Analytics
     var eventAction = 'Buy ' + actionType + ': ' + productID;
-    ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel);
+    ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
     // FIXME: Is this useful? 
     actionType = '';
 
@@ -315,7 +315,7 @@ function getBuyCode(productId, productPrice, userId, productName, orderNum){
             productPrice =  productPrice.substr(1,productPrice.length);
         }
         productPrice =  productPrice.replace(',','');
-
+        // productPrice =  '0.01';
         if(osVersion.indexOf('Android')>=0){
             try {
                 if(ftjavacriptapp){                  
@@ -337,7 +337,7 @@ function getBuyCode(productId, productPrice, userId, productName, orderNum){
     }
 
     onProductClick(productIdStr,productPosition) ;
-    onPromoClick(window.gSubscriptionEventLabel,productIdStr);
+
 }
 
 
@@ -378,6 +378,13 @@ function isShowVipCenter(){
         vipCenterBtn.style.display = 'block';
     }
 }
+
+$('body').on('click', '#vip-center-btn', function(){
+    turnonOverlay('vip-center');
+    payWall('/index.php/jsapi/paywall?vipcenter');   
+    // vipCenter(parsedDataForCenter);
+});
+
 
 //MARK: - 交易失败时，显示的页面
 $('body').on('click', '#iap-know', function(){
@@ -496,6 +503,7 @@ function timestampToTime(timestamp) {
 }
 
 function vipCenter(dataObj){
+
     var formatTime = '';
     if(dataObj.expire){
         var time = dataObj.expire;
@@ -510,6 +518,10 @@ function vipCenter(dataObj){
         vipTypeId.innerHTML = '高端会员';
         warmPrompt.innerHTML = '您的会员截止至<span style="color:#26747a">'+formatTime+'</span>';
     }else{
+        vipTypeId.innerHTML = '未付费注册用户';
+        warmPrompt.innerHTML = '成为付费会员，阅读FT独家内容，请<a href="#" style="color:#26747a">成为会员</a>';
+    }
+    if(isEmptyObj(dataObj)){
         vipTypeId.innerHTML = '未付费注册用户';
         warmPrompt.innerHTML = '成为付费会员，阅读FT独家内容，请<a href="#" style="color:#26747a">成为会员</a>';
     }
@@ -598,9 +610,8 @@ function updatePageAction(){
         payWall('api/paywall.json');
     }else{
         var userId1 = getCookie('USER_ID') || '';
-        if (!!userId1) { 
-            vipCenter(dataObj); 
-            payWall('/index.php/jsapi/paywall?update');   
+        if (!!userId1) {   
+            payWall('/index.php/jsapi/paywall?update');       
         }else{
             setCookie('isFTCw', 1, '', '/');
         }
@@ -628,12 +639,12 @@ function getSystemVersion(){
 getSystemVersion();
 
 $('#setHelp').unbind().bind('click', function() {
-    // var userId = getCookie('USER_ID') || '';
+    var userId = getCookie('USER_ID') || '';
     // isReqSuccess = false;
     // payWall('/index.php/jsapi/paywall?test');
     // alert(JSON.stringify(testObj));
     // alert(userId);
-
+    // alert(getCookie('isFTCw'));
     payWay='alipay';
     var productName = '高端会员'; 
     var memberNum = (productName == '高端会员') ? '100' : '010';
@@ -731,7 +742,7 @@ $('body').on('click', '#to-pay', function(){
 //         turnonOverlay('loginBox');  
 //     }
 //  onProductClick(productName,productPosition) ;
-//  onPromoClick(window.gSubscriptionEventLabel,productName);
+
 // });
 
 
@@ -877,7 +888,7 @@ function payFinishAction(productID, actionType){
 
     // MARK: - Send Event to GA and Other Analytics
     var eventAction = 'Buy ' + actionType + ': ' + productID;
-    ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel);
+    ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
     // ecommerceTrack(tradeNum,window.gSubscriptionEventLabel,productPrice.substring(1),productID);
 
     addTransaction(tradeNum, productID, productPrice.substring(1), window.gSubscriptionEventLabel);

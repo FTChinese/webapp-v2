@@ -19,17 +19,20 @@ video::-webkit-media-controls-panel {width: calc(100% + 30px);}
 </style>
 <script>
      //获取url参数 --wyc Add
-    var gSearchVars = {};
-    var searchStr = window.location.search;
-    for (var index = 0, searchStrArr = searchStr.substr(1).split("&"); index < searchStrArr.length; index++) {
-        var oneKeyValueArr = searchStrArr[index].split("=");
-        gSearchVars[oneKeyValueArr[0]] = oneKeyValueArr.length > 1 ? oneKeyValueArr[1] : "";
-    }
+    var gSearchVars = getSearchVars();
     //console.log(gSearchVars);
 
     var gUserType = window.parent.gUserType || 'visitor';
 
-    
+    function getSearchVars() {
+        var searchVars = {};
+        var searchStr = window.location.search;
+        for (var index = 0, searchStrArr = searchStr.substr(1).split('&'); index < searchStrArr.length; index++) {
+            var oneKeyValueArr = searchStrArr[index].split('=');
+            searchVars[oneKeyValueArr[0]] = oneKeyValueArr.length > 1 ? oneKeyValueArr[1] : '';
+        }
+        return searchVars;
+    }
     function GetCookie(name){
         var start = document.cookie.indexOf(name+"="),
             len = start+name.length+1,
@@ -164,7 +167,7 @@ video::-webkit-media-controls-panel {width: calc(100% + 30px);}
         }
     }
 
-    // for newdb
+    // for newdb:get zone
     if (gSpecialPageId) {
         zone = 'home/special/'+ gSpecialPageId;
     } else {
@@ -303,9 +306,7 @@ video::-webkit-media-controls-panel {width: calc(100% + 30px);}
         }
     }
 
-
-
-    //New Ad Add: 旧的逻辑中Pad和Phone的两个mpu是同样的两个位置，但新逻辑中Phone的mpu是MPU-Middle1和MPU-Middle2(即0401和0402),pad中的mpu是MPU-Right1和MPU-Right2(即0411和0412)
+    //旧的逻辑中Pad和Phone的两个mpu是同样的两个位置，但新逻辑中Phone的mpu是MPU-Middle1和MPU-Middle2(即0401和0402),pad中的mpu是MPU-Right1和MPU-Right2(即0411和0412)
     if(deviceId=="6000") {
         if(adPatternId=="0401") {
             adPatternId="0411";
@@ -315,15 +316,7 @@ video::-webkit-media-controls-panel {width: calc(100% + 30px);}
             adPattern = "MPU-Right2";
         }
     }
-    
-    // for newdb
-    if (deviceType == 'PadApp') {
-        if (pos == 'middle1') {
-            pos = 'right1';
-        } else if (pos == 'middle2') {
-            pos = 'right2';
-        }
-    }
+     
 
     if(gSpecialAdId) {
         adchannelId = gSpecialAdId;
@@ -331,94 +324,13 @@ video::-webkit-media-controls-panel {width: calc(100% + 30px);}
     c = deviceId + adchannelId + adPatternId;
     //console.log('computed c:',c);
     var adName = 'db-'+ c;
-    var deviceWidth = window.parent.innerWidth || window.parent.document.documentElement.clientWidth || window.parent.document.body.clientWidth;
-    var bannerW = deviceWidth;
-    var bannerH = Math.round(bannerW/4);
-    /*
-    var adSizeArr;
-    if(adPattern === 'Banner-Num1' || adPattern === 'Banner-Num2') {
-        adSizeArr = [[bannerW,bannerH],[414, 104]];
-    } else if (adPattern === 'MPU-Middle1' || adPattern === 'MPU-Middle2' ||adPattern === 'MPU-Right1' || adPattern === 'MPU-Right2' ) {
-        adSizeArr = [[300, 250]];
-    } else if (adPattern === 'Information-Num1' || adPattern === 'Information-Num2') {
-        adSizeArr = [[480, 320]];
-    } else {
-        adSizeArr = [];
-    }
-    */
-    // for newdb
-    if (gSearchVars && gSearchVars.newdb === 'yes') {
-        var adFormats = { 
-            "FtcMobileBanner": [[414, 104]],
-            "FtcMpu":[[300, 250], [300, 600]],
-            "FtcInfoFlow":[[400, 300]],
-            "FtcMobileFullscreen":[[414, 736]]
-        }
-
-        switch(pos) {
-            case 'top1':
-                format = adFormats.FtcMobileBanner;
-                name = 'banner1';
-                break;
-            case 'top2':
-                format = adFormats.FtcMobileBanner;
-                name = 'banner2';
-                break;
-            case 'middle1':
-                format = adFormats.FtcMpu;
-                name = 'mpu-middle1';
-                break;
-            case 'middle2':
-                format = adFormats.FtcMpu;
-                name = 'mpu-middle2';
-                break;
-            case 'right1':
-                format = adFormats.FtcMpu;
-                name = 'mpu-right1';
-                break;
-            case 'right2':
-                format = adFormats.FtcMpu;
-                name = 'mpu-right2';
-                break;
-            case 'info1':
-                format = adFormats.FtcInfoFlow;
-                name = 'infoflow1';
-                break;
-            case 'info2':
-                format = adFormats.FtcInfoFlow;
-                name = 'infoflow2';
-                break;
-            case 'fullscreen':
-                format = adFormats.FtcMobileFullscreen;
-                name = 'fullscreen-mobile';
-                break;
-            default:
-                format = adFormats.FtcMobileBanner;
-                name = 'banner1';
-                
-        }
-    }
- 
-</script>
-<script src="https://www.ft.com/__origami/service/build/v2/bundles/js?modules=o-ads@8.3.0"></script>
- <script src='https://www.googletagservices.com/tag/js/gpt.js'></script>
-<script>
-    
-    if (gSearchVars && gSearchVars.newdb === 'yes') {
-        googletag.cmd.push(function() {
-            googletag.defineSlot('/80682004/ftchinese/' + zone, format , name). addService(googletag.pubads())
-            googletag.pubads().enableSingleRequest();
-            googletag.pubads().enableSyncRendering();
-            googletag.pubads().setTargeting('pos',[pos]);
-            googletag.enableServices();
-        });
-    }
 
 </script>
 
 </head>
 
 <body style="background-color:#f7e8d7;">
+
 <script>
 
 
@@ -429,14 +341,9 @@ if (c == '400050480302') {
 }
 
 var dolphineInlineScript = '';
-if (gSearchVars && gSearchVars.newdb === 'yes') {
-    if(deviceId == "6000" && adType === 'mpu') {//MARK:当既是PadApp又是MPU时就是6000xxxx04xx
-        document.body.style.backgroundColor = '#f6e9d8';
-    }
-    var dolphineInlineScript = '<div id="'+ name + '"style="padding-top:0;"><scr' + 'ipt>googletag.cmd.push(function() { googletag.display("' + name + '")})</scr' + 'ipt></div>';
-} else {
-    dolphineInlineScript = '<div class="'+adType+'" id="ad-content"><scr'+'ipt type="text/javascript" src="http://dualstack.adsame-1421766300.ap-southeast-1.elb.amazonaws.com/s?z=ft&c=' + c + adReachability() + slotString + '&t='+Math.round(Math.random() * 1000000)+'" charset="gbk" onerror="removeAd()" onload="loaded()"></scr'+'ipt><div id="ad-bottom"></div></div>';
-}
+
+
+dolphineInlineScript = '<div class="'+adType+'" id="ad-content"><scr'+'ipt type="text/javascript" src="http://dualstack.adsame-1421766300.ap-southeast-1.elb.amazonaws.com/s?z=ft&c=' + c + adReachability() + slotString + '&t='+Math.round(Math.random() * 1000000)+'" charset="gbk" onerror="removeAd()" onload="loaded()"></scr'+'ipt><div id="ad-bottom"></div></div>';
 
 
 
@@ -479,7 +386,6 @@ try {
 
 }
 </script>
-
 
 
 <script>
@@ -734,5 +640,6 @@ function controlVideoPlayback(container) {
 
 controlVideoPlayback(document.getElementById('ad-content'));
 </script>
+
 </body>
 </html>

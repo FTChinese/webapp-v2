@@ -12,6 +12,9 @@ function socialLogin(socialName, socialInfo) {
                 // show this in the interface so that users know login is successful
                 username = getCookie('USER_NAME') || '';
                 checkLogin();
+                isLoginReq = true;
+                isReqSuccess = false;
+                payWall('/index.php/jsapi/paywall?sociallogin'+ (new Date()).getTime());
             // print the result for review
             $('#yourDevice .overlay-header p').html('登录成功');
             $('#yourDevice .padding').html('亲爱的用户，您已经成功登录。');
@@ -46,7 +49,7 @@ function weixinLogin(){
 
 
 if(typeof ftjavacriptapp == 'object'){  
-    if(ftjavacriptapp.weixlogin){   
+    if(typeof ftjavacriptapp.weixlogin == 'function'){   
         $('.weiXinLogin').show();
     }else{
         $('.weiXinLogin').hide();

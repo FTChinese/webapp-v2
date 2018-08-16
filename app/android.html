@@ -89,13 +89,7 @@ function commonProblem() {
 <style>
 {{cssbundle}}
 </style>
-<!-- DB Ad Head-->
-<script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>
-<script>
-    var googletag = googletag || {};
-    googletag.cmd = googletag.cmd || [];
-</script>
-<!-- End DB Ad Head-->
+
 </head>
 
 <body class=fullbody>
@@ -339,7 +333,7 @@ function commonProblem() {
 <div class=inner>
 <div class=cell>
 <div class=settingbox>
-<div class=overlay-header onclick="weixinLogin()">
+<div class=overlay-header>
 <div class="nutmeg-content_right rightmargin"><button onclick="closeOverlay()" class="overlay_close-btn" aria-label="Settings"></button></div>
 设置与帮助
 </div>
@@ -358,7 +352,7 @@ function commonProblem() {
 <strong>字号大小</strong>                   
 </div>
 <div class="standalonebutton"><button class="ui-light-btn" onclick="turnonOverlay('loginBox')">登录</button></div>
-<div class="standalonebutton" id="vip-center-btn"><button class="ui-light-btn" onclick="turnonOverlay('vip-center')">会员中心</button></div>
+<div class="standalonebutton" id="vip-center-btn"><button class="ui-light-btn" >会员中心</button></div>
 <!--<div class="standalonebutton" id="pay-success-btn"><button class="ui-light-btn">测试付费</button></div>-->
 <div class="standalonebutton"><button class="ui-light-btn channel" url="/index.php/ft/channel/phonetemplate.html?channel=myftsetup">设置我的<font class=english>FT</font></button></div>                                
 <div class="standalonebutton nativeButton"><a href="https://itunes.apple.com/cn/app/ft-zhong-wen-wang-zhi-neng/id443870811?mt=8" target=_blank><button class="ui-light-btn">到<span class=english>App Store</span>上推荐这个应用</button></a></div>
@@ -546,7 +540,7 @@ function commonProblem() {
 <div>用户名/电子邮件</div>
 <input type="text"  autocorrect="off" name="username" id="username" class="user_id textinput"/>
 <div>密码</div>
-<input type="password" name="password"  class="user_id textinput password" id="password"/>
+<input type="password" name="password"  class="textinput password" id="password"/>
 <div class="centerButton"><input type="submit" value="登录" class="comment_btn submitbutton button ui-light-btn" onclick="login()"/></div>
 <div class="statusmsg"></div>
 <div class="centerButton"><button class="ui-light-btn" onclick='register()'>免费注册</button></div>
