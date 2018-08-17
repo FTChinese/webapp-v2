@@ -32,8 +32,8 @@ var category = 'membership';
 // 放入订阅页面
 function productImpression(){ 
     ga('ec:addImpression', { // Provide product details in an impressionFieldObject
-    'id': 'Standard',                   // Product ID (string).
-    'name': 'Standard',  // Product name (string)
+    'id': 'ftc_standard',                   // Product ID (string).
+    'name': 'ftc_standard',  // Product name (string)
     'category': category,  // Product category (string)
     'brand': 'FTC',    // Product brand (string)
     'list': listName,   // Product list (string)
@@ -41,8 +41,8 @@ function productImpression(){
     });
 
     ga('ec:addImpression', {
-    'id': 'Premium',
-    'name': 'Premium',
+    'id': 'ftc_premium',
+    'name': 'ftc_premium',
     'category': category,
     'brand': 'FTC',
     'list': listName,
@@ -56,15 +56,15 @@ function productImpression(){
 
 function addProduct(){
     ga('ec:addProduct', {     // Provide product details in a productFieldObject.
-    'id': 'Standard',                   // Product ID (string).
-    'name': 'Standard', // Product name (string).
+    'id': 'ftc_standard',                   // Product ID (string).
+    'name': 'ftc_standard', // Product name (string).
     'category': listName,            // Product category (string).
     'brand': 'FTC',                // Product brand (string).
     'position': 1                    // Product position (number).
     });
     ga('ec:addProduct', {     // Provide product details in a productFieldObject.
-    'id': 'Premium',                   // Product ID (string).
-    'name': 'Premium', // Product name (string).
+    'id': 'ftc_premium',                   // Product ID (string).
+    'name': 'ftc_premium', // Product name (string).
     'category': listName,            // Product category (string).
     'brand': 'FTC',                // Product brand (string).
     'position': 2                    // Product position (number).
