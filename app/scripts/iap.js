@@ -725,7 +725,8 @@ $('body').on('click', '.iap-button', function(){
      payWrapData['orderNum'] =  orderNum;
      
      $('#to-pay-price').html($(this).attr('product-price')+'/年');
-
+     $('.payment-member-type').html(productName);
+     
     var userId = getCookie('USER_ID');
     if (!!userId){
         var iapBtnHtml= $(this).find('.iap-move-left').html();

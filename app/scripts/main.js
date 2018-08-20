@@ -1,6 +1,6 @@
 //申明各种Global变量
 
-var _currentVersion = 1341; //当前的版本号
+var _currentVersion = 1342; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
