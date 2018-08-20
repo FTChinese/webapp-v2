@@ -423,7 +423,7 @@ function commonProblem() {
                 <div id="payment-box" class="">
                     <div class="payment-way">
                         <div class="payment-name">
-                            <span>会员类型：</span><span class="payment-type"><strong>标准会员</strong></span></div>
+                            <span>会员类型：</span><span class="payment-type"><strong class="payment-member-type">标准会员</strong></span></div>
                             <div class="payment-method">
                                 <div class="one-way-container">
                                     <label id="pay-ali" for="payWay"></label><input name="payWay" type="radio" value="alipay"/>
@@ -810,8 +810,31 @@ setTimeout(function() { if(cache && navigator.online==true) cache.update();},100
 <script type="text/javascript">var FTAdch = "NP_Home";</script>
 <script type="text/javascript">
 {{googleanalytics}}
-ga('create', 'UA-1608715-1');ga('require', 'displayfeatures');
-// ga('require', 'ecommerce');
+</script>
+<script type="text/javascript">
+
+function getCookie(name){
+    var start,len,end;
+    try {
+        start = document.cookie.indexOf(name+'=');
+        if (start == -1) {return null;}
+        len = start + name.length + 1;
+        end = document.cookie.indexOf(';', len);
+        if (end == -1) {end = document.cookie.length;}
+        return decodeURIComponent(document.cookie.substring(len, end));
+    } catch (err) {
+        trackErr(err, 'setCookie');
+        return '';
+    }
+}
+
+var userIdForGA = getCookie('USER_ID');
+if (userIdForGA !== null) {
+	ga('create', 'UA-1608715-1', 'auto', {userId: userIdForGA});
+} else {
+	ga('create', 'UA-1608715-1', 'auto');
+}
+ga('require', 'displayfeatures');
 ga('require', 'ec');
 var deviceName;
 if (/ipad/i.test(uaForMail)) {

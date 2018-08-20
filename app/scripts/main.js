@@ -1,5 +1,10 @@
 //申明各种Global变量
+<<<<<<< HEAD
 var _currentVersion = 1335; //当前的版本号
+=======
+
+var _currentVersion = 1342; //当前的版本号
+>>>>>>> f7278b1924bd1d3b74f2f547cf805e574f1edefe
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -254,26 +259,31 @@ function pauseAllVideos() {
         videosAtTop[i].pause();
     }
 }
+
+function payWallUpdateSub(url,iapAction,iapTitle){
+    var xhrpw = new XMLHttpRequest();
+    xhrpw.open('get', url);
+    xhrpw.setRequestHeader('Content-Type', 'application/text');
+    xhrpw.setRequestHeader('If-Modified-Since', '0'); 
+    xhrpw.setRequestHeader('Cache-Control','no-cache'); 
+    xhrpw.onload = function() {
+        if (xhrpw.status === 200) {  
+            var data = xhrpw.responseText;
+            var parsedData = JSON.parse(data); 
+            if (iapAction) {
+                displayProducts(window.iapProducts, iapAction, iapTitle, parsedData);
+            }
+        } else{
+            alert('请求失败！');
+        }
+    };
+    xhrpw.send(null);
+}
+
 //Start the App
 function startpage() {
 
-    function payWallUpdateSub(url,iapAction,iapTitle){
-        var xhrpw = new XMLHttpRequest();
-        xhrpw.open('get', url);
-        xhrpw.setRequestHeader('Content-Type', 'application/text');
-        xhrpw.onload = function() {
-            if (xhrpw.status === 200) {  
-                var data = xhrpw.responseText;
-                var parsedData = JSON.parse(data); 
-                if (iapAction) {
-                    displayProducts(window.iapProducts, iapAction, iapTitle, parsedData);
-                }
-            } else{
-                alert('请求失败！');
-            }
-        };
-        xhrpw.send(null);
-    }
+
 
     var savedhomepage;
     console.log('start page');

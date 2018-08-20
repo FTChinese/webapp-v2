@@ -10,7 +10,7 @@ function getOrderNum(memberNum){
     return orderNum;
 }
 
-window.iapProducts = [{title: '标准会员',price: '¥198.00',id: 'ftc_standard',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为标准会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 专享订阅内容每日仅需0.5元','- 精选深度分析','- 中英双语内容','- 金融英语速读训练','- 英语原声电台','- 无限浏览7日前所有历史文章（近8万篇）'],period:'year'},{title: '高端会员',price: '¥1,998.00',id: 'ftc_premium',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为高端会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 专享订阅内容每日仅需5.5元','- 享受“标准会员”所有权益','- 编辑精选，总编/各版块主编每周五为您推荐本周必读资讯，分享他们的思考与观点','- 2018年8月26日前开通会员，可获得：FT中文网2018年度论坛门票2张，价值3999元/张 （不含差旅与食宿）','- 2018年8月26日后开通会员，可获得：FT中文网2019年度论坛门票两张（活动门票不可折算现金、不能转让、门票不含差旅与食宿）。'],period:'year'}];
+window.iapProducts = [{title: '标准会员',price: '¥198.00',id: 'ftc_standard',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为标准会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 专享订阅内容每日仅需0.5元','- 精选深度分析','- 中英双语内容','- 金融英语速读训练','- 英语原声电台','- 无限浏览7日前所有历史文章（近8万篇）'],period:'year'},{title: '高端会员',price: '¥1,998.00',id: 'ftc_premium',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为高端会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 专享订阅内容每日仅需5.5元','- 享受“标准会员”所有权益','- 编辑精选，总编/各版块主编每周五为您推荐本周必读资讯，分享他们的思考与观点','- 2018年8月26日前开通会员，可获得：FT中文网2018年度论坛门票2张，价值3999元/张 （不含差旅与食宿）','- 2018年8月26日后开通会员，可获得：FT中文网2019年度论坛门票2张','- 注：所有活动门票不可折算现金、不能转让、门票不含差旅与食宿'],period:'year'}];
 
 var subscribeIntruction = {
     title: '订阅说明与注意事项',
@@ -99,7 +99,9 @@ function getProductHTMLCode(products, forGroup, dataObj) {
                 if(dataObj.standard===1 && dataObj.premium===0){
                     products[0].isPurchased = true;
                     products[0].state = '<button class="iap-move-left">已订阅</button><p class="iap-teaser">' + products[i].price + '/年' + '</p>';
-                    products[1].state = '<a onclick="getBuyCode(\''+ products[1].id +'\',\''+ dataObj.v +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ orderNum +'\')"><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">¥' + dataObj.v + '.00/年' + '</p>';
+                    // products[1].state = '<a onclick="getBuyCode(\''+ products[1].id +'\',\''+ dataObj.v +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ orderNum +'\')"><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">¥' + dataObj.v + '.00/年' + '</p>';
+
+                    products[1].state = '<a><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">¥' + dataObj.v + '.00/年' + '</p>';
                     upgradePrice = dataObj.v;
                 }else if(dataObj.premium===1){
                     products[i].isPurchased = true;
@@ -107,8 +109,11 @@ function getProductHTMLCode(products, forGroup, dataObj) {
                 }else{
                     products[i].isPurchased = false;
       
-                    products[i].state = '<a onclick="getBuyCode(\''+ products[i].id +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ orderNum +'\')"><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + products[i].price + '/年' + '</p>';
+                    // products[i].state = '<a onclick="getBuyCode(\''+ products[i].id +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ orderNum +'\')"><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + products[i].price + '/年' + '</p>';
+
+                    products[i].state = '<a><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + products[i].price + '/年' + '</p>';
                     upgradePrice = '¥1,998.00';
+                    
 
                 }
                 if(!isEmptyObj(dataObj)){
@@ -194,7 +199,6 @@ function updateProductStatus(productIndex, isProductPurchased, isProductDownload
 
 
 
-// iapActions('FT0101231522033086', 'fail', '');
 // MARK: - Update DOM UI based on user actions
 function iapActions(productID, actionType, expireDate) { 
     var gUserId = getCookie('USER_ID');   
@@ -245,11 +249,15 @@ function iapActions(productID, actionType, expireDate) {
         case 'fail':
             if (productType === 'membership') {  
                 turnonOverlay('iap-hint');
-                var isFTCpw = Boolean(Number(getCookie('isFTCw')));
+                var isFTCpw = (!getCookie('isFTCw')) ? true : Boolean(Number(getCookie('isFTCw')));
+                // var isFTCpw = Boolean(Number(getCookie('isFTCw')));
                 if(!isPremium && !isFTCpw){
-                    iapHTMLCode = '<a onclick="getBuyCode(\''+ productID +'\',\''+ upgradePrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ tradeNum +'\')"><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">' + upgradePrice + '/年' + '</p>';  
+                    // iapHTMLCode = '<a onclick="getBuyCode(\''+ productID +'\',\''+ upgradePrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ tradeNum +'\')"><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">' + upgradePrice + '/年' + '</p>';  
+                    iapHTMLCode = '<a><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">' + upgradePrice + '/年' + '</p>';  
+
                 }else{
-                    iapHTMLCode = '<a onclick="getBuyCode(\''+ productID +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ tradeNum +'\')"><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>';
+                    // iapHTMLCode = '<a onclick="getBuyCode(\''+ productID +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ tradeNum +'\')"><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>';
+                    iapHTMLCode = '<a><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>';
                 }            
             } 
             updateProductStatus(productIndex, false, false); 
@@ -257,7 +265,8 @@ function iapActions(productID, actionType, expireDate) {
         default:
             if (productType === 'membership') {  
                 turnonOverlay('iap-hint');
-                iapHTMLCode = '<a onclick="getBuyCode(\''+ productID +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ tradeNum +'\')"><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>'; 
+                // iapHTMLCode = '<a onclick="getBuyCode(\''+ productID +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ tradeNum +'\')"><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>'; 
+                iapHTMLCode = '<a><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>'; 
             } 
             updateProductStatus(productIndex, false, false); 
             break;
@@ -281,7 +290,6 @@ function iapActions(productID, actionType, expireDate) {
     // FIXME: Is this useful? 
     actionType = '';
 
-    // ecommerceTrack(tradeNum,window.gSubscriptionEventLabel,productPrice.substring(1),productID);
     addTransaction(tradeNum, productID, productPrice.substring(1), window.gSubscriptionEventLabel);
 }
 
@@ -382,7 +390,6 @@ function isShowVipCenter(){
 $('body').on('click', '#vip-center-btn', function(){
     turnonOverlay('vip-center');
     payWall('/index.php/jsapi/paywall?vipcenter');   
-    // vipCenter(parsedDataForCenter);
 });
 
 
@@ -639,12 +646,7 @@ function getSystemVersion(){
 getSystemVersion();
 
 $('#setHelp').unbind().bind('click', function() {
-    var userId = getCookie('USER_ID') || '';
-    isReqSuccess = false;
-    payWall('/index.php/jsapi/paywall?test');
-    alert(JSON.stringify(testObj));
-    alert(userId);
-    alert(getCookie('isFTCw'));
+    // var userId = getCookie('USER_ID') || '';
     // payWay='alipay';
     // var productName = '高端会员'; 
     // var memberNum = (productName == '高端会员') ? '100' : '010';
@@ -663,8 +665,6 @@ $('#setHelp').unbind().bind('click', function() {
 });
 
 $('#testHelp').unbind().bind('click', function() {
-    // alert(testVar);
-    // alert(JSON.stringify(testObj));
     payWay='wxpay';
     var productName = '高端会员'; 
     var memberNum = (productName == '高端会员') ? '100' : '010';
@@ -700,16 +700,13 @@ $('body').on('click', '#to-pay', function(){
     // var memberNum = (productName == '高端会员') ? '100' : '010';
     // var orderNum = getOrderNum(memberNum);
     // 把微信getWxBuyCode测试更新过来
+    // console.log(payWrapData);
 
     var userId = getCookie('USER_ID') || '';
     if (!!userId){
         if(payWay==='wxpay'){
-            // getWxBuyCode(payWrapData['productsId'], '0.01',userId,payWrapData['productName'],payWrapData['orderNum']);
-            // getWxBuyCode('ftc_premium', '0.01', userId, productName, orderNum);
             getWxBuyCode(payWrapData['productsId'], payWrapData['productPrice'],userId,payWrapData['productName'],payWrapData['orderNum']);
         }else if(payWay==='alipay'){
-            // getWxBuyCode(payWrapData['productsId'], '0.01',userId,payWrapData['productName'],payWrapData['orderNum']);
-            // getWxBuyCode('ftc_premium', '0.01', userId, productName, orderNum);
             getWxBuyCode(payWrapData['productsId'], payWrapData['productPrice'],userId,payWrapData['productName'],payWrapData['orderNum']);
         }
     }else{
@@ -717,33 +714,36 @@ $('body').on('click', '#to-pay', function(){
     }
 });
 
-// $('body').on('click', '.iap-button', function(){
-//      var productName = $(this).attr('product-title');
-//      var memberNum = (productName == '高端会员') ? '100' : '010';
-//      var productPosition = (memberNum === '100') ? 2 : 1;
-//      var orderNum = getOrderNum(memberNum);
-//      payWrapData['productsId'] =  $(this).attr('product-id');
-//      payWrapData['productPrice'] =  $(this).attr('product-price');
-//      payWrapData['productName'] =  productName;
-//      payWrapData['orderNum'] =  orderNum;
+$('body').on('click', '.iap-button', function(){
+     var productName = $(this).attr('product-title');
+     var memberNum = (productName == '高端会员') ? '100' : '010';
+     var productPosition = (memberNum === '100') ? 2 : 1;
+     var orderNum = getOrderNum(memberNum);
+     payWrapData['productsId'] =  $(this).attr('product-id');
+     payWrapData['productPrice'] =  $(this).attr('product-price');
+     payWrapData['productName'] =  productName;
+     payWrapData['orderNum'] =  orderNum;
      
-//      $('#to-pay-price').html($(this).attr('product-price')+'/年');
+     $('#to-pay-price').html($(this).attr('product-price')+'/年');
+     $('.payment-member-type').html(productName);
+     
+    var userId = getCookie('USER_ID');
+    if (!!userId){
+        var iapBtnHtml= $(this).find('.iap-move-left').html();
+        if(iapBtnHtml === '已订阅'){
+            alert('您已经是会员了');
+        }else{
+            turnonOverlay('pay-way');
+            onProductClick(productName,productPosition) ;
+        }
+        console.log('iapBtnHtml'+iapBtnHtml);
+    }else{
+        turnonOverlay('loginBox');  
+        onProductClick(productName,productPosition) ;
+    }
+    
 
-//     var userId = getCookie('USER_ID');
-//     if (!!userId){
-//         var iapBtnHtml= $(this).find('.iap-move-left').html();
-//         if(iapBtnHtml === '已订阅'){
-//             alert('您已经是会员了');
-//         }else{
-//             turnonOverlay('pay-way');
-//         }
-//         console.log('iapBtnHtml'+iapBtnHtml);
-//     }else{
-//         turnonOverlay('loginBox');  
-//     }
-//  onProductClick(productName,productPosition) ;
-
-// });
+});
 
 
 function getWxBuyCode(productId, productPrice, userId, productName, orderNum){ 
@@ -836,13 +836,8 @@ function payFinishAction(productID, actionType){
     }
     postProductPrice =  postProductPrice.replace(',','');
  
-    // ftc_premium ￥1,998.00 userid FT100 fail
-    alert(productID +'-1-'+'-1-'+productPrice+'-1-'+gUserId+'-:-'+tradeNum+'-:-'+actionType);
-
     postPayState(productID, postProductPrice, gUserId, tradeNum, actionType);
  
-    // postPayState(productID, productPrice, gUserId, tradeNum, actionType);
-
     switch (actionType) { 
         case 'success':
             if (productType === 'membership') {
@@ -855,7 +850,8 @@ function payFinishAction(productID, actionType){
         case 'fail':
             if (productType === 'membership') {  
                 turnonOverlay('iap-hint');
-                var isFTCpw = Boolean(Number(getCookie('isFTCw')));
+                var isFTCpw = (!getCookie('isFTCw')) ? true : Boolean(Number(getCookie('isFTCw')));
+                // var isFTCpw = Boolean(Number(getCookie('isFTCw')));      
                 if(!isPremium && !isFTCpw){
                     iapHTMLCode = '<a><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">' + upgradePrice + '/年' + '</p>';  
                 }else{
@@ -889,7 +885,6 @@ function payFinishAction(productID, actionType){
     // MARK: - Send Event to GA and Other Analytics
     var eventAction = 'Buy ' + actionType + ': ' + productID;
     ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
-    // ecommerceTrack(tradeNum,window.gSubscriptionEventLabel,productPrice.substring(1),productID);
 
     addTransaction(tradeNum, productID, productPrice.substring(1), window.gSubscriptionEventLabel);
 }

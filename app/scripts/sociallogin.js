@@ -1,7 +1,7 @@
 function socialLogin(socialName, socialInfo) {
     // alert(socialInfo);
 	var socialLoginUrl = '/index.php/users/socialLogin/' + socialName;
-    $('#yourDevice .padding').html(socialLoginUrl);
+    // $('#yourDevice .padding').html(socialLoginUrl);
     $.ajax({
         type: 'POST',
         url: socialLoginUrl,
