@@ -144,8 +144,8 @@
             name = 'infoflow2';
             break;
         case 'fullscreen':
-            format = adFormats['FtcMobileFullscreen'];
-            name = 'fullscreen-mobile';
+            //format = adFormats['FtcMobileFullscreen'];
+            //name = 'fullscreen-mobile';
             break;
         default:
             format = adFormats['FtcMobileBanner'];
@@ -164,7 +164,7 @@
  </script>
  <script>
     googletag.cmd.push(function() {
-      googletag.defineSlot('/80682004/ftchinese/' + zone, adProps.format , adProps.name). addService(googletag.pubads())
+      googletag.defineSlot('/5887/FtChinese/' + zone, adProps.format , adProps.name). addService(googletag.pubads())
       googletag.pubads().enableSingleRequest();
       googletag.pubads().enableSyncRendering();
       googletag.pubads().setTargeting('pos',[adProps.pos]);
