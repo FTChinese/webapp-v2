@@ -249,7 +249,8 @@ function iapActions(productID, actionType, expireDate) {
         case 'fail':
             if (productType === 'membership') {  
                 turnonOverlay('iap-hint');
-                var isFTCpw = Boolean(Number(getCookie('isFTCw')));
+                var isFTCpw = (!getCookie('isFTCw')) ? true : Boolean(Number(getCookie('isFTCw')));
+                // var isFTCpw = Boolean(Number(getCookie('isFTCw')));
                 if(!isPremium && !isFTCpw){
                     // iapHTMLCode = '<a onclick="getBuyCode(\''+ productID +'\',\''+ upgradePrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ tradeNum +'\')"><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">' + upgradePrice + '/年' + '</p>';  
                     iapHTMLCode = '<a><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">' + upgradePrice + '/年' + '</p>';  
@@ -848,7 +849,8 @@ function payFinishAction(productID, actionType){
         case 'fail':
             if (productType === 'membership') {  
                 turnonOverlay('iap-hint');
-                var isFTCpw = Boolean(Number(getCookie('isFTCw')));
+                var isFTCpw = (!getCookie('isFTCw')) ? true : Boolean(Number(getCookie('isFTCw')));
+                // var isFTCpw = Boolean(Number(getCookie('isFTCw')));      
                 if(!isPremium && !isFTCpw){
                     iapHTMLCode = '<a><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">' + upgradePrice + '/年' + '</p>';  
                 }else{
