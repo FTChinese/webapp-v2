@@ -188,6 +188,12 @@
 
       //var dbCode = '<div id="banner1" style="padding-top:0;"><scr' + 'ipt>googletag.cmd.push(function() { googletag.display("banner1")})</scr' + 'ipt></div>'
       document.write(dbCode);
+
+      var adid = searchVars.adid;
+      if(window.parent && window.parent.document.getElementById(adid)) {
+        var adiframeElem = window.parent.document.getElementById(adid).parentNode;
+        adiframeElem.style.backgroundColor = 'transparent';
+      }
     }
   </script>
 </body>

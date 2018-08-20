@@ -233,7 +233,7 @@ function updateAds() {
                         //$(this).removeClass('adiframe banner');
                       }
                       */
-                      $(this).html('<iframe id="' + nowV + index + '" name= "'+ nowV + index +'" src="/phone/newdb.html?v='+ _currentVersion +'&adframe='+ adFrame +'" width="100%" height="100%" style="border:0;"></iframe>');
+                      $(this).html('<iframe id="' + nowV + index + '" name= "'+ nowV + index +'" src="/phone/newdb.html?v='+ _currentVersion +'&adframe='+ adFrame +'&adid=' + nowV + index + '" scrolling="no" width="100%" height="100%" style="border:0;"></iframe>');
                     } else {
                       $(this).html('<iframe id="' + nowV + index + '" src="/phone/ad.html?isad=0&v=' + _currentVersion +'&adtype=' + adFrame + '&adid=' + nowV + index + '" frameborder=0  marginheight="0" marginwidth="0" frameborder="0" scrolling="no" width="'+adwidth+'" height="100%"></iframe>' + adOverlay);
                     }
