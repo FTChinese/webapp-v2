@@ -78,7 +78,7 @@ function isEmptyObj(dataObj){
         return true;
      }
 }
-var upgradePrice = '¥1,998.00';
+window.upgradePrice = '¥1,998.00';
 function getProductHTMLCode(products, forGroup, dataObj) {
     var productsHTML = '';
     var currentGroup = '';
@@ -102,7 +102,7 @@ function getProductHTMLCode(products, forGroup, dataObj) {
                     // products[1].state = '<a onclick="getBuyCode(\''+ products[1].id +'\',\''+ dataObj.v +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ orderNum +'\')"><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">¥' + dataObj.v + '.00/年' + '</p>';
 
                     products[1].state = '<a><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">¥' + dataObj.v + '.00/年' + '</p>';
-                    upgradePrice = dataObj.v;
+                    window.upgradePrice = '¥'+dataObj.v+ '.00';
                 }else if(dataObj.premium===1){
                     products[i].isPurchased = true;
                     products[i].state = '<button class="iap-move-left">已订阅</button><p class="iap-teaser">' + products[i].price + '/年' + '</p>';
@@ -112,7 +112,7 @@ function getProductHTMLCode(products, forGroup, dataObj) {
                     // products[i].state = '<a onclick="getBuyCode(\''+ products[i].id +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ orderNum +'\')"><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + products[i].price + '/年' + '</p>';
 
                     products[i].state = '<a><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + products[i].price + '/年' + '</p>';
-                    upgradePrice = '¥1,998.00';
+                    window.upgradePrice = '¥1,998.00';
                     
 
                 }
@@ -235,8 +235,20 @@ function iapActions(productID, actionType, expireDate) {
         productType = 'eBook';
     }
 
- 
-    postPayState(productID, productPrice, gUserId, tradeNum, actionType);
+    var isFTCpw = (!getCookie('isFTCw')) ? true : Boolean(Number(getCookie('isFTCw')));
+    if(productIndex === 1 && !isPremium && !isFTCpw){
+        productPrice = window.upgradePrice;
+    }else{
+        productPrice = productPrice;
+    }
+
+    var postProductPrice = '';
+    if(productPrice.indexOf('¥')>=0){
+        postProductPrice =  productPrice.substr(1,productPrice.length);
+    }
+    postProductPrice =  postProductPrice.replace(',','');
+
+    postPayState(productID, postProductPrice, gUserId, tradeNum, actionType);
 
     switch (actionType) { 
         case 'success':
@@ -249,11 +261,10 @@ function iapActions(productID, actionType, expireDate) {
         case 'fail':
             if (productType === 'membership') {  
                 turnonOverlay('iap-hint');
-                var isFTCpw = (!getCookie('isFTCw')) ? true : Boolean(Number(getCookie('isFTCw')));
-                // var isFTCpw = Boolean(Number(getCookie('isFTCw')));
-                if(!isPremium && !isFTCpw){
-                    // iapHTMLCode = '<a onclick="getBuyCode(\''+ productID +'\',\''+ upgradePrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ tradeNum +'\')"><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">' + upgradePrice + '/年' + '</p>';  
-                    iapHTMLCode = '<a><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">' + upgradePrice + '/年' + '</p>';  
+
+                if(productIndex === 1 && !isPremium && !isFTCpw){
+                    // iapHTMLCode = '<a onclick="getBuyCode(\''+ productID +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ tradeNum +'\')"><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>';  
+                    iapHTMLCode = '<a><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>';  
 
                 }else{
                     // iapHTMLCode = '<a onclick="getBuyCode(\''+ productID +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ tradeNum +'\')"><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>';
@@ -290,7 +301,7 @@ function iapActions(productID, actionType, expireDate) {
     // FIXME: Is this useful? 
     actionType = '';
 
-    addTransaction(tradeNum, productID, productPrice.substring(1), window.gSubscriptionEventLabel);
+    addTransaction(tradeNum, productID, postProductPrice, window.gSubscriptionEventLabel);
 }
 
  // MARK: - Get the index number of the current product for window.iapProducts
@@ -829,12 +840,21 @@ function payFinishAction(productID, actionType){
     }else {
         productType = 'eBook';
     }
+
+
+    var isFTCpw = (!getCookie('isFTCw')) ? true : Boolean(Number(getCookie('isFTCw')));
+    if(productIndex === 1 && !isPremium && !isFTCpw){
+        productPrice = window.upgradePrice;
+    }else{
+        productPrice = productPrice;
+    }
  
     var postProductPrice = '';
     if(productPrice.indexOf('¥')>=0){
         postProductPrice =  productPrice.substr(1,productPrice.length);
     }
     postProductPrice =  postProductPrice.replace(',','');
+
  
     postPayState(productID, postProductPrice, gUserId, tradeNum, actionType);
  
@@ -852,8 +872,8 @@ function payFinishAction(productID, actionType){
                 turnonOverlay('iap-hint');
                 var isFTCpw = (!getCookie('isFTCw')) ? true : Boolean(Number(getCookie('isFTCw')));
                 // var isFTCpw = Boolean(Number(getCookie('isFTCw')));      
-                if(!isPremium && !isFTCpw){
-                    iapHTMLCode = '<a><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">' + upgradePrice + '/年' + '</p>';  
+                if(productIndex === 1 && !isPremium && !isFTCpw){
+                    iapHTMLCode = '<a><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>';  
                 }else{
                     iapHTMLCode = '<a><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>';
                 }
@@ -886,7 +906,7 @@ function payFinishAction(productID, actionType){
     var eventAction = 'Buy ' + actionType + ': ' + productID;
     ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
 
-    addTransaction(tradeNum, productID, productPrice.substring(1), window.gSubscriptionEventLabel);
+    addTransaction(tradeNum, productID, postProductPrice, window.gSubscriptionEventLabel);
 }
 
 
