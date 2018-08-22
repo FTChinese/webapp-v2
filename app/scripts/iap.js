@@ -664,24 +664,6 @@ function getSystemVersion(){
 }
 getSystemVersion();
 
-$('#setHelp').unbind().bind('click', function() {
-    // var userId = getCookie('USER_ID') || '';
-    // payWay='alipay';
-    // var productName = '高端会员'; 
-    // var memberNum = (productName == '高端会员') ? '100' : '010';
-    // var orderNum = getOrderNum(memberNum);
-
-    // var userId = getCookie('USER_ID') || '';
-    // if (!!userId){
-    //     if(payWay==='wxpay'){
-    //         getWxBuyCode('ftc_premium', '0.01', userId, productName, orderNum);
-    //     }else if(payWay==='alipay'){
-    //         getWxBuyCode('ftc_premium', '0.01', userId, productName, orderNum);
-    //     }
-    // }else{
-    //     turnonOverlay('loginBox');  
-    // }
-});
 
 $('#testHelp').unbind().bind('click', function() {
     payWay='wxpay';
