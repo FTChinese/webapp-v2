@@ -10,7 +10,9 @@ function getOrderNum(memberNum){
     return orderNum;
 }
 
-window.iapProducts = [{title: '标准会员',price: '¥198.00',id: 'ftc_standard',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为标准会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 专享订阅内容每日仅需0.5元','- 精选深度分析','- 中英双语内容','- 金融英语速读训练','- 英语原声电台','- 无限浏览7日前所有历史文章（近8万篇）'],period:'year'},{title: '高端会员',price: '¥1,998.00',id: 'ftc_premium',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为高端会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 专享订阅内容每日仅需5.5元','- 享受“标准会员”所有权益','- 编辑精选，总编/各版块主编每周五为您推荐本周必读资讯，分享他们的思考与观点','- 2018年8月26日前开通会员，可获得：FT中文网2018年度论坛门票2张，价值3999元/张 （不含差旅与食宿）','- 2018年8月26日后开通会员，可获得：FT中文网2019年度论坛门票2张','注：所有活动门票不可折算现金、不能转让、门票不含差旅与食宿'],period:'year'}];
+var premiumPrice = '¥1,998.00';
+
+window.iapProducts = [{title: '标准会员',price: '¥198.00',id: 'ftc_standard',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为标准会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 专享订阅内容每日仅需0.5元','- 精选深度分析','- 中英双语内容','- 金融英语速读训练','- 英语原声电台','- 无限浏览7日前所有历史文章（近8万篇）'],period:'year'},{title: '高端会员',price: premiumPrice,id: 'ftc_premium',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为高端会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 专享订阅内容每日仅需5.5元','- 享受“标准会员”所有权益','- 编辑精选，总编/各版块主编每周五为您推荐本周必读资讯，分享他们的思考与观点','- 2018年8月26日前开通会员，可获得：FT中文网2018年度论坛门票2张，价值3999元/张 （不含差旅与食宿）','- 2018年8月26日后开通会员，可获得：FT中文网2019年度论坛门票2张','注：所有活动门票不可折算现金、不能转让、门票不含差旅与食宿'],period:'year'}];
 
 var subscribeIntruction = {
     title: '订阅说明与注意事项',
@@ -78,7 +80,7 @@ function isEmptyObj(dataObj){
         return true;
      }
 }
-window.upgradePrice = '¥1,998.00';
+window.upgradePrice = premiumPrice;
 function getProductHTMLCode(products, forGroup, dataObj) {
     var productsHTML = '';
     var currentGroup = '';
@@ -112,7 +114,7 @@ function getProductHTMLCode(products, forGroup, dataObj) {
                     // products[i].state = '<a onclick="getBuyCode(\''+ products[i].id +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ orderNum +'\')"><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + products[i].price + '/年' + '</p>';
 
                     products[i].state = '<a><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + products[i].price + '/年' + '</p>';
-                    window.upgradePrice = '¥1,998.00';
+                    window.upgradePrice = premiumPrice;
                     
 
                 }
