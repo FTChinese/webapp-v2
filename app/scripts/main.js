@@ -72,9 +72,9 @@ screenWidth = $(window).width();
 screenHeight = $(window).height();
 
 if (screenWidth >= 700) {
-    gStartPageTemplate = '/index.php/ft/channel/phonetemplate.html?channel='+homeFileName+fullScreenAdPara+'&screentype=wide&';
+    gStartPageTemplate = '/index.php/ft/channel/phonetemplate.html?channel=' + homeFileName + fullScreenAdPara + '&screentype=wide&v=' +  _currentVersion;
 } else {
-    gStartPageTemplate = '/index.php/ft/channel/phonetemplate.html?channel='+homeFileName+fullScreenAdPara+'&';
+    gStartPageTemplate = '/index.php/ft/channel/phonetemplate.html?channel=' + homeFileName + fullScreenAdPara + '&v=' + _currentVersion;
 }
 
 
