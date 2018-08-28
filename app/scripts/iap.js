@@ -918,31 +918,30 @@ function postTimeToServer(obj) {
 
 var timeIn = '';
 function trackStartPageTime() {
-    
-    if(document.addEventListener){
-        function DOMContentLoaded(){
-            timeIn = (new Date()).getTime();
-        }
-        document.addEventListener( 'DOMContentLoaded', DOMContentLoaded, false );
-    }else if (document.attachEvent) {
-        document.attachEvent('onreadystatechange', function () {
-              timeIn = (new Date()).getTime();  
-        });
-    }
-
-    window.onload = function () {
-        var timeOut = new Date().getTime();
-        var dataArr = {
-            'url': location.href,
-            'timeIn': timeIn,
-            'timeOut': timeOut,
-            'userId': getCookie('USER_ID') || null,
-            'functionName': 'trackStartPageTime'
-        };
-        
-        postTimeToServer(dataArr);
-        
+    // if(document.addEventListener){
+    //     function DOMContentLoaded(){
+    //         timeIn = (new Date()).getTime();
+    //     }
+    //     document.addEventListener( 'DOMContentLoaded', DOMContentLoaded, false );
+    // }else if (document.attachEvent) {
+    //     document.attachEvent('onreadystatechange', function () {
+    //           timeIn = (new Date()).getTime();  
+    //     });
+    // }
+    timeIn = (new Date()).getTime(); 
+    // window.onload = function () {
+    // var timeOut = new Date().getTime();
+    var dataArr = {
+        'url': location.href,
+        'timeIn': timeIn,
+        'timeOut': timeIn,
+        'userId': getCookie('USER_ID') || null,
+        'functionName': 'trackStartPageTime'
     };
+    
+    postTimeToServer(dataArr);
+        
+    // };
 }
 trackStartPageTime();
 

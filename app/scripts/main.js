@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1348; //当前的版本号
+var _currentVersion = 1349; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -517,6 +517,7 @@ function fillContent(loadType) {
         pageStarted=1;
         _popstate=0;
         showchannel($(this).attr('url'), $(this).html(), ($(this).hasClass('require-log-in') == true) ? 1 : 0);
+        trackStartPageTime();
     });
 
 
@@ -1603,6 +1604,8 @@ function gotowebapp(url) {
 
 //阅读文章
 function readstory(theid, theHeadline) {
+    trackStartPageTime();
+
     var h,theurl, backto, sv, allViewsId, jsondata, myid;
 
     if (useFTScroller===0) {
@@ -3582,7 +3585,8 @@ function watchVideo(videoUrl, videoTitle, videoId, videoLead, videoImage,videoTa
 }
 
 
-function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFrame){    
+function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFrame){  
+    trackStartPageTime();  
     var randomTime = new Date().getTime();
     var url = slideUrl;
     var urlMore;
