@@ -15,8 +15,8 @@
       "FtcInfoFlow":[[400,300]]
     }
     var adProps = getAdProps(searchVars.adframe);
-    //console.log(zone);
-    //console.log(adProps);
+    console.log('zone:',zone);
+    console.log(adProps);
     function getZone() {
       // Get zone
       // MARK: - 检查parent里面的gSpecialAnchors，根据这个来确定当前的页面是不是要投放赞助的adid 
@@ -26,10 +26,10 @@
         for (var i=0; i < window.parent.gSpecialAnchors.length && matchSpecial === false; i++) {
             // MARK: - this is added per request of ad sales
             // MARK: - to exclude situations where ad sales don't want to invoke sponsored special report code
-        
+            var thisSpecialAnchor = window.parent.gSpecialAnchors[i];
             var useSpecialCode = true;
             try {
-                if (window.parent.gNowView === 'storyview' && window.parent.gSpecialAnchors[i].adid === '2062') {
+                if (window.parent.gNowView === 'storyview' && thisSpecialAnchor.adid === '2062') {
                     useSpecialCode = false;
                 }
             } catch (ignore) {
@@ -37,11 +37,14 @@
             }
             
             var keywordsOfCurrentPage = window.parent.gTagData;
-            var keywordForCheck = window.parent.gSpecialAnchors[i].tag;
+            var keywordForCheck = thisSpecialAnchor.tag;
             //console.log('keywordForCheck:'+keywordForCheck);
 
             if (useSpecialCode === true && keywordsOfCurrentPage.indexOf(keywordForCheck) >=0) {
                 matchSpecial = true;
+                console.log('thisSpecialAnchor:')
+                console.log(thisSpecialAnchor)
+                gSpecialPageId = thisSpecialAnchor.pageId;
                 //console.log(gSpecialAnchors[i]);
                 //console.log('gSpecialPageId:'+gSpecialPageId);
                 break;
