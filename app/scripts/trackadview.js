@@ -179,11 +179,11 @@ function switchToNewDb() {
   var newdbShow;
   var adchannelID = getAdChannelId();
    ///1. Force to show new db ad
-   if(adchannelID === '5067') {
+   if(adchannelID === '0000') {
      newdbShow = true;
      console.log('Force to show new db ad, for the adchannelID is',adchannelID);
    ///2. Force to show od chuanyang ad
-   } else if(adchannelID === '5070' || adchannelID === '5069') {
+   } else if(adchannelID === '5070' || adchannelID === '5069' || adchannelID === '5067') {
      newdbShow = false;
      console.log('Force to show od chuanyang ad, for the adchannelID is',adchannelID);
 
