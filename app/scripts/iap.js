@@ -13,14 +13,9 @@ function getOrderNum(memberNum){
 var standardPrice = '¥198.00';
 var premiumPrice = '¥1,998.00';
 var currentMilliseconds = new Date().getTime();
-if(currentMilliseconds>=1535644800000 && currentMilliseconds<=1535731200000){
-    standardPrice = '¥98.00';
-    premiumPrice = '¥998.00';
-}
 
-// '- 专享订阅内容每日仅需0.5元', '- 专享订阅内容每日仅需5.5元',
 
-window.iapProducts = [{title: '标准会员',price: standardPrice,id: 'ftc_standard',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为标准会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 精选深度分析','- 中英双语内容','- 金融英语速读训练','- 英语原声电台','- 无限浏览7日前所有历史文章（近8万篇）'],period:'year'},{title: '高端会员',price: premiumPrice,id: 'ftc_premium',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为高端会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 享受“标准会员”所有权益','- 编辑精选，总编/各版块主编每周五为您推荐本周必读资讯，分享他们的思考与观点','- FT中文网2019年度论坛门票2张','注：所有活动门票不可折算现金、不能转让、不含差旅与食宿'],period:'year'}];
+window.iapProducts = [{title: '标准会员',price: standardPrice,id: 'ftc_standard',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为标准会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 专享订阅内容每日仅需0.5元','- 精选深度分析','- 中英双语内容','- 金融英语速读训练','- 英语原声电台','- 无限浏览7日前所有历史文章（近8万篇）'],period:'year'},{title: '高端会员',price: premiumPrice,id: 'ftc_premium',image: 'http://i.ftimg.net/picture/6/000068886_piclink.jpg', teaser: '注册成为高端会员', isPurchased: false, state: '订阅', group: 'membership', groupTitle: '会员',benefits:['- 专享订阅内容每日仅需5.5元','- 享受“标准会员”所有权益','- 编辑精选，总编/各版块主编每周五为您推荐本周必读资讯，分享他们的思考与观点','- FT中文网2019年度论坛门票2张','注：所有活动门票不可折算现金、不能转让、不含差旅与食宿'],period:'year'}];
 
 var subscribeIntruction = {
     title: '订阅说明与注意事项',
