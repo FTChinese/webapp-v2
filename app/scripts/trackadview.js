@@ -190,7 +190,7 @@ function switchToNewDb() {
   ///3. Show new ad or not depending on gray
    } else {
     var newdbRand = getRandomInt(0, 1000);
-     newdbShow = newdbRand < 150;
+     newdbShow = newdbRand < 200;
      console.log('Show new ad or not depending on gray is less than 500, the gray is',newdbRand)
    }
   
