@@ -759,12 +759,13 @@ function getWxBuyCode(productId, productPrice, userId, productName, orderNum){
             try {
                 if(ftjavacriptapp){   
                     if(payWay==='wxpay'){
+                        var wxProductPrice = '';
                         if(productPrice<1){
-                           productPrice = productPrice*100+''; 
+                           wxProductPrice = productPrice*100+''; 
                         }else{
-                            productPrice = parseInt(productPrice)*100+'';
+                            wxProductPrice = parseInt(productPrice)*100+'';
                         }  
-                        ftjavacriptapp.payweixin(productId,productPrice,userId, productName);
+                        ftjavacriptapp.payweixin(productId,wxProductPrice,userId, productName);
                     }else if(payWay==='alipay'){
                         ftjavacriptapp.payzfb(productId,productPrice,userId, productName);
                     }
