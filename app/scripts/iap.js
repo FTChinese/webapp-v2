@@ -10,8 +10,8 @@ function getOrderNum(memberNum){
     return orderNum;
 }
 
-var standardPrice = '¥198.00';
-var premiumPrice = '¥1,998.00';
+var standardPrice = '198.00';
+var premiumPrice = '1,998.00';
 var currentMilliseconds = new Date().getTime();
 
 
@@ -103,20 +103,17 @@ function getProductHTMLCode(products, forGroup, dataObj) {
                 var orderNum = getOrderNum(memberNum);
                 if(dataObj.standard===1 && dataObj.premium===0){
                     products[0].isPurchased = true;
-                    products[0].state = '<button class="iap-move-left">已订阅</button><p class="iap-teaser">' + products[i].price + '/年' + '</p>';
-                    // products[1].state = '<a onclick="getBuyCode(\''+ products[1].id +'\',\''+ dataObj.v +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ orderNum +'\')"><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">¥' + dataObj.v + '.00/年' + '</p>';
-
+                    products[0].state = '<button class="iap-move-left">已订阅</button><p class="iap-teaser">' + '¥'+ products[i].price + '/年' + '</p>';
+ 
                     products[1].state = '<a><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">¥' + dataObj.v + '.00/年' + '</p>';
-                    window.upgradePrice = '¥'+dataObj.v+ '.00';
+                    window.upgradePrice = dataObj.v+ '.00';
                 }else if(dataObj.premium===1){
                     products[i].isPurchased = true;
-                    products[i].state = '<button class="iap-move-left">已订阅</button><p class="iap-teaser">' + products[i].price + '/年' + '</p>';
+                    products[i].state = '<button class="iap-move-left">已订阅</button><p class="iap-teaser">' + '¥' + products[i].price + '/年' + '</p>';
                 }else{
                     products[i].isPurchased = false;
       
-                    // products[i].state = '<a onclick="getBuyCode(\''+ products[i].id +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ orderNum +'\')"><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + products[i].price + '/年' + '</p>';
-
-                    products[i].state = '<a><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + products[i].price + '/年' + '</p>';
+                    products[i].state = '<a><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + '¥' + products[i].price + '/年' + '</p>';
                     window.upgradePrice = premiumPrice;
                     
 
@@ -258,7 +255,7 @@ function iapActions(productID, actionType, expireDate) {
     switch (actionType) { 
         case 'success':
             if (productType === 'membership') {
-                iapHTMLCode = '<a><button class="iap-move-left">已订阅</button></a><p class="iap-teaser">'+ productPrice + '/年' + '</p>'; 
+                iapHTMLCode = '<a><button class="iap-move-left">已订阅</button></a><p class="iap-teaser">' + '¥' + productPrice + '/年' + '</p>'; 
             } 
             recordSuccessBuyInLocal();
             updateProductStatus(productIndex, true, true);
@@ -268,12 +265,12 @@ function iapActions(productID, actionType, expireDate) {
                 turnonOverlay('iap-hint');
 
                 if(productIndex === 1 && !isPremium && !isFTCpw){
-                    // iapHTMLCode = '<a onclick="getBuyCode(\''+ productID +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ tradeNum +'\')"><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>';  
-                    iapHTMLCode = '<a><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>';  
+
+                    iapHTMLCode = '<a><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">' + '¥' + productPrice + '/年' + '</p>';  
 
                 }else{
-                    // iapHTMLCode = '<a onclick="getBuyCode(\''+ productID +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ tradeNum +'\')"><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>';
-                    iapHTMLCode = '<a><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>';
+
+                    iapHTMLCode = '<a><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + '¥' + productPrice + '/年' + '</p>';
                 }            
             } 
             updateProductStatus(productIndex, false, false); 
@@ -281,8 +278,8 @@ function iapActions(productID, actionType, expireDate) {
         default:
             if (productType === 'membership') {  
                 turnonOverlay('iap-hint');
-                // iapHTMLCode = '<a onclick="getBuyCode(\''+ productID +'\',\''+ productPrice +'\',\''+ gUserId +'\',\''+ productName +'\',\''+ tradeNum +'\')"><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>'; 
-                iapHTMLCode = '<a><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>'; 
+
+                iapHTMLCode = '<a><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + '¥' + productPrice + '/年' + '</p>'; 
             } 
             updateProductStatus(productIndex, false, false); 
             break;
@@ -324,45 +321,8 @@ function getproductIndex(productID){
     return productIndex;
 }
 
-// MARK: - Get url scheme for iOS buy and JS onclick code for Android
-function getBuyCode(productId, productPrice, userId, productName, orderNum){
-    
-    var userId = getCookie('USER_ID');
-    if (!!userId){
-        
-        var productIDArr = orderNum.substring(2,5);
-        var productIdStr = (productIDArr === '100') ? 'ftc_premium' : 'ftc_standard';
-        var productPosition = (productIDArr === '100') ? 2 : 1;
-        productId = orderNum;
 
-        if(productPrice.indexOf('¥')>=0){
-            productPrice =  productPrice.substr(1,productPrice.length);
-        }
-        productPrice =  productPrice.replace(',','');
-        // productPrice =  '0.01';
-        if(osVersion.indexOf('Android')>=0){
-            try {
-                if(ftjavacriptapp){                  
-                    ftjavacriptapp.payzfb(productId,productPrice,userId, productName);
-                    postPayState(productIdStr, productPrice, userId, orderNum, 'start');
-                    var eventAction = 'Buy: ' + productIdStr;
-                    ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel);
-                    setTimeout(function(){
-                        postPayState(productIdStr, productPrice, userId, orderNum, 'start pending');
-                    },15000);
-                }
-            } catch (ignore) {
-                postPayState(productIdStr, productPrice, userId, orderNum, 'start fail');
-                alert('请求失败！');
-            }
-        }
-    }else{
-        turnonOverlay('loginBox');  
-    }
 
-    onProductClick(productIdStr,productPosition) ;
-
-}
 
 
 // MARK: - Test paywall for Android
@@ -681,25 +641,17 @@ $('#testHelp').unbind().bind('click', function() {
 });
 
 // 测试付费成功与否的地方
-// $(this).find("input[name='payWay']").attr('checked','true');
 // ftc_premium 1800 高端会员 FT1006001526873479
 // iapActions('ftc_premium_FT0101522812152', 'success', '');
 
 
-// // Mark:支付方式
+// Mark:支付方式
 var payWay = '';
 $('body').on('click', '.one-way-container', function(){   
     payWay = $(this).find('input[name=\'payWay\']').val();   
 });
 var payWrapData = {};
 $('body').on('click', '#to-pay', function(){
-    // 当正式环境需要注释productName  memberNum  orderNum 三行，因为现在是把价格设为1测试
-    // var productName = '高端会员'; 
-    // var memberNum = (productName == '高端会员') ? '100' : '010';
-    // var orderNum = getOrderNum(memberNum);
-    // 把微信getWxBuyCode测试更新过来
-    // console.log(payWrapData);
-
     var userId = getCookie('USER_ID') || '';
     if (!!userId){
         if(payWay==='wxpay'){
@@ -710,6 +662,7 @@ $('body').on('click', '#to-pay', function(){
     }else{
         turnonOverlay('loginBox');  
     }
+
 });
 
 $('body').on('click', '.iap-button', function(){
@@ -770,7 +723,7 @@ function getWxBuyCode(productId, productPrice, userId, productName, orderNum){
                         ftjavacriptapp.payzfb(productId,productPrice,userId, productName);
                     }
                     // FT100-- 183900 -- 高端会员 -- FT100
-                    // alert(productId+':'+ productPrice +':'+productName+':'+orderNum);
+                    // alert(productId+':'+wxProductPrice+':'+ productPrice +':'+productName+':'+orderNum);
 
                     postPayState(productIdStr, productPrice, userId, orderNum, 'start');
                     var eventAction = 'Buy: ' + productIdStr;
@@ -849,7 +802,7 @@ function payFinishAction(productID, actionType){
     switch (actionType) { 
         case 'success':
             if (productType === 'membership') {
-                iapHTMLCode = '<a><button class="iap-move-left">已订阅</button></a><p class="iap-teaser">'+ productPrice + '/年' + '</p>'; 
+                iapHTMLCode = '<a><button class="iap-move-left">已订阅</button></a><p class="iap-teaser">' + '¥'+ productPrice + '/年' + '</p>'; 
             } 
             closeOverlay();
             recordSuccessBuyInLocal();
@@ -861,9 +814,9 @@ function payFinishAction(productID, actionType){
                 var isFTCpw = (!getCookie('isFTCw')) ? true : Boolean(Number(getCookie('isFTCw')));
                 // var isFTCpw = Boolean(Number(getCookie('isFTCw')));      
                 if(productIndex === 1 && !isPremium && !isFTCpw){
-                    iapHTMLCode = '<a><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>';  
+                    iapHTMLCode = '<a><button class="iap-move-left">现在升级</button></a><p class="iap-teaser">' + '¥' + productPrice + '/年' + '</p>';  
                 }else{
-                    iapHTMLCode = '<a><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>';
+                    iapHTMLCode = '<a><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + '¥' + productPrice + '/年' + '</p>';
                 }
                 
                 
@@ -873,7 +826,7 @@ function payFinishAction(productID, actionType){
         default:
             if (productType === 'membership') {  
                 turnonOverlay('iap-hint');
-                iapHTMLCode = '<a><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + productPrice + '/年' + '</p>'; 
+                iapHTMLCode = '<a><button class="iap-move-left">订阅</button></a><p class="iap-teaser">' + '¥' + productPrice + '/年' + '</p>'; 
             } 
             updateProductStatus(productIndex, false, false); 
             break;
@@ -952,4 +905,39 @@ function trackEndPageTime() {
     postTimeToServer(dataArr);
 };
 
+// Mark:此函数后期需要删除
+function getBuyCode(productId, productPrice, userId, productName, orderNum){  
+    var userId = getCookie('USER_ID');
+    if (!!userId){ 
+        var productIDArr = orderNum.substring(2,5);
+        var productIdStr = (productIDArr === '100') ? 'ftc_premium' : 'ftc_standard';
+        var productPosition = (productIDArr === '100') ? 2 : 1;
+        productId = orderNum;
 
+        if(productPrice.indexOf('¥')>=0){
+            productPrice =  productPrice.substr(1,productPrice.length);
+        }
+        productPrice =  productPrice.replace(',','');
+        if(osVersion.indexOf('Android')>=0){
+            try {
+                if(ftjavacriptapp){                  
+                    ftjavacriptapp.payzfb(productId,productPrice,userId, productName);
+                    postPayState(productIdStr, productPrice, userId, orderNum, 'start');
+                    var eventAction = 'Buy: ' + productIdStr;
+                    ga('send','event','Android Privileges', eventAction, window.gSubscriptionEventLabel);
+                    setTimeout(function(){
+                        postPayState(productIdStr, productPrice, userId, orderNum, 'start pending');
+                    },15000);
+                }
+            } catch (ignore) {
+                postPayState(productIdStr, productPrice, userId, orderNum, 'start fail');
+                alert('请求失败！');
+            }
+        }
+    }else{
+        turnonOverlay('loginBox');  
+    }
+
+    onProductClick(productIdStr,productPosition) ;
+
+}
