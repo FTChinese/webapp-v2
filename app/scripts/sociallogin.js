@@ -1,15 +1,20 @@
 function socialLogin(socialName, socialInfo) {
+    // alert(socialInfo);
 	var socialLoginUrl = '/index.php/users/socialLogin/' + socialName;
-    $('#yourDevice .padding').html(socialLoginUrl);
+    // $('#yourDevice .padding').html(socialLoginUrl);
     $.ajax({
         type: 'POST',
         url: socialLoginUrl,
-        data: {'socialInfo': socialInfo},
+        data: 'socialInfo='+encodeURIComponent(socialInfo),
         success: function(data) {
+            // alert(data);
             if (data === 'yes') {
                 // show this in the interface so that users know login is successful
                 username = getCookie('USER_NAME') || '';
                 checkLogin();
+                isLoginReq = true;
+                isReqSuccess = false;
+                payWall('/index.php/jsapi/paywall?sociallogin'+ (new Date()).getTime());
             // print the result for review
             $('#yourDevice .overlay-header p').html('登录成功');
             $('#yourDevice .padding').html('亲爱的用户，您已经成功登录。');
@@ -34,4 +39,21 @@ function socialLogin(socialName, socialInfo) {
     turnonOverlay('yourDevice');
     //$('#yourDevice .overlay-header p').html(socialName);
     //$('#yourDevice .padding').html(socialInfo);
+}
+
+function weixinLogin(){
+    if(ftjavacriptapp){ 
+        ftjavacriptapp.weixlogin();
+    }
+}
+
+
+if(typeof ftjavacriptapp == 'object'){  
+    if(typeof ftjavacriptapp.weixlogin == 'function'){   
+        $('.weiXinLogin').show();
+    }else{
+        $('.weiXinLogin').hide();
+    }        
+}else{
+    $('.weiXinLogin').hide();
 }

@@ -43,7 +43,8 @@ function adViewUpdate() {
             adPosition = gViewableAds[adCount].adid.substring(4,8);
             // console.log (gViewableAds[adCount].adid + ' is viewed. adchi is ' + adch + ', ad position is ' + adPosition);
             //document.getElementById('header-title').innerHTML = adch + adPosition;
-            ga('send','event', 'Ad In View', adch, adPosition, {'nonInteraction':1});
+            // MARK: - Stop Tracking for Lack of GA Quota
+            // ga('send','event', 'Ad In View', adch, adPosition, {'nonInteraction':1});
             playVideoInAdIframe(adch + adPosition);
           }
         }
@@ -143,7 +144,58 @@ function getAdChannelId() {
   return '1000';
 }
 
+function getSearchVars() {
+  var searchVars = {};
+  var searchStr = window.location.search;
+  for (var index = 0, searchStrArr = searchStr.substr(1).split('&'); index < searchStrArr.length; index++) {
+    var oneKeyValueArr = searchStrArr[index].split('=');
+    searchVars[oneKeyValueArr[0]] = oneKeyValueArr.length > 1 ? oneKeyValueArr[1] : '';
+  }
+  return searchVars;
+}
 
+function getRandomInt(min, max) {
+  // * @dest 生成min~max之间的随机整数，如果min和max都为整数，那么生成区间包含min,不包含max
+
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random()*(max-min)) + min;
+}
+
+/**
+ * @depend func getSearchVars, getAdChannelId,getRandomInt
+ */
+function switchToNewDb() {
+  //First: newdbStart:
+  var newdbStart;
+  var searchVars = getSearchVars();
+  if(searchVars.newdb == 'yes' || new Date() > new Date('2018,09,03')) {
+    newdbStart = true;
+  } else {
+    newdbStart = false;
+  }
+
+  //Second:newdbShow
+  var newdbShow;
+  var adchannelID = getAdChannelId();
+   ///1. Force to show new db ad
+   if(adchannelID === '0000') {
+     newdbShow = true;
+     console.log('Force to show new db ad, for the adchannelID is',adchannelID);
+   ///2. Force to show od chuanyang ad
+   } else if(adchannelID === '5070' || adchannelID === '5069' || adchannelID === '5067') {
+     newdbShow = false;
+     console.log('Force to show od chuanyang ad, for the adchannelID is',adchannelID);
+
+  ///3. Show new ad or not depending on gray
+   } else {
+    var newdbRand = getRandomInt(0, 1000);
+     newdbShow = newdbRand < 200;
+     console.log('Show new ad or not depending on gray is less than 500, the gray is',newdbRand)
+   }
+  
+   return newdbStart && newdbShow;
+}
 // MARK: - load or reload all the ad friendly ad iframes that are in view
 function updateAds() {
     // MARK: - Get the id of the view that is currently visible. It's either home, channel or story. 
@@ -153,6 +205,8 @@ function updateAds() {
     if (nowV !== 'storyview') {
         gSpecial = false;
     }
+    var toNewDb = switchToNewDb();
+    console.log('toNewDb:', toNewDb);
     // MARK: - there are two possibilities when display storyview
     // if (nowV === 'storyview') {
     //     if ($('#storyview').hasClass('columnFlowOn')) {
@@ -194,11 +248,23 @@ function updateAds() {
                     if (useFTScroller===1 || nowV === 'story-column-flow') {
                         adOverlay = '<a target=_blank class="ad-overlay"></a>';
                     }
-                    var testDBParam = '';
-                    if (window.location.search.indexOf('testDB=yes') > 0) {
-                      testDBParam = '&testDB=yes';
-                    } 
-                    $(this).html('<iframe id="' + nowV + index + '" src="/phone/ad.html?isad=0&v=' + _currentVersion + '&adtype=' + adFrame + '&adid=' + nowV + index + testDBParam + '" frameborder=0  marginheight="0" marginwidth="0" frameborder="0" scrolling="no" width="'+adwidth+'" height="100%"></iframe>' + adOverlay);
+                    if(toNewDb) {
+                      /*
+                      if(adFrame === 'banner-paid-post-home' || adFrame === 'banner-paid-post-home-2') {
+                        console.log('here paid-post home');
+                        $(this).css({
+                          height:'auto',
+                          display:'block',
+                          padding:'0'
+                        });
+                        //$(this).removeClass('adiframe banner');
+                      }
+                      */
+                      $(this).html('<iframe id="' + nowV + index + '" name= "'+ nowV + index +'" src="/phone/newdb.html?v='+ _currentVersion +'&adframe='+ adFrame +'&adid=' + nowV + index + '" scrolling="no" width="100%" height="100%" style="border:0;"></iframe>');
+                    } else {
+                      $(this).html('<iframe id="' + nowV + index + '" src="/phone/ad.html?isad=0&v=' + _currentVersion +'&adtype=' + adFrame + '&adid=' + nowV + index + '" frameborder=0  marginheight="0" marginwidth="0" frameborder="0" scrolling="no" width="'+adwidth+'" height="100%"></iframe>' + adOverlay);
+                    }
+                    
                     //console.log ($(this).html());
                     $(this).attr('id','ad-' + nowV + index);
                 }

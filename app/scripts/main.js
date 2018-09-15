@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1312; //当前的版本号
+var _currentVersion = 1362; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -72,9 +72,9 @@ screenWidth = $(window).width();
 screenHeight = $(window).height();
 
 if (screenWidth >= 700) {
-    gStartPageTemplate = '/index.php/ft/channel/phonetemplate.html?channel='+homeFileName+fullScreenAdPara+'&screentype=wide&';
+    gStartPageTemplate = '/index.php/ft/channel/phonetemplate.html?channel=' + homeFileName + fullScreenAdPara + '&screentype=wide&v=' +  _currentVersion;
 } else {
-    gStartPageTemplate = '/index.php/ft/channel/phonetemplate.html?channel='+homeFileName+fullScreenAdPara+'&';
+    gStartPageTemplate = '/index.php/ft/channel/phonetemplate.html?channel=' + homeFileName + fullScreenAdPara + '&v=' + _currentVersion;
 }
 
 
@@ -254,26 +254,31 @@ function pauseAllVideos() {
         videosAtTop[i].pause();
     }
 }
+
+function payWallUpdateSub(url,iapAction,iapTitle){
+    var xhrpw = new XMLHttpRequest();
+    xhrpw.open('get', url);
+    xhrpw.setRequestHeader('Content-Type', 'application/text');
+    xhrpw.setRequestHeader('If-Modified-Since', '0'); 
+    xhrpw.setRequestHeader('Cache-Control','no-cache'); 
+    xhrpw.onload = function() {
+        if (xhrpw.status === 200) {  
+            var data = xhrpw.responseText;
+            var parsedData = JSON.parse(data); 
+            if (iapAction) {
+                displayProducts(window.iapProducts, iapAction, iapTitle, parsedData);
+            }
+        } else{
+            alert('请求失败！');
+        }
+    };
+    xhrpw.send(null);
+}
+
 //Start the App
 function startpage() {
 
-    function payWallUpdateSub(url,iapAction,iapTitle){
-        var xhrpw = new XMLHttpRequest();
-        xhrpw.open('get', url);
-        xhrpw.setRequestHeader('Content-Type', 'application/text');
-        xhrpw.onload = function() {
-            if (xhrpw.status === 200) {  
-                var data = xhrpw.responseText;
-                var parsedData = JSON.parse(data); 
-                if (iapAction) {
-                    displayProducts(window.iapProducts, iapAction, iapTitle, parsedData);
-                }
-            } else{
-                alert('请求失败！');
-            }
-        };
-        xhrpw.send(null);
-    }
+
 
     var savedhomepage;
     console.log('start page');
@@ -404,6 +409,10 @@ function startpage() {
             var iapTitle = $(this).attr('iap-title')|| 'FT中文网';
             var dataObj = payWallUpdateSub('/index.php/jsapi/paywall?3',iapAction,iapTitle);
             ga('send', 'event', 'Android Privileges','Tap', window.gSubscriptionEventLabel);
+            
+            productImpression();
+            onPromoClick(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
+           
          }
     });
 
@@ -431,15 +440,16 @@ function startpage() {
     });
     //gStartStatus = "startpage end";
     //Delegate Click on Home Page
-    $('body').on('click','.track-click',function(){
-        var eventCategory,eventAction,eventLabel;
-        eventCategory = 'Phone App';
-        eventAction = 'Click';
-        eventLabel = $(this).attr('eventLabel') || '';
-        if (eventLabel !== '') {
-            ga('send','event',eventCategory, eventAction, eventLabel);
-        }
-    });
+    // MARK: - Stop Tracking for Lack of GA Quota
+    // $('body').on('click','.track-click',function(){
+    //     var eventCategory,eventAction,eventLabel;
+    //     eventCategory = 'Phone App';
+    //     eventAction = 'Click';
+    //     eventLabel = $(this).attr('eventLabel') || '';
+    //     if (eventLabel !== '') {
+    //         ga('send','event',eventCategory, eventAction, eventLabel);
+    //     }
+    // });
     
     //Window Oriention Change event
     try {
@@ -507,6 +517,7 @@ function fillContent(loadType) {
         pageStarted=1;
         _popstate=0;
         showchannel($(this).attr('url'), $(this).html(), ($(this).hasClass('require-log-in') == true) ? 1 : 0);
+        trackStartPageTime();
     });
 
 
@@ -777,7 +788,8 @@ function fillContent(loadType) {
                 saveLocalStorage('mostcomment', hotdata);
             }
         }).fail(function(jqXHR){
-            trackErr(message.head.transactiontype, 'Most Commented');
+            // MARK: - Stop Tracking for lack of GA quota
+            //trackErr(message.head.transactiontype, 'Most Commented');
         });
     }
     
@@ -831,12 +843,14 @@ function fillContent(loadType) {
     if ($('.specialanchor').length>0) {
         $('.specialanchor').each(function(){
             var adId = $(this).attr('adid') || '';
-            var sTag = $(this).attr('tag') || '';
-            var sTitle = $(this).attr('title') || '';
+            var sTag = $(this).attr('tag') || $(this).attr('title') || '';
+            var sTitle = $(this).attr('title') || $(this).attr('tag') || '';
+            var pageId = $(this).attr('pageid') || '';
             gSpecialAnchors.push({
                 'tag': sTag,
                 'title': sTitle,
-                'adid': adId
+                'adid': adId,
+                'pageId':pageId
             });
         });
     }
@@ -1055,20 +1069,23 @@ function loadStoryData(data) {
         if (jsonHeadPosition>0) {//如果返回的数据前有服务器返回的乱码（参见jsoneerror.html），则先去除它
             jsonWrong = thedata.substring(0,100);
             thedata = thedata.slice(jsonHeadPosition);
-            if (gOnlineAPI === true) {
-                trackErr(jsonWrong, 'wrong jsondata live');
-            } else {
-                trackErr(jsonWrong, 'wrong jsondata cache');
-            }
+            // MARK: - Stop Tracking for lack of GA Quota
+            // if (gOnlineAPI === true) {
+            //     trackErr(jsonWrong, 'wrong jsondata live');
+            // } else {
+            //     trackErr(jsonWrong, 'wrong jsondata cache');
+            // }
         }
         jsondata = $.parseJSON(thedata);
     } catch(err) {
         thedata = thedata.substring(0,22);
         if (gOnlineAPI === true) {
-            trackErr(err + '.' + thedata, 'fillPage jsondata');
+            // MARK: - Remove Event for not enough GA quota
+            //trackErr(err + '.' + thedata, 'fillPage jsondata');
             dataStatus = 'online error';
         } else {
-            trackErr(err + '.' + thedata, 'fillPage jsondata cache');
+            // MARK: - Remove Event for not enough GA quota
+            //trackErr(err + '.' + thedata, 'fillPage jsondata cache');
             dataStatus = 'cache error';
         }
     }
@@ -1120,7 +1137,8 @@ function downloadStories(downloadType) {
         message.body.ielement = {};
         message.body.ielement.num = 30;
         gHomeAPIRequest = new Date().getTime();
-        ga('send', 'event', 'App API 10001', 'Request', connectionType);
+        // MARK: - Stop Tracking for Lack of GA Quota
+        //ga('send', 'event', 'App API 10001', 'Request', connectionType);
         $.ajax({
             method: gApi001Method,
             url: apiurl + '?' + themi,
@@ -1130,8 +1148,9 @@ function downloadStories(downloadType) {
         .done(function(data) {
             gHomeAPISuccess = new Date().getTime();
             var timeSpent = gHomeAPISuccess - gHomeAPIRequest;
-            ga('send', 'event', 'App API 10001', 'Success', connectionType);
-            ga('send', 'timing', 'App', 'API Request', timeSpent, 'Home Stories');
+            // MARK: - Stop Tracking for Lack of GA Quota
+            // ga('send', 'event', 'App API 10001', 'Success', connectionType);
+            // ga('send', 'timing', 'App', 'API Request', timeSpent, 'Home Stories');
             if (data.length <= 300) {
                 return;
             }
@@ -1149,7 +1168,8 @@ function downloadStories(downloadType) {
                 },10000);
             }
         }).fail(function(jqXHR){
-            ga('send', 'event', 'App API 10001', 'Fail', connectionType);
+            // MARK: - Stop Tracking for Lack of GA Quota
+            //ga('send', 'event', 'App API 10001', 'Fail', connectionType);
             todaystamp = unixtochinese(lateststory, 0);
             $('#homeload .loadingStatus').html('未能下载成功');
             setTimeout(function(){
@@ -1158,7 +1178,8 @@ function downloadStories(downloadType) {
             gOnlineAPI = false;
             gHomeAPIFail = new Date().getTime();
             var timeSpent = gHomeAPIFail - gHomeAPIRequest;
-            trackFail(message.head.transactiontype + ':' + jqXHR.status + ',' + jqXHR.statusText + ',' + timeSpent, 'Latest News');
+            // MARK: Stop tracking for lack of GA quota
+            //trackFail(message.head.transactiontype + ':' + jqXHR.status + ',' + jqXHR.statusText + ',' + timeSpent, 'Latest News');
         });
     }
 }
@@ -1218,7 +1239,8 @@ function loadHomePage(loadType) {
         $('#homeload .loadingStatus').html('加载最新主页...');
         //$(".loadingStory").html('<div id="homeload"><div class="cell loadingStatus">' + loadcontent + '</div><div class="cell right">' + loadingBarContent + '</div></div>');
     }
-    ga('send', 'event', 'App Home Page', 'Request', connectionType);
+    // MARK: Stop Tracking for lack of GA Quota
+    //ga('send', 'event', 'App Home Page', 'Request', connectionType);
     requests.push(
         $.ajax({
             // url with events and date
@@ -1248,12 +1270,14 @@ function loadHomePage(loadType) {
                     $('#screenstart').remove();
                 });
                 $('html').removeClass('is-refreshing');
-                ga('send', 'event', 'App Home Page', 'Success', connectionType);
-                ga('send', 'timing', 'App', 'Home Page Request', timeSpent, connectionType);
+                // MARK: Stop Tracking for lack of GA Quota
+                //ga('send', 'event', 'App Home Page', 'Success', connectionType);
+                //ga('send', 'timing', 'App', 'Home Page Request', timeSpent, connectionType);
             },
             error: function () {
                 gStartStatus = 'startFromOnline error';
-                ga('send', 'event', 'App Home Page', 'Fail', connectionType);
+                // MARK: Stop Tracking for lack of GA Quota
+                //ga('send', 'event', 'App Home Page', 'Fail', connectionType);
                 if (loadType === 'start') {
                     $('#startstatus').html('服务器开小差了');
                     try {
@@ -1580,6 +1604,8 @@ function gotowebapp(url) {
 
 //阅读文章
 function readstory(theid, theHeadline) {
+    trackStartPageTime();
+
     var h,theurl, backto, sv, allViewsId, jsondata, myid;
 
     if (useFTScroller===0) {
@@ -1821,7 +1847,7 @@ function displaystoryNormal(theid, language, forceTitle) {
         isStoryBeforeOneWeek = true;
         // console.log(Number(allId.last_publish_time)+604800);
     }
-
+// isFTCw为false时，就没有付费墙。当getCookie('isFTCw')为"0"时，就没有付费墙。注意getCookie('isFTCw')得到的是字符串"0"或者"1"，而不是0或者1，这样下面写的逻辑就没有问题。getCookie('isFTCw')可能为null。
 
     var isFTCw = (!getCookie('isFTCw')) ? true : Boolean(Number(getCookie('isFTCw')));
     var hasPaywall = false;
@@ -1886,7 +1912,8 @@ function displaystoryNormal(theid, language, forceTitle) {
             if (!isPremium && isEditorChoiceStory){
                 $('#storyview .storybody').html(storyimage).append(getpaywallHint());     
                 hasPaywall = true; 
-                ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
+                ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
+                addPromotion(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
             }else{
                 $('#storyview .storybody').html(storyimage).append(allId.ebody);
                 hasPaywall = false;   
@@ -1898,7 +1925,8 @@ function displaystoryNormal(theid, language, forceTitle) {
             }
             hasPaywall = true;
             
-            ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
+            ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
+            addPromotion(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
         }
 
         if(allId.whitelist && allId.whitelist === 1){
@@ -1965,7 +1993,8 @@ function displaystoryNormal(theid, language, forceTitle) {
             if (!isPremium && isEditorChoiceStory){
                 $('#storyview .storybody').html(getpaywallHint());
                 hasPaywall = true; 
-                ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
+                ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
+                addPromotion(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
             }else{
                 $('#storyview .storybody').html('<div class=ce>' + ct + '</div>');
                 hasPaywall = false;  
@@ -1975,7 +2004,8 @@ function displaystoryNormal(theid, language, forceTitle) {
                 $('#storyview .storybody').html(getpaywallHint());
             }
             hasPaywall = true;    
-            ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
+            ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
+            addPromotion(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
         }
 
         if(allId.whitelist && allId.whitelist === 1){
@@ -2013,7 +2043,8 @@ function displaystoryNormal(theid, language, forceTitle) {
             if (!isPremium && isEditorChoiceStory){
                 $('#storyview .storybody').html(storyimage).append(getpaywallHint());
                 hasPaywall = true; 
-                ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
+                ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
+                addPromotion(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
             }else{
                 $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));     
                 hasPaywall = false;  
@@ -2022,11 +2053,13 @@ function displaystoryNormal(theid, language, forceTitle) {
             if (allId.paywall === 1) {
                 $('#storyview .storybody').html(storyimage).append(getpaywallHint());  
                 hasPaywall = true;
-                ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
+                ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
+                addPromotion(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
             } else {
                 if(isStoryBeforeOneWeek){
                     $('#storyview .storybody').html(storyimage).append(getpaywallHint());
-                    ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
+                    ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
+                    addPromotion(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
                     hasPaywall = true;
                 }else{
                     $('#storyview .storybody').html(storyimage).append(allId.cbody.replace(/<p>(<div.*<\/div>)<\/p>/g,'$1'));
@@ -2126,11 +2159,12 @@ function displaystoryNormal(theid, language, forceTitle) {
             firstChild='';
         }
         storyTag += '<a class="oneTag oneStory more'+firstChild+'" onclick=\'showchannel("/index.php/ft/tag/' + tagdata[i] + '?i=2","' + tagdata[i] + '")\'>' + tagdata[i] + '</a>';
-        try {
-            ga('send','event','Story Tag',tagdata[i],theid,{'nonInteraction':1});
-        } catch (ignore) {
+        // MARK: - Stop tracking for lack of GA quota
+        // try {
+        //     ga('send','event','Story Tag',tagdata[i],theid,{'nonInteraction':1});
+        // } catch (ignore) {
 
-        }
+        // }
     }
     storyTag = storyTag.replace(/，$/g, '');
     $('#storyview .storymore').after('<div class="storyTag"><a class=section><span>相关话题</span></a><div class=container>'+ storyTag +'</div></div>');
@@ -2511,7 +2545,8 @@ function pauseallvideo() {
 
 //错误追踪
 function trackErr(err, err_location) {
-    var k=err.toString() + '. ua string: ' + uaString + '. url: ' + location.href + '. version: ' + _currentVersion;
+    //var k = err.toString() + '. ua string: ' + uaString + '. url: ' + location.href + '. version: ' + _currentVersion;
+    var k = err.toString() + _currentVersion;
     if (_localStorage===1) {
         ga('send','event', 'CatchError', err_location, k);
         //fa('send','event', 'CatchError', err_location, k);
@@ -2522,7 +2557,8 @@ function trackErr(err, err_location) {
 
 //服务器请求失败追踪
 function trackFail(err, err_location) {
-    var k=err.toString() + '. url: ' + location.href + '. version: ' + _currentVersion;
+    //var k=err.toString() + '. url: ' + location.href + '. version: ' + _currentVersion;
+    var k = err.toString() + _currentVersion;
     if (_localStorage===1) {
         ga('send','event', 'CatchError', err_location, k);
         //fa('send','event', 'CatchError', err_location, k);
@@ -3080,7 +3116,7 @@ function histback(gesture) {
         payWall('/index.php/jsapi/paywall?histback');
         isLoginReq = false;
     }
-    
+    trackEndPageTime();
     
 
     var thispage,previouspage,theid, index = 0, nonStoryIndex=-1;
@@ -3438,6 +3474,7 @@ function login(fromwhere) {
             $('#logincomment, #logincommentc, #nologincomment, #nologincommentc, .logged, .notLogged').hide();
             $('#nick_name,.user_id,.user_Name').val(u).html(u);
             $('#logincomment, #logincommentc, .logged').show();
+            $('.password').val(p).html(p);
             // $('#loginButton').removeClass("blue");
             $('#setting').find('.standalonebutton').eq(0).find('button').html('登出');
             username = u;
@@ -3458,20 +3495,20 @@ function login(fromwhere) {
 }
 
 function logout() {
+    // alert('1:'+document.cookie);
     var thed = (new Date()).getTime();
     $('.logged .statusmsg').html('正在登出...');
     $.get('/index.php/users/logout?' + thed, function(data) {
         isReqSuccess = false;
         payWall('/index.php/jsapi/paywall?logout'+ thed); 
         deleteCookie('isFTCw');
-        // deleteCookie('USER_ID');
-        // deleteCookie('USER_KV');
-        // deleteCookie('USER_NAME');
+        deleteCookie('USER_ID');
         $('#logincomment,#nologincomment, .logged, .notLogged').hide();
         $('#nologincomment,.notLogged').show();
         username = '';
         closeOverlay();
         $('#setting').find('.standalonebutton').eq(0).find('button').html('登录');
+        // alert('2:'+document.cookie);
     });
 }
 
@@ -3548,7 +3585,8 @@ function watchVideo(videoUrl, videoTitle, videoId, videoLead, videoImage,videoTa
 }
 
 
-function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFrame){    
+function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFrame){  
+    trackStartPageTime();  
     var randomTime = new Date().getTime();
     var url = slideUrl;
     var urlMore;
@@ -3590,7 +3628,8 @@ function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFra
             $('#slideShow').html('<div id="bookstart" class=opening style="opacity: 0.9;"><span><div  style="text-align: center;font-size: 1.2em;padding: 20px 0px;">成为付费会员，阅读FT独家内容<br>请<a style="color:#26747a" iap-action="membership" class="iap-channel" iap-title="会员">点击此处</a> 。</div>  <p class=booklead id="loadstatus" style="font-size: 2em;">触摸<b onclick="closeOverlay()">此处</b>返回</p>  </span></div>');
 
             window.gSubscriptionEventLabel = getEventLabelFromUrl(url);
-            ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel);
+            ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
+            addPromotion(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
         }else{
 
             $('#slideShow').html('<div id="bookstart" class=opening><span><font id="bookname" style="font-size:2em;">'+ slideTitle + '</font><p class=booklead id="booklead">获取内容...</p><p class=booklead id="loadstatus">触摸<b onclick="closeOverlay()">此处</b>返回</p></span></div>');

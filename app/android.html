@@ -89,13 +89,7 @@ function commonProblem() {
 <style>
 {{cssbundle}}
 </style>
-<!-- DB Ad Head-->
-<script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>
-<script>
-    var googletag = googletag || {};
-    googletag.cmd = googletag.cmd || [];
-</script>
-<!-- End DB Ad Head-->
+
 </head>
 
 <body class=fullbody>
@@ -224,7 +218,7 @@ function commonProblem() {
 		<input type="submit" value="登录后发表评论" class="comment_btn submitbutton button ui-light-btn" onclick="login(1)"/> 
 		<div class="topmargin statusmsg"></div>
 		<div class="centerButton"><button class="ui-light-btn" onclick='register()'>免费注册</button></div>
-		<a class="social-login-wechat" href="weixinlogin://www.ftchinese.com/" style="display:none;"><div class="centerButton"><button class="ui-light-btn">微信登录</button></div></a>
+		<div class="centerButton weiXinLogin"><button class="ui-light-btn" onclick="weixinLogin()">微信登录</button></div>
 	</div>
 </div>
 </div>
@@ -339,7 +333,7 @@ function commonProblem() {
 <div class=inner>
 <div class=cell>
 <div class=settingbox>
-<div class=overlay-header >
+<div class=overlay-header>
 <div class="nutmeg-content_right rightmargin"><button onclick="closeOverlay()" class="overlay_close-btn" aria-label="Settings"></button></div>
 设置与帮助
 </div>
@@ -358,7 +352,7 @@ function commonProblem() {
 <strong>字号大小</strong>                   
 </div>
 <div class="standalonebutton"><button class="ui-light-btn" onclick="turnonOverlay('loginBox')">登录</button></div>
-<div class="standalonebutton" id="vip-center-btn"><button class="ui-light-btn" onclick="turnonOverlay('vip-center')">会员中心</button></div>
+<div class="standalonebutton" id="vip-center-btn"><button class="ui-light-btn" >会员中心</button></div>
 <!--<div class="standalonebutton" id="pay-success-btn"><button class="ui-light-btn">测试付费</button></div>-->
 <div class="standalonebutton"><button class="ui-light-btn channel" url="/index.php/ft/channel/phonetemplate.html?channel=myftsetup">设置我的<font class=english>FT</font></button></div>                                
 <div class="standalonebutton nativeButton"><a href="https://itunes.apple.com/cn/app/ft-zhong-wen-wang-zhi-neng/id443870811?mt=8" target=_blank><button class="ui-light-btn">到<span class=english>App Store</span>上推荐这个应用</button></a></div>
@@ -429,7 +423,7 @@ function commonProblem() {
                 <div id="payment-box" class="">
                     <div class="payment-way">
                         <div class="payment-name">
-                            <span>会员类型：</span><span class="payment-type"><strong>标准会员</strong></span></div>
+                            <span>会员类型：</span><span class="payment-type"><strong class="payment-member-type">标准会员</strong></span></div>
                             <div class="payment-method">
                                 <div class="one-way-container">
                                     <label id="pay-ali" for="payWay"></label><input name="payWay" type="radio" value="alipay"/>
@@ -439,7 +433,7 @@ function commonProblem() {
                                 </div>
                             </div>
                     </div>
-                    <div class="pay-action"><label>支付金额</label> &nbsp;<label id="to-pay-price">¥198.00/年</label><button class="to-pay" id="to-pay">确定支付</button></div>
+                    <div class="pay-action"><label>支付金额</label> &nbsp;<label>¥</label><label id="to-pay-price">198.00/年</label><button class="to-pay" id="to-pay">确定支付</button></div>
                 </div>
             </div>
          </div>
@@ -546,11 +540,11 @@ function commonProblem() {
 <div>用户名/电子邮件</div>
 <input type="text"  autocorrect="off" name="username" id="username" class="user_id textinput"/>
 <div>密码</div>
-<input type="password" name="password"  class="user_id textinput password" id="password"/>
+<input type="password" name="password"  class="textinput password" id="password"/>
 <div class="centerButton"><input type="submit" value="登录" class="comment_btn submitbutton button ui-light-btn" onclick="login()"/></div>
 <div class="statusmsg"></div>
 <div class="centerButton"><button class="ui-light-btn" onclick='register()'>免费注册</button></div>
-<a class="social-login-wechat" href="weixinlogin://www.ftchinese.com/" style="display:none;"><div class="centerButton"><button class="ui-light-btn">微信登录</button></div></a>
+<div class="centerButton weiXinLogin"><button class="ui-light-btn" onclick="weixinLogin()">微信登录</button></div>
 </div>
 <div class="padding logged">
 <div>欢迎您，<span class=user_Name></span></div>
@@ -816,8 +810,32 @@ setTimeout(function() { if(cache && navigator.online==true) cache.update();},100
 <script type="text/javascript">var FTAdch = "NP_Home";</script>
 <script type="text/javascript">
 {{googleanalytics}}
-ga('create', 'UA-1608715-1');ga('require', 'displayfeatures');
-ga('require', 'ecommerce');
+</script>
+<script type="text/javascript">
+
+function getCookie(name){
+    var start,len,end;
+    try {
+        start = document.cookie.indexOf(name+'=');
+        if (start == -1) {return null;}
+        len = start + name.length + 1;
+        end = document.cookie.indexOf(';', len);
+        if (end == -1) {end = document.cookie.length;}
+        return decodeURIComponent(document.cookie.substring(len, end));
+    } catch (err) {
+        trackErr(err, 'setCookie');
+        return '';
+    }
+}
+
+var userIdForGA = getCookie('USER_ID');
+if (userIdForGA !== null) {
+	ga('create', 'UA-1608715-1', 'auto', {userId: userIdForGA});
+} else {
+	ga('create', 'UA-1608715-1', 'auto');
+}
+ga('require', 'displayfeatures');
+ga('require', 'ec');
 var deviceName;
 if (/ipad/i.test(uaForMail)) {
     deviceName = 'iPad';
