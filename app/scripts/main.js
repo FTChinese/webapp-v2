@@ -2583,8 +2583,12 @@ function httpspv(theurl) {
     var w = screenWidth;
     var screenType;
     var deviceName;
-
-    if (gIsSpider === true) {
+    var paywallType = getCookie('paywall');
+    if (paywallType === 'premium') {
+        vtype = 'VIP';
+    } else if (paywallType === 'standard') {
+        vtype = 'Subscriber';
+    } else if (gIsSpider === true) {
         vtype = 'spider';
     } else if (username === undefined || username== null || username == '') {
         vtype='visitor';
