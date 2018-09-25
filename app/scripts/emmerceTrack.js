@@ -1,25 +1,3 @@
-// function ecommerceTrack(id,affiliation,price,productName){
-//     ga('ecommerce:addTransaction', {
-//     'id': id,                     // Transaction ID. Required.
-//     'affiliation': affiliation,   // Affiliation or store name.
-//     'revenue': price,               // Grand Total.
-//     'shipping': '0',                  // Shipping.
-//     'tax': '0' ,
-//     'currency': 'CNY'                     // Tax.
-//     });
-
-//     ga('ecommerce:addItem', {
-//     'id': id,                     // Transaction ID. Required.
-//     'name': productName,    // Product name. Required.
-//     'sku': productName,                 // SKU/code.
-//     'category': 'Android Subscription',         // Category or variation.
-//     'price': price,                 // Unit price.
-//     'quantity': '1'                   // Quantity.
-//     });
-
-//     ga('ecommerce:send');
-// }
-
 
 // Mark:使用增强型ecommerce跟踪
 
@@ -27,9 +5,6 @@ var listName = 'androidMembership';
 var category = 'membership';
 
 
-// 把交易号放在cookie里，这样buy success能获取到此交易号，把成功页面现有的代码暂时隐藏
-// 生成交易号，交易号为全局的，这样display和
-// 放入订阅页面
 function productImpression(){ 
     ga('ec:addImpression', { // Provide product details in an impressionFieldObject
     'id': 'ftc_standard',                   // Product ID (string).
