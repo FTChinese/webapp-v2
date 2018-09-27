@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1350; //当前的版本号
+var _currentVersion = 1363; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -518,6 +518,7 @@ function fillContent(loadType) {
         pageStarted=1;
         _popstate=0;
         showchannel($(this).attr('url'), $(this).html(), ($(this).hasClass('require-log-in') == true) ? 1 : 0);
+        trackStartPageTime();
     });
 
 
@@ -1604,6 +1605,8 @@ function gotowebapp(url) {
 
 //阅读文章
 function readstory(theid, theHeadline) {
+    trackStartPageTime();
+
     var h,theurl, backto, sv, allViewsId, jsondata, myid;
 
     if (useFTScroller===0) {
@@ -2581,8 +2584,12 @@ function httpspv(theurl) {
     var w = screenWidth;
     var screenType;
     var deviceName;
-
-    if (gIsSpider === true) {
+    var paywallType = getCookie('paywall');
+    if (paywallType === 'premium') {
+        vtype = 'VIP';
+    } else if (paywallType === 'standard') {
+        vtype = 'Subscriber';
+    } else if (gIsSpider === true) {
         vtype = 'spider';
     } else if (username === undefined || username== null || username == '') {
         vtype='visitor';
@@ -3500,6 +3507,7 @@ function logout() {
         isReqSuccess = false;
         payWall('/index.php/jsapi/paywall?logout'+ thed); 
         deleteCookie('isFTCw');
+        deleteCookie('USER_ID');
         $('#logincomment,#nologincomment, .logged, .notLogged').hide();
         $('#nologincomment,.notLogged').show();
         username = '';
@@ -3582,7 +3590,8 @@ function watchVideo(videoUrl, videoTitle, videoId, videoLead, videoImage,videoTa
 }
 
 
-function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFrame){    
+function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFrame){  
+    trackStartPageTime();  
     var randomTime = new Date().getTime();
     var url = slideUrl;
     var urlMore;

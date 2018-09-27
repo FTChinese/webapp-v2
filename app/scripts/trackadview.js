@@ -10,8 +10,6 @@ var windowHeight = w.innerHeight|| e.clientHeight|| g.clientHeight;
 var gAdImpressionExpose = 0.5;
 var gScrollerHeight = windowHeight - gBottomBarHeight;
 var gUserType = 'visitor';
-var searchVars = getSearchVars();
-var newdbShow = newdbShowByRand(999);
 
 function adViewUpdate() {
   var scrollTop = document.getElementById(gCurrentScroller).scrollTop;
@@ -164,12 +162,39 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random()*(max-min)) + min;
 }
 
-function newdbShowByRand(thresholdValue) {
-  var newdbRand = Math.random(0, 1000);
-  if (newdbRand<thresholdValue) {
-    return true;
+/**
+ * @depend func getSearchVars, getAdChannelId,getRandomInt
+ */
+function switchToNewDb() {
+  //First: newdbStart:
+  var newdbStart;
+  var searchVars = getSearchVars();
+  if(searchVars.newdb == 'yes' || new Date() > new Date('2018,09,03')) {
+    newdbStart = true;
+  } else {
+    newdbStart = false;
   }
-  return false;
+
+  //Second:newdbShow
+  var newdbShow;
+  var adchannelID = getAdChannelId();
+   ///1. Force to show new db ad
+   if(adchannelID === '0000') {
+     newdbShow = true;
+     console.log('Force to show new db ad, for the adchannelID is',adchannelID);
+   ///2. Force to show od chuanyang ad
+   } else if(adchannelID === '5070' || adchannelID === '5069' || adchannelID === '5067') {
+     newdbShow = false;
+     console.log('Force to show od chuanyang ad, for the adchannelID is',adchannelID);
+
+  ///3. Show new ad or not depending on gray
+   } else {
+    var newdbRand = getRandomInt(0, 1000);
+     newdbShow = newdbRand < 200;
+     console.log('Show new ad or not depending on gray is less than 500, the gray is',newdbRand)
+   }
+  
+   return newdbStart && newdbShow;
 }
 // MARK: - load or reload all the ad friendly ad iframes that are in view
 function updateAds() {
@@ -180,6 +205,8 @@ function updateAds() {
     if (nowV !== 'storyview') {
         gSpecial = false;
     }
+    var toNewDb = switchToNewDb();
+    console.log('toNewDb:', toNewDb);
     // MARK: - there are two possibilities when display storyview
     // if (nowV === 'storyview') {
     //     if ($('#storyview').hasClass('columnFlowOn')) {
@@ -221,7 +248,7 @@ function updateAds() {
                     if (useFTScroller===1 || nowV === 'story-column-flow') {
                         adOverlay = '<a target=_blank class="ad-overlay"></a>';
                     }
-                    if( searchVars.newdb === 'yes' && newdbShow) {
+                    if(toNewDb) {
                       /*
                       if(adFrame === 'banner-paid-post-home' || adFrame === 'banner-paid-post-home-2') {
                         console.log('here paid-post home');

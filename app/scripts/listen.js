@@ -49,7 +49,12 @@ function listenToSpeedRead() {
 	var audioMessage = {};
 	var speedreadArticleEle = document.getElementById('speedread-article');
 	var eventCategory = 'Listen To Speedread';
-	title = speedreadArticleEle.querySelector('b').innerHTML || '';
+	var titleEle = speedreadArticleEle.querySelector('b');
+	if (titleEle) {
+		title = speedreadArticleEle.querySelector('b').innerHTML || '';
+	} else {
+		title = '';
+	}
 	text = speedreadArticleEle.innerHTML.replace(/<b>.*<\/b>/, '').replace(/[\(\（][0-9\s]+words[\)\）]/,'');
 	audioMessage = {
 		title: title,
