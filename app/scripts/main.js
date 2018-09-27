@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1347; //当前的版本号
+var _currentVersion = 1350; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -71,10 +71,11 @@ var gSubscriptionEventLabel = '';
 screenWidth = $(window).width();
 screenHeight = $(window).height();
 
+var gTestParameter = (window.location.href.indexOf('test=yes') >= 0) ? '&test=yes': '';
 if (screenWidth >= 700) {
-    gStartPageTemplate = '/index.php/ft/channel/phonetemplate.html?channel=' + homeFileName + fullScreenAdPara + '&screentype=wide&v=' +  _currentVersion;
+    gStartPageTemplate = '/index.php/ft/channel/phonetemplate.html?channel=' + homeFileName + fullScreenAdPara + gTestParameter + '&screentype=wide&v=' +  _currentVersion;
 } else {
-    gStartPageTemplate = '/index.php/ft/channel/phonetemplate.html?channel=' + homeFileName + fullScreenAdPara + '&v=' + _currentVersion;
+    gStartPageTemplate = '/index.php/ft/channel/phonetemplate.html?channel=' + homeFileName + fullScreenAdPara + gTestParameter + '&v=' + _currentVersion;
 }
 
 
