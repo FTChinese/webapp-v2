@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1364; //当前的版本号
+var _currentVersion = 1367; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -1526,6 +1526,7 @@ function handlelinks() {
         var storyid1;
         var newlink;
         var photoId = $(this).attr('photo-id') || '';
+        var connector = '?';
         if (link.match(patt8) || link.match(patt9)) {
             return;
         }
@@ -1553,14 +1554,17 @@ function handlelinks() {
                 showPicture (link);
             });
         } else if (!link.match(patt2) && !link.match(patt3) && !link.match(patt4)) {
-            newlink = unescape(link).replace(/(\/photonews\/.*$)/g,'http://m.ftchinese.com/index.php/ft$1') + '?isad=1';
+            newlink = unescape(link).replace(/(\/photonews\/.*$)/g,'http://m.ftchinese.com/index.php/ft$1');
+            if (newlink.indexOf('?')>=0) {
+                connector = '&';
+            }
+            newlink += connector + 'isad=1';
             $(this).attr('href', newlink).removeAttr('target').addClass('outsidelink');
             adclick();
         }
     });
-
     // MARK: - Wrap story images into a link:
-    if (gIsInSWIFT === true) {
+    if (gIsInSWIFT) {
         $('#storyview .storybody .pic img').each(function(){
             var src = this.src;
             $(this).wrap('<a class="image-outer" href="'+src+'"></a>');
@@ -3627,6 +3631,8 @@ function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFra
         var hash = location.hash;
         var isDailyEnglish = false;
         if(hash.indexOf('ftradio')>=0 || hash.indexOf('speedread')>=0 || hash.indexOf('english')>=0){
+            isDailyEnglish = true;
+        } else if (typeof interactiveType === 'string' && /radio|speedread|intelligence/.test(interactiveType)) {
             isDailyEnglish = true;
         }
         if (isFTCpw && isDailyEnglish) {

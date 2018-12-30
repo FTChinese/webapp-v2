@@ -169,7 +169,7 @@ function switchToNewDb() {
   //First: newdbStart:
   var newdbStart;
   var searchVars = getSearchVars();
-  if(searchVars.newdb == 'yes' || new Date() > new Date('2018,09,03')) {
+  if(searchVars.newdb == 'yes' || new Date() > new Date('2019,09,03')) {
     newdbStart = true;
   } else {
     newdbStart = false;
@@ -179,20 +179,20 @@ function switchToNewDb() {
   var newdbShow;
   var adchannelID = getAdChannelId();
    ///1. Force to show new db ad
-   if(adchannelID === '0000') {
-     newdbShow = true;
-     console.log('Force to show new db ad, for the adchannelID is',adchannelID);
-   ///2. Force to show od chuanyang ad
-   } else if(adchannelID === '5070' || adchannelID === '5069' || adchannelID === '5067') {
-     newdbShow = false;
-     console.log('Force to show od chuanyang ad, for the adchannelID is',adchannelID);
+  //  if(adchannelID === '0000') {
+  //    newdbShow = true;
+  //    console.log('Force to show new db ad, for the adchannelID is',adchannelID);
+  //  ///2. Force to show od chuanyang ad
+  //  } else if(adchannelID === '5070' || adchannelID === '5069' || adchannelID === '5067') {
+  //    newdbShow = false;
+  //    console.log('Force to show od chuanyang ad, for the adchannelID is',adchannelID);
 
-  ///3. Show new ad or not depending on gray
-   } else {
+  // ///3. Show new ad or not depending on gray
+  //  } else {
     var newdbRand = getRandomInt(0, 1000);
-     newdbShow = newdbRand < 200;
+     newdbShow = newdbRand < 2000;
      console.log('Show new ad or not depending on gray is less than 500, the gray is',newdbRand)
-   }
+   //}
   
    return newdbStart && newdbShow;
 }
