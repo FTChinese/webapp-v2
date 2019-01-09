@@ -241,7 +241,7 @@ gulp.task('copy', ['build'], function () {
     .pipe(replace('{{googleanalytics}}', googleanalytics))
     .pipe(replace('{{fa}}', fa))
     .pipe(replace('{{main-m}}', mainM))
-    .pipe(replace('<html>', '<html manifest="android-2014.manifest">'))
+    //.pipe(replace('<html>', '<html manifest="android-2014.manifest">'))
     .pipe(rename('androidapp.html'))
     .pipe(gulp.dest('../testing/dev_www/mobile_webroot/'))
     .on('end', function() {

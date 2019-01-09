@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Page Title</title>
+  <title></title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src='https://www.googletagservices.com/tag/js/gpt.js'></script> <!--TODO:该资源网络不好的时候会获取不到-->
   <script>
@@ -15,10 +15,7 @@
       "FtcInfoFlow":[[400,300]]
     }
     var adProps = getAdProps(searchVars.adframe);
-    console.log('zone:',zone);
-    console.log(adProps);
     function getZone() {
-      // Get zone
       // MARK: - 检查parent里面的gSpecialAnchors，根据这个来确定当前的页面是不是要投放赞助的adid 
       var matchSpecial = false;
       var gSpecialPageId = '';
@@ -35,18 +32,11 @@
             } catch (ignore) {
                 
             }
-            
             var keywordsOfCurrentPage = window.parent.gTagData;
             var keywordForCheck = thisSpecialAnchor.tag;
-            //console.log('keywordForCheck:'+keywordForCheck);
-
             if (useSpecialCode === true && keywordsOfCurrentPage.indexOf(keywordForCheck) >=0) {
                 matchSpecial = true;
-                console.log('thisSpecialAnchor:')
-                console.log(thisSpecialAnchor)
                 gSpecialPageId = thisSpecialAnchor.pageId;
-                //console.log(gSpecialAnchors[i]);
-                //console.log('gSpecialPageId:'+gSpecialPageId);
                 break;
             }
         }
@@ -57,6 +47,7 @@
       }
       return zone;
     }
+
     function getSearchVars() {
       var searchVars = {};
       var searchStr = window.location.search;
@@ -72,8 +63,6 @@
       var pos = 'top1';
       var format = '';
       var name = '';
-     
-
       if (adCode=='ad300x250-SP' || (parent.window.gSpecial === true && adCode==="ad300x250-2")) {//code for special report VFTT
         pos = 'middle2';
       } else if (adCode=="ad300x600-SP" || (parent.window.gSpecial === true && adCode==="ad300x600")) {
@@ -153,51 +142,41 @@
             format = adFormats['FtcMobileBanner'];
             name = 'banner1'; 
       }
-
       return {
         pos:pos,
         format:format,
         name:name
       }
     }
-
-   
-  
  </script>
  <script>
     googletag.cmd.push(function() {
       googletag.defineSlot('/5887/FtChinese/' + zone, adProps.format , adProps.name). addService(googletag.pubads())
       googletag.pubads().enableSingleRequest();
-      googletag.pubads().enableSyncRendering();
       googletag.pubads().setTargeting('cnpos',[adProps.pos]);
       googletag.enableServices();
     });
-    /*
-    googletag.cmd.push(function() {
-      googletag.defineSlot('/80682004/ftchinese/home', adProps.format , adProps.name). addService(googletag.pubads())
-      googletag.pubads().enableSingleRequest();
-      googletag.pubads().enableSyncRendering();
-      googletag.pubads().setTargeting('pos',[adProps.pos]);
-      googletag.enableServices();
-    });
-    */
 </script>
 </head>
 <body style="width:100%;margin: 0px;padding: 0px;background-color:#fff1e0;">
   <script>
-    //if(['top1','top2','middle1','middle2','right1','right2'].indexOf(adProps.pos)>=0) {
     if(adProps.pos) {
       var dbCode = '<div id="'+ adProps.name +'" style="padding-top:0;"><scr' + 'ipt>googletag.cmd.push(function() { googletag.display("'+ adProps.name +'")})</scr' + 'ipt></div>';
-
-      //var dbCode = '<div id="banner1" style="padding-top:0;"><scr' + 'ipt>googletag.cmd.push(function() { googletag.display("banner1")})</scr' + 'ipt></div>'
       document.write(dbCode);
-
       var adid = searchVars.adid;
       if(window.parent && window.parent.document.getElementById(adid)) {
         var adiframeElem = window.parent.document.getElementById(adid).parentNode;
         adiframeElem.style.backgroundColor = 'transparent';
       }
+
+      try {
+        window.parent.ga('send', 'event', 'Ad Impression Test: GAM Web App', adProps.pos, adProps.name, {'nonInteraction':1});
+      } catch(ignore) {
+
+      }
+
     }
+
   </script>
 </body>
 </html>
