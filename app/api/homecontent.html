@@ -25,6 +25,56 @@
 </div>
 <div id="breakingnews"></div>
 
+<script type="text/javascript">
+    function showMigrationNotice() {
+        var ua = navigator.userAgent || navigator.vendor || '';
+         // MARK: - Do nothing if the device is Android 2,3,4, or not an Android device
+        if (/Android [234]/i.test(ua) || osVersion === 'Android[234]' || !/Android/i.test(ua)) {
+            return false;
+        }
+        var notice = '<b>重要通知</b>: 亲爱的用户，您所用的FT中文网安卓应用版本已不再维护更新，我们发布了一个功能更完善的新应用。';
+        var marketLink;
+        var eventLabel;
+        var isFromHuaweiMarket = /huawei/i.test(ua) && window.location.href.indexOf('utm_campaign=an_huawei') >= 0;
+        var isFrom360Market = window.location.href.indexOf('utm_campaign=an_360shouji') >= 0;
+        var isFromSamsungMarket = /Samsung/i.test(ua) && window.location.href.indexOf('utm_campaign=isFromSamsungMarket') >= 0;
+        var linkStyle = ' style="color: white; text-decoration: underline; "';
+        if (isFromHuaweiMarket) {
+            eventLabel = 'Huawei';
+            marketLink = '请<a href="https://appstore.huawei.com/app/C100680885?isad=1" target="_blank"' + linkStyle + ' data-event-click-label="' + eventLabel + '">点击此处到华为应用市场下载新的FT中文网应用</a>，或者直接打开华为应用市场搜索“FT中文网”。';
+        } else if (isFrom360Market) {
+            eventLabel = '360';
+            marketLink = '请<a href="http://zhushou.360.cn/detail/index/soft_id/4029901?recrefer=SE_D_FT?isad=1" target="_blank"' + linkStyle + ' data-event-click-label="' + eventLabel + '">点击此处到360应用市场下载新的FT中文网应用</a>，或者直接打开360应用市场搜索“FT中文网”。';
+            
+        } else if (isFromSamsungMarket) {
+            eventLabel = 'Samsung';
+            marketLink = '请打开三星应用市场搜索“FT中文网”，或者<a href="http://creatives.ftacademy.cn/app/ftchinese-v2.0.6.apk?isad=1" target="_blank"' + linkStyle + ' data-event-click-label="' + eventLabel + '">点击此处到FT中文网下载新的FT中文网官方应用</a>。';
+        } else {
+            eventLabel = 'Other';
+            marketLink = '请<a href="http://creatives.ftacademy.cn/app/ftchinese-v2.0.6.apk?isad=1" target="_blank"' + linkStyle + ' data-event-click-label="' + eventLabel + '">点击此处到FT中文网下载新的FT中文网官方应用</a>，或者打开Google Play搜索“FT中文网”。';
+        }
+        var breakingnews = document.getElementById('breakingnews');
+        if (breakingnews) {
+            breakingnews.innerHTML = notice + marketLink;
+            breakingnews.style.color = 'white';
+            breakingnews.style.backgroundColor = '#27757b';
+            breakingnews.style.padding = '14px';
+            breakingnews.style.marginBottom = '14px';
+            var link = breakingnews.querySelector('a');
+            if (link) {
+                link.onclick = function() {
+                    var eventLabel = this.getAttribute('data-event-click-label');
+                    if (eventLabel) {
+                        ga('send','event','AndroidMigrationNotice', 'Click', eventLabel);
+                    }
+                };
+            }
+        }
+        // TODO: Track the display and click
+        ga('send','event','AndroidMigrationNotice', 'Display', eventLabel, {'nonInteraction':1});
+    }
+    showMigrationNotice();
+</script>
 
 <div class="layout-a_region-3">
 <div class="inner">

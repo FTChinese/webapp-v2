@@ -1,5 +1,5 @@
 //申明各种Global变量
-var _currentVersion = 1381; //当前的版本号
+var _currentVersion = 1384; //当前的版本号
 var _localStorage = 0;
 var exp_times = Math.round(new Date().getTime() / 1000) + 86400;
 var username;
@@ -133,9 +133,11 @@ if (window.location.hostname === 'localhost' || window.location.hostname.indexOf
 }
 
 
-function getEventLabelFromUrl(url) {
+function getEventLabelFromUrl(url, interactiveType) {
     var privilegeType = '';
-    if (/interactive\/.*audio=/.test(url)) {
+    if (interactiveType == 'intelligence') {
+        privilegeType = 'Intelligence/';
+    } else if (/interactive\/.*audio=/.test(url)) {
         privilegeType = 'Radio/';
     } else if (/interactive\//.test(url)) {
         privilegeType = 'SpeedReading/';
@@ -3638,7 +3640,7 @@ function showSlide(slideUrl,slideTitle,requireLogin, interactiveType, openIniFra
         if (isFTCpw && isDailyEnglish) {
             $('#slideShow').html('<div id="bookstart" class=opening style="opacity: 0.9;"><span><div  style="text-align: center;font-size: 1.2em;padding: 20px 0px;">成为付费会员，阅读FT独家内容<br>请<a style="color:#26747a" iap-action="membership" class="iap-channel" iap-title="会员">点击此处</a> 。</div>  <p class=booklead id="loadstatus" style="font-size: 2em;">触摸<b onclick="closeOverlay()">此处</b>返回</p>  </span></div>');
 
-            window.gSubscriptionEventLabel = getEventLabelFromUrl(url);
+            window.gSubscriptionEventLabel = getEventLabelFromUrl(url, interactiveType);
             ga('send','event','Android Privileges', 'Display', window.gSubscriptionEventLabel, { 'nonInteraction': 1 });
             addPromotion(window.gSubscriptionEventLabel,window.gSubscriptionEventLabel);
         }else{

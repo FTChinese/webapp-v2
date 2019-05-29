@@ -10,7 +10,7 @@ function getOrderNum(memberNum){
     return orderNum;
 }
 
-var standardPrice = '198.00';
+var standardPrice = '258.00';
 var premiumPrice = '1,998.00';
 var currentMilliseconds = new Date().getTime();
 
@@ -20,7 +20,7 @@ window.iapProducts = [{title: '标准会员',price: standardPrice,id: 'ftc_stand
 var subscribeIntruction = {
     title: '订阅说明与注意事项',
     items: [
-        {headline: '订阅价格与周期', lead: '您可以在应用内订阅《FT中文网会员》和《FT中文网高端会员》两种服务。《FT中文网会员》每年订阅价格为 198元（$28.99），订阅后您可以解锁阅读FT中文网每日新增的两篇独家文章内容，以及解锁双语文章的英语语音服务。《FT中文网高端会员》每年订阅价格为 1998元（$294.99），订阅后您可以解锁《FT中文网会员》提供的所有服务，再加上每周的《编辑精选》周刊。'}
+        {headline: '订阅价格与周期', lead: '您可以在应用内订阅《FT中文网会员》和《FT中文网高端会员》两种服务。《FT中文网会员》每年订阅价格为 258元（$28.99），订阅后您可以解锁阅读FT中文网每日新增的两篇独家文章内容，以及解锁双语文章的英语语音服务。《FT中文网高端会员》每年订阅价格为 1998元（$294.99），订阅后您可以解锁《FT中文网会员》提供的所有服务，再加上每周的《编辑精选》周刊。'}
     ],
     moreService: ['隐私申明','用户协议','反馈']
 }
