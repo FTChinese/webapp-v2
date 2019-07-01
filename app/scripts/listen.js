@@ -61,7 +61,7 @@ function listenToSpeedRead() {
 		text: text,
 		language: language,
 		eventCategory: eventCategory
-	}
+	};
 	webkit.messageHandlers.listen.postMessage(audioMessage);
 	ga('send','event',eventCategory, 'Start', language + ': ' + title);
 }
