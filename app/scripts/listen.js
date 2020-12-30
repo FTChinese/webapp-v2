@@ -62,6 +62,10 @@ function listenToSpeedRead() {
 		language: language,
 		eventCategory: eventCategory
 	};
+	if (window.gAudioId && window.gAudioUrl) {
+		audioMessage.audioId = gAudioId;
+		audioMessage.audioUrl = gAudioUrl;
+	}
 	webkit.messageHandlers.listen.postMessage(audioMessage);
 	ga('send','event',eventCategory, 'Start', language + ': ' + title);
 }
