@@ -1,4 +1,6 @@
 // colors
+@use "sass:math";
+
 $defaultBG: #FFF1E5;
 $defaultColor: #333333;
 $placeHolderBG: #E9DECF;
@@ -13,7 +15,7 @@ $buttonEdge: 10px;
 
 // Percentages
 $goldenRatio: 168.1%;
-$videoRatio: percentage(9/16);
+$videoRatio: percentage(math.div(9, 16));
 $coverImage: 56.25%;
 
 // Font Sizes
