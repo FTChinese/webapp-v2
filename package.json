@@ -1,7 +1,7 @@
 {
   "private": true,
   "engines": {
-    "node": ">=4"
+    "node": ">=16"
   },
   "devDependencies": {
     "babel-core": "^6.4.0",
@@ -48,6 +48,6 @@
     }
   },
   "dependencies": {
-    "node-sass": "^4.9.2"
+    "node-sass": "^7.0.1"
   }
 }
