@@ -5,12 +5,11 @@ const browserSync = require('browser-sync').create();
 const del = require('del');
 const wiredep = require('wiredep').stream;
 const runSequence = require('run-sequence');
-
+const sass = require('gulp-dart-sass');
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
 
 var dev = true;
-
 
 
 // MARK: code created for this project specifically
@@ -89,10 +88,29 @@ function postDatatoFile (urlSource, postData, fileName) {
   request.end();
 }
 
+function lint(files) {
+  return gulp.src(files)
+    .pipe($.eslint({ fix: true }))
+    .pipe(reload({stream: true, once: true}))
+    .pipe($.eslint.format())
+    .pipe($.if(!browserSync.active, $.eslint.failAfterError()));
+}
+
+gulp.task('lint', () => {
+  return lint('app/scripts/**/*.js')
+    .pipe(gulp.dest('app/scripts'));
+});
+gulp.task('lint:test', () => {
+  return lint('test/spec/**/*.js')
+    .pipe(gulp.dest('test/spec'));
+});
+
+
 gulp.task('origami', function () {
   getUrltoFile('http://build.origami.ft.com/bundles/js?modules=o-ft-header@^2.5.15,o-table@^1.6.0', './bower_components/origami/build.js');
   getUrltoFile ('http://build.origami.ft.com/bundles/css?modules=o-ft-header@^2.5.15,o-ft-footer@^2.0.4,o-table@^1.6.0', './bower_components/origami/build.scss');
 });
+
 
 gulp.task('ea', function () {
   var message = {};
@@ -146,7 +164,89 @@ gulp.task('log', () => {
     .pipe(gulp.dest('dist/log'));
 });
 
-gulp.task('copy', ['build'], function () {
+gulp.task('styles', () => {
+  return gulp.src('app/styles/main.scss')
+    .pipe($.plumber())
+    .pipe($.if(dev, $.sourcemaps.init()))
+    .pipe(sass.sync({
+      outputStyle: 'expanded',
+      precision: 10,
+      includePaths: ['.']
+    }).on('error', sass.logError))
+    .pipe($.autoprefixer({browsers: ['> 1%', 'last 2 versions', 'Firefox ESR']}))
+    .pipe($.if(dev, $.sourcemaps.write()))
+    .pipe(gulp.dest('.tmp/styles'))
+    .pipe(reload({stream: true}));
+});
+
+gulp.task('scripts', () => {
+  return gulp.src('app/scripts/**/*.js')
+    .pipe($.plumber())
+    .pipe($.if(dev, $.sourcemaps.init()))
+    .pipe($.babel())
+    .pipe($.if(dev, $.sourcemaps.write('.')))
+    .pipe(gulp.dest('.tmp/scripts'))
+    .pipe(reload({stream: true}));
+});
+
+
+
+
+gulp.task('images', () => {
+  return gulp.src('app/images/**/*')
+    .pipe($.cache($.imagemin()))
+    .pipe(gulp.dest('dist/images'));
+});
+
+gulp.task('fonts', () => {
+  return gulp.src(require('main-bower-files')('**/*.{eot,svg,ttf,woff,woff2}', function (err) {})
+    .concat('app/fonts/**/*'))
+    .pipe($.if(dev, gulp.dest('.tmp/fonts'), gulp.dest('dist/fonts')));
+});
+
+gulp.task('extras', () => {
+  return gulp.src([
+    'app/*',
+    '!app/*.html'
+  ], {
+    dot: true
+  }).pipe(gulp.dest('dist'));
+});
+
+gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
+
+gulp.task('html', gulp.series('styles', 'scripts', () => {
+  return gulp.src('app/*.html')
+    .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
+    .pipe($.if(/\.js$/, $.uglify({compress: {drop_console: true}})))
+    .pipe($.if(/\.css$/, $.cssnano({safe: true, autoprefixer: false})))
+    .pipe($.if(/\.html$/, $.htmlmin({
+      collapseWhitespace: true,
+      minifyCSS: true,
+      minifyJS: {compress: {drop_console: true}},
+      processConditionalComments: true,
+      removeComments: true,
+      removeEmptyAttributes: true,
+      removeScriptTypeAttributes: true,
+      removeStyleLinkTypeAttributes: true
+    })))
+    .pipe(gulp.dest('dist'));
+}));
+
+
+gulp.task('ga', function () {
+  //var gaUrl = 'http://m.ftchinese.com/index.php/jsapi/analytics';
+  var gaUrl = 'https://www.google-analytics.com/analytics.js';
+  getUrltoFile(gaUrl, './app/log/ga.js');
+  //getUrltoFile(gaUrl, './dist/log/ga.js');
+});
+
+// // MARK: - add more actions in build
+gulp.task('build', gulp.series('lint', 'html', 'images', 'fonts', 'extras', 'api', 'phone', 'log', 'ga', () => {
+  return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
+}));
+
+gulp.task('copy', gulp.series('build', function () {
   var replace = require('gulp-replace');
   var rename = require("gulp-rename");
   var thedatestamp = new Date().getTime();
@@ -257,16 +357,7 @@ gulp.task('copy', ['build'], function () {
             console.log('big 5 file writen to ' + fileName);
       });
     });
-});
-
-
-
-gulp.task('ga', function () {
-    //var gaUrl = 'http://m.ftchinese.com/index.php/jsapi/analytics';
-    var gaUrl = 'https://www.google-analytics.com/analytics.js';
-    getUrltoFile(gaUrl, './app/log/ga.js');
-    //getUrltoFile(gaUrl, './dist/log/ga.js');
-});
+}));
 
 
 gulp.task('publish', function () {
@@ -306,7 +397,7 @@ gulp.task('publish', function () {
     .pipe(gulp.dest('../dev_www/mobile_webroot/images'));
 });
 
-gulp.task('ios', ['publish'], function () {
+gulp.task('ios', gulp.series('publish', function () {
   var rename = require("gulp-rename");
   gulp.src('../testing/dev_www/mobile_webroot/androidapp.html')
     .pipe(rename('index.html'))
@@ -314,122 +405,74 @@ gulp.task('ios', ['publish'], function () {
   gulp.src('../testing/dev_www/mobile_webroot/androidappbig5.html')
     .pipe(rename('indexBig5.html'))
     .pipe(gulp.dest('../../sandbox/FTCiPhone/FT Academy/supporting/'));
-});
+}));
 
 
 
 // MARK: - Code created from generator (might be edidted)
 
-gulp.task('styles', () => {
-  return gulp.src('app/styles/main.scss')
-    .pipe($.plumber())
-    .pipe($.if(dev, $.sourcemaps.init()))
-    .pipe($.sass.sync({
-      outputStyle: 'expanded',
-      precision: 10,
-      includePaths: ['.']
-    }).on('error', $.sass.logError))
-    .pipe($.autoprefixer({browsers: ['> 1%', 'last 2 versions', 'Firefox ESR']}))
-    .pipe($.if(dev, $.sourcemaps.write()))
-    .pipe(gulp.dest('.tmp/styles'))
-    .pipe(reload({stream: true}));
-});
 
-gulp.task('scripts', () => {
-  return gulp.src('app/scripts/**/*.js')
-    .pipe($.plumber())
-    .pipe($.if(dev, $.sourcemaps.init()))
-    .pipe($.babel())
-    .pipe($.if(dev, $.sourcemaps.write('.')))
-    .pipe(gulp.dest('.tmp/scripts'))
-    .pipe(reload({stream: true}));
-});
 
-function lint(files) {
-  return gulp.src(files)
-    .pipe($.eslint({ fix: true }))
-    .pipe(reload({stream: true, once: true}))
-    .pipe($.eslint.format())
-    .pipe($.if(!browserSync.active, $.eslint.failAfterError()));
-}
+// gulp.task('serve', () => {
 
-gulp.task('lint', () => {
-  return lint('app/scripts/**/*.js')
-    .pipe(gulp.dest('app/scripts'));
-});
-gulp.task('lint:test', () => {
-  return lint('test/spec/**/*.js')
-    .pipe(gulp.dest('test/spec'));
-});
+  // runSequence(['clean', 'wiredep'], ['styles', 'scripts', 'fonts'], () => {
+  //   browserSync.init({
+  //     notify: false,
+  //     port: 9000,
+  //     server: {
+  //       baseDir: ['.tmp', 'app'],
+  //       routes: {
+  //         '/bower_components': 'bower_components'
+  //       }
+  //     }
+  //   });
 
-gulp.task('html', ['styles', 'scripts'], () => {
-  return gulp.src('app/*.html')
-    .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
-    .pipe($.if(/\.js$/, $.uglify({compress: {drop_console: true}})))
-    .pipe($.if(/\.css$/, $.cssnano({safe: true, autoprefixer: false})))
-    .pipe($.if(/\.html$/, $.htmlmin({
-      collapseWhitespace: true,
-      minifyCSS: true,
-      minifyJS: {compress: {drop_console: true}},
-      processConditionalComments: true,
-      removeComments: true,
-      removeEmptyAttributes: true,
-      removeScriptTypeAttributes: true,
-      removeStyleLinkTypeAttributes: true
-    })))
-    .pipe(gulp.dest('dist'));
-});
+  //   gulp.watch([
+  //     'app/*.html',
+  //     'app/images/**/*',
+  //     '.tmp/fonts/**/*'
+  //   ]).on('change', reload);
 
-gulp.task('images', () => {
-  return gulp.src('app/images/**/*')
-    .pipe($.cache($.imagemin()))
-    .pipe(gulp.dest('dist/images'));
-});
+  //   gulp.watch('app/styles/**/*.scss', ['styles']);
+  //   gulp.watch('app/scripts/**/*.js', ['scripts']);
+  //   gulp.watch('app/fonts/**/*', ['fonts']);
+  //   gulp.watch('bower.json', ['wiredep', 'fonts']);
+  // });
+// });
 
-gulp.task('fonts', () => {
-  return gulp.src(require('main-bower-files')('**/*.{eot,svg,ttf,woff,woff2}', function (err) {})
-    .concat('app/fonts/**/*'))
-    .pipe($.if(dev, gulp.dest('.tmp/fonts'), gulp.dest('dist/fonts')));
-});
 
-gulp.task('extras', () => {
-  return gulp.src([
-    'app/*',
-    '!app/*.html'
-  ], {
-    dot: true
-  }).pipe(gulp.dest('dist'));
-});
-
-gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
-
-gulp.task('serve', () => {
-  runSequence(['clean', 'wiredep'], ['styles', 'scripts', 'fonts'], () => {
+gulp.task('serve', 
+  gulp.parallel(
+    'styles', 
+    'scripts', 
+    'fonts',
+    function serve() {
     browserSync.init({
-      notify: false,
-      port: 9000,
       server: {
-        baseDir: ['.tmp', 'app'],
+        baseDir: ['app', '.tmp'],
+        index: 'index.html',
         routes: {
-          '/bower_components': 'bower_components'
+          '/node_modules': 'node_modules'
         }
       }
     });
 
-    gulp.watch([
-      'app/*.html',
-      'app/images/**/*',
-      '.tmp/fonts/**/*'
-    ]).on('change', reload);
+    gulp.watch('app/styles/**/*.scss', gulp.parallel('styles'));
+    gulp.watch(['app/*.html', 'app/scripts/**/*.js', 'app/fonts/**/*'], browserSync.reload);
+  })
+);
 
-    gulp.watch('app/styles/**/*.scss', ['styles']);
-    gulp.watch('app/scripts/**/*.js', ['scripts']);
-    gulp.watch('app/fonts/**/*', ['fonts']);
-    gulp.watch('bower.json', ['wiredep', 'fonts']);
+
+
+gulp.task('default', () => {
+  return new Promise(resolve => {
+    dev = false;
+    runSequence(['clean', 'wiredep'], 'build', resolve);
   });
 });
 
-gulp.task('serve:dist', ['default'], () => {
+
+gulp.task('serve:dist', gulp.series('default', () => {
   browserSync.init({
     notify: false,
     port: 9000,
@@ -437,9 +480,9 @@ gulp.task('serve:dist', ['default'], () => {
       baseDir: ['dist']
     }
   });
-});
+}));
 
-gulp.task('serve:test', ['scripts'], () => {
+gulp.task('serve:test', gulp.series('scripts', () => {
   browserSync.init({
     notify: false,
     port: 9000,
@@ -456,7 +499,7 @@ gulp.task('serve:test', ['scripts'], () => {
   gulp.watch('app/scripts/**/*.js', ['scripts']);
   gulp.watch(['test/spec/**/*.js', 'test/index.html']).on('change', reload);
   gulp.watch('test/spec/**/*.js', ['lint:test']);
-});
+}));
 
 // inject bower components
 gulp.task('wiredep', () => {
@@ -474,14 +517,6 @@ gulp.task('wiredep', () => {
     .pipe(gulp.dest('app'));
 });
 
-// MARK: - add more actions in build
-gulp.task('build', ['lint', 'html', 'images', 'fonts', 'extras', 'api', 'phone', 'log', 'ga'], () => {
-  return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
-});
 
-gulp.task('default', () => {
-  return new Promise(resolve => {
-    dev = false;
-    runSequence(['clean', 'wiredep'], 'build', resolve);
-  });
-});
+
+
